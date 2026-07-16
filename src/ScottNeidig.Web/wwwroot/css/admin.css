@@ -1,0 +1,96 @@
+/*  admin.css
+    Styles for the private admin area only. Loaded normally (not deferred) because
+    the admin is a tool, not a page we're optimizing a PageSpeed score for.
+    Design tokens come from critical.css.
+*/
+
+.container--narrow {
+  max-width: 26rem;
+}
+
+/* ---------- Forms ---------- */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.form__field--inline {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.form__field label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.form input[type="text"],
+.form input[type="email"],
+.form input[type="password"],
+.form textarea {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.625rem 0.75rem;
+  color: var(--text);
+  font: inherit;
+}
+
+.form input:focus-visible,
+.form textarea:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+/* Validation messages must not rely on color alone. */
+.form__errors:not(:empty),
+.form__error:not(:empty) {
+  color: #ff8a8a;
+  font-size: 0.875rem;
+}
+
+.form__errors ul {
+  margin: 0;
+}
+
+/* ---------- Buttons ---------- */
+.button {
+  align-self: flex-start;
+  background: var(--accent-strong);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.625rem 1.25rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button:hover,
+.button:focus-visible {
+  background: var(--accent);
+}
+
+.button--quiet {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 0.375rem 0.75rem;
+  font-weight: 500;
+}
+
+.button--quiet:hover,
+.button--quiet:focus-visible {
+  background: var(--surface);
+  color: var(--text);
+}

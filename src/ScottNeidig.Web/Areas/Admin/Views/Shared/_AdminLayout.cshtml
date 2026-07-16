@@ -1,0 +1,34 @@
+@*
+    Admin layout. Deliberately separate from the public layout: the admin is a private
+    tool, so it does not need the marketing chrome, SEO tags, or the deferred CSS dance.
+    noindex because admin pages must never end up in search results.
+*@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="~/css/critical.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+    <title>@ViewData["Title"] | Admin</title>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Admin">
+            <a class="site-nav__brand" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Admin</a>
+
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <form asp-area="Admin" asp-controller="Account" asp-action="Logout" method="post">
+                    <button class="button button--quiet" type="submit">Sign out</button>
+                </form>
+            }
+        </nav>
+    </header>
+
+    <main id="main">
+        @RenderBody()
+    </main>
+</body>
+</html>

@@ -1,9 +1,15 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ScottNeidig.Web.Data.Entities;
 
 namespace ScottNeidig.Web.Data;
 
-public class AppDbContext : DbContext
+/// <summary>
+/// Inherits IdentityDbContext so the Identity tables live in the same database as the
+/// site content. One database, one migration history, one connection to manage.
+/// </summary>
+public class AppDbContext : IdentityDbContext<IdentityUser>
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 

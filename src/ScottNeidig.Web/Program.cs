@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ScottNeidig.Web.Configuration;
 using ScottNeidig.Web.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +20,36 @@ if (string.IsNullOrWhiteSpace(connection))
 
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(connection));
 
+builder.Services.Configure<AdminUserOptions>(
+    builder.Configuration.GetSection(AdminUserOptions.SectionName));
+
+// Roles are registered now even though nothing uses them yet, so adding one later
+// is a code change rather than a migration.
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+    {
+        options.User.RequireUniqueEmail = true;
+
+        // There is one human account and no self-service registration, so the value here
+        // is throttling brute force, not enforcing password theatre.
+        options.Password.RequiredLength = 12;
+        options.Password.RequireNonAlphanumeric = false;
+
+        options.Lockout.MaxFailedAccessAttempts = 5;
+        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+    })
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/admin/account/login";
+    options.AccessDeniedPath = "/admin/account/login";
+    options.ExpireTimeSpan = TimeSpan.FromDays(14);
+    options.SlidingExpiration = true;
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SameSite = SameSiteMode.Lax;
+});
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -29,13 +61,26 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
+
+// Area route must come first, otherwise /admin/... is swallowed by the default route.
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}")
+    .WithStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
+
+using (var scope = app.Services.CreateScope())
+{
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    await AdminSeeder.SeedAsync(scope.ServiceProvider, logger);
+}
 
 app.Run();
