@@ -1,0 +1,101 @@
+@model ProjectFormModel
+@{
+    var isEdit = Model.Id.HasValue;
+}
+
+<section>
+    <div class="container container--form">
+        <p class="topper">Projects</p>
+        <h1 class="title">@(isEdit ? "Edit project" : "New project")</h1>
+
+        <form method="post" asp-action="@(isEdit ? "Edit" : "Create")" asp-route-id="@Model.Id" class="form">
+            <div asp-validation-summary="ModelOnly" class="form__errors" role="alert"></div>
+
+            <div class="form__field">
+                <label asp-for="Title"></label>
+                <input asp-for="Title" autofocus />
+                <span asp-validation-for="Title" class="form__error"></span>
+            </div>
+
+            <div class="form__field">
+                <label asp-for="Slug"></label>
+                <input asp-for="Slug" placeholder="@(isEdit ? "" : "Generated from the title if left blank")" />
+                <span class="form__hint">
+                    @if (isEdit)
+                    {
+                        <text>Page lives at <code>/work/@Model.Slug</code>. Changing this breaks existing links.</text>
+                    }
+                    else
+                    {
+                        <text>Leave blank to generate from the title.</text>
+                    }
+                </span>
+                <span asp-validation-for="Slug" class="form__error"></span>
+            </div>
+
+            <div class="form__field">
+                <label asp-for="Summary"></label>
+                <textarea asp-for="Summary" rows="5"></textarea>
+                <span class="form__hint">The lead paragraph on the project page.</span>
+                <span asp-validation-for="Summary" class="form__error"></span>
+            </div>
+
+            <div class="form__field">
+                <label asp-for="MetaText"></label>
+                <input asp-for="MetaText" />
+                <span class="form__hint">Short line under the title, e.g. "Built and operated solo".</span>
+                <span asp-validation-for="MetaText" class="form__error"></span>
+            </div>
+
+            <div class="form__field">
+                <label asp-for="LiveUrl"></label>
+                <input asp-for="LiveUrl" type="url" placeholder="https://" />
+                <span asp-validation-for="LiveUrl" class="form__error"></span>
+            </div>
+
+            <div class="form__row">
+                <div class="form__field">
+                    <label asp-for="CategoryId"></label>
+                    <select asp-for="CategoryId" asp-items="Model.Categories">
+                        <option value="">Uncategorised</option>
+                    </select>
+                    <span asp-validation-for="CategoryId" class="form__error"></span>
+                </div>
+
+                <div class="form__field">
+                    <label asp-for="SortOrder"></label>
+                    <input asp-for="SortOrder" type="number" />
+                    <span class="form__hint">Lower shows first.</span>
+                </div>
+            </div>
+
+            <div class="form__field form__field--inline">
+                <input asp-for="Published" />
+                <label asp-for="Published">Published</label>
+            </div>
+
+            <fieldset class="form__group">
+                <legend>Search engines</legend>
+
+                <div class="form__field">
+                    <label asp-for="SeoTitle"></label>
+                    <input asp-for="SeoTitle" />
+                    <span class="form__hint">Falls back to the title. Aim for under 60 characters.</span>
+                    <span asp-validation-for="SeoTitle" class="form__error"></span>
+                </div>
+
+                <div class="form__field">
+                    <label asp-for="SeoDescription"></label>
+                    <textarea asp-for="SeoDescription" rows="3"></textarea>
+                    <span class="form__hint">Shown in search results. Aim for under 160 characters.</span>
+                    <span asp-validation-for="SeoDescription" class="form__error"></span>
+                </div>
+            </fieldset>
+
+            <div class="form__actions">
+                <button class="button" type="submit">Save</button>
+                <a class="button--link" asp-action="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>

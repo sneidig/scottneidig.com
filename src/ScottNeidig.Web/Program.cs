@@ -25,6 +25,7 @@ builder.Services.Configure<AdminUserOptions>(
     builder.Configuration.GetSection(AdminUserOptions.SectionName));
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
 
 // Roles are registered now even though nothing uses them yet, so adding one later
 // is a code change rather than a migration.

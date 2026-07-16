@@ -8,6 +8,10 @@
   max-width: 26rem;
 }
 
+.container--form {
+  max-width: 42rem;
+}
+
 /* ---------- Forms ---------- */
 .form {
   display: flex;
@@ -36,20 +40,73 @@
 .form input[type="text"],
 .form input[type="email"],
 .form input[type="password"],
-.form textarea {
+.form input[type="url"],
+.form input[type="number"],
+.form textarea,
+.form select {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 0.625rem 0.75rem;
   color: var(--text);
   font: inherit;
+  width: 100%;
 }
 
 .form input:focus-visible,
-.form textarea:focus-visible {
+.form textarea:focus-visible,
+.form select:focus-visible {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+/* Checkboxes must not stretch to full width like the text inputs above. */
+.form input[type="checkbox"] {
+  width: auto;
+}
+
+/* Two fields side by side on wider screens, stacked on mobile. */
+.form__row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 1.25rem;
+}
+
+.form__group {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin: 0;
+}
+
+.form__group legend {
+  padding: 0 0.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* ---------- Badges ---------- */
+.badge {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+}
+
+.badge--live {
+  color: #5bd49a;
+  border-color: #5bd49a;
+}
+
+.badge--draft {
+  color: var(--text-muted);
 }
 
 /* Validation messages must not rely on color alone. */

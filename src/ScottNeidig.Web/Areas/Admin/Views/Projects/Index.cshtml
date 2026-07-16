@@ -1,0 +1,61 @@
+@using ScottNeidig.Web.Services
+@model List<ProjectSummary>
+
+<section>
+    <div class="container">
+        <p class="topper">Admin</p>
+        <h1 class="title">Projects</h1>
+
+        <a class="button" asp-action="Create">New project</a>
+
+        @if (Model.Count == 0)
+        {
+            <p class="text">No projects yet.</p>
+        }
+        else
+        {
+            <table class="table">
+                <caption class="visually-hidden">Projects, in display order</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col">URL</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Sort</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Content</th>
+                        <th scope="col"><span class="visually-hidden">Actions</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var project in Model)
+                    {
+                        <tr>
+                            <td>@project.Title</td>
+                            <td><code>/work/@project.Slug</code></td>
+                            <td>@(project.CategoryName ?? "—")</td>
+                            <td>@project.SortOrder</td>
+                            <td>
+                                @* Not colour alone: the word carries the meaning. *@
+                                <span class="badge @(project.Published ? "badge--live" : "badge--draft")">
+                                    @(project.Published ? "Published" : "Draft")
+                                </span>
+                            </td>
+                            <td>@project.ImageCount img, @project.PointCount pts</td>
+                            <td>
+                                <div class="table__actions">
+                                    <a asp-action="Edit" asp-route-id="@project.Id">Edit</a>
+
+                                    <form asp-action="Delete" asp-route-id="@project.Id" method="post"
+                                          onsubmit="return confirm('Delete @project.Title? Its images and points go too. This cannot be undone.');">
+                                        <button class="button--link" type="submit">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</section>
