@@ -64,7 +64,10 @@
 }
 
 /* ---------- Buttons ---------- */
+/* inline-block matters: .button is used on <a> as well as <button>, and vertical
+   padding on an inline element overflows the line box instead of expanding it. */
 .button {
+  display: inline-block;
   align-self: flex-start;
   background: var(--accent-strong);
   color: #fff;
@@ -73,12 +76,17 @@
   padding: 0.625rem 1.25rem;
   font: inherit;
   font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
   cursor: pointer;
 }
 
 .button:hover,
 .button:focus-visible {
   background: var(--accent);
+  color: #fff;
+  text-decoration: none;
 }
 
 .button--quiet {
@@ -93,4 +101,90 @@
 .button--quiet:focus-visible {
   background: var(--surface);
   color: var(--text);
+}
+
+/* A button that reads as a link, for destructive actions inside a form. */
+.button--link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--accent);
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.form__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.form__label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.form__readonly {
+  color: var(--text-muted);
+}
+
+.form__hint {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* ---------- Admin nav ---------- */
+.admin-nav {
+  display: flex;
+  gap: 1rem;
+  margin-left: auto;
+  margin-right: 1rem;
+}
+
+/* ---------- Tables ---------- */
+.table {
+  width: 100%;
+  margin-top: 2rem;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th,
+.table td {
+  padding: 0.625rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.table th {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.table code {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.table__actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* Hidden visually but still read by screen readers. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

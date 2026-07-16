@@ -107,6 +107,30 @@ section {
   padding: var(--sectionPadding);
 }
 
+/* ---------- Section rhythm: topper / title / text ----------
+   These live in critical.css rather than main.css because the first section's
+   heading is above the fold on every page. Deferring them would flash unstyled
+   text on first paint. The admin layout reuses them too. */
+.topper {
+  display: block;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: var(--topperFontSize);
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.title {
+  font-size: var(--titleFontSize);
+  margin-bottom: 1rem;
+}
+
+.text {
+  color: var(--text-muted);
+  max-width: 46rem;
+}
+
 /* ---------- Skip link (a11y) ---------- */
 .skip-link {
   position: absolute;

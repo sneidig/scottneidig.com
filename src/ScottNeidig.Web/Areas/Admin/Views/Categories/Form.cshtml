@@ -1,0 +1,42 @@
+@model CategoryFormModel
+@{
+    var isEdit = Model.Id.HasValue;
+}
+
+<section>
+    <div class="container container--narrow">
+        <p class="topper">Categories</p>
+        <h1 class="title">@(isEdit ? "Edit category" : "New category")</h1>
+
+        <form method="post" asp-action="@(isEdit ? "Edit" : "Create")" asp-route-id="@Model.Id" class="form">
+            <div asp-validation-summary="ModelOnly" class="form__errors" role="alert"></div>
+
+            <div class="form__field">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" autofocus />
+                <span asp-validation-for="Name" class="form__error"></span>
+            </div>
+
+            <div class="form__field">
+                <label asp-for="SortOrder"></label>
+                <input asp-for="SortOrder" type="number" />
+                <span class="form__hint">Lower numbers show first.</span>
+                <span asp-validation-for="SortOrder" class="form__error"></span>
+            </div>
+
+            @if (isEdit)
+            {
+                <div class="form__field">
+                    <span class="form__label">URL</span>
+                    <p class="form__readonly"><code>/@Model.Slug</code></p>
+                    <span class="form__hint">Generated from the name. Renaming changes it.</span>
+                </div>
+            }
+
+            <div class="form__actions">
+                <button class="button" type="submit">Save</button>
+                <a class="button--link" asp-action="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>

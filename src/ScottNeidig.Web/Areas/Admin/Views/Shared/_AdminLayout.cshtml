@@ -20,6 +20,10 @@
 
             @if (User.Identity?.IsAuthenticated == true)
             {
+                <ul class="admin-nav">
+                    <li><a asp-area="Admin" asp-controller="Categories" asp-action="Index">Categories</a></li>
+                </ul>
+
                 <form asp-area="Admin" asp-controller="Account" asp-action="Logout" method="post">
                     <button class="button button--quiet" type="submit">Sign out</button>
                 </form>

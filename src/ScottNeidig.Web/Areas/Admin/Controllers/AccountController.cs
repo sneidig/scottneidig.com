@@ -6,11 +6,11 @@ using ScottNeidig.Web.Areas.Admin.Models;
 namespace ScottNeidig.Web.Areas.Admin.Controllers;
 
 /// <summary>
-/// The way into the admin area. Anonymous by design: everything else under /admin
-/// requires auth, but the login page obviously cannot.
+/// The way into the admin area. AllowAnonymous is applied per-action rather than to the
+/// whole controller: a class-level AllowAnonymous would override the [Authorize] on
+/// Logout and silently leave it open.
 /// </summary>
 [Area("Admin")]
-[AllowAnonymous]
 public class AccountController : Controller
 {
     private readonly SignInManager<IdentityUser> _signInManager;
@@ -23,6 +23,7 @@ public class AccountController : Controller
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public IActionResult Login(string? returnUrl = null)
     {
         ViewData["Title"] = "Sign in";
@@ -30,6 +31,7 @@ public class AccountController : Controller
     }
 
     [HttpPost]
+    [AllowAnonymous]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginViewModel model)
     {

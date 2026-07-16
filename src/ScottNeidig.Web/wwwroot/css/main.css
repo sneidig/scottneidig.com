@@ -3,27 +3,6 @@
     Section/component styles land here as each section gets built.
 */
 
-/* ---------- Section rhythm: topper / title / text ---------- */
-.topper {
-  display: block;
-  margin-bottom: 0.25rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: var(--topperFontSize);
-  font-weight: 700;
-  color: var(--accent);
-}
-
-.title {
-  font-size: var(--titleFontSize);
-  margin-bottom: 1rem;
-}
-
-.text {
-  color: var(--text-muted);
-  max-width: 46rem;
-}
-
 /* ---------- Footer ---------- */
 .site-footer {
   border-top: 1px solid var(--border);

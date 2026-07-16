@@ -1,0 +1,55 @@
+@using ScottNeidig.Web.Services
+@model List<CategorySummary>
+
+<section>
+    <div class="container">
+        <p class="topper">Admin</p>
+        <h1 class="title">Categories</h1>
+
+        <a class="button" asp-action="Create">New category</a>
+
+        @if (Model.Count == 0)
+        {
+            <p class="text">No categories yet.</p>
+        }
+        else
+        {
+            <table class="table">
+                <caption class="visually-hidden">Categories, in display order</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">URL</th>
+                        <th scope="col">Sort</th>
+                        <th scope="col">Projects</th>
+                        <th scope="col"><span class="visually-hidden">Actions</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var category in Model)
+                    {
+                        <tr>
+                            <td>@category.Name</td>
+                            <td><code>/@category.Slug</code></td>
+                            <td>@category.SortOrder</td>
+                            <td>@category.ProjectCount</td>
+                            <td>
+                                @* Flex lives on an inner div, not the td: a table cell set to
+                                   display:flex leaves the table layout model and breaks
+                                   border-collapse and row alignment. *@
+                                <div class="table__actions">
+                                    <a asp-action="Edit" asp-route-id="@category.Id">Edit</a>
+
+                                    <form asp-action="Delete" asp-route-id="@category.Id" method="post"
+                                          onsubmit="return confirm('Delete @category.Name? Its @category.ProjectCount project(s) will stay, but become uncategorised.');">
+                                        <button class="button--link" type="submit">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</section>

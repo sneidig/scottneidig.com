@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ScottNeidig.Web.Configuration;
 using ScottNeidig.Web.Data;
+using ScottNeidig.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,8 @@ builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(connection))
 
 builder.Services.Configure<AdminUserOptions>(
     builder.Configuration.GetSection(AdminUserOptions.SectionName));
+
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 // Roles are registered now even though nothing uses them yet, so adding one later
 // is a code change rather than a migration.
