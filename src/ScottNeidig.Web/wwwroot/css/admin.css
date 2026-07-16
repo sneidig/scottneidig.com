@@ -73,6 +73,13 @@
   gap: 1.25rem;
 }
 
+/* The add row sits under a list rather than being the whole page, so it's boxed and
+   narrower than the surrounding table. */
+.form--add {
+  margin-top: 2.5rem;
+  max-width: 42rem;
+}
+
 .form__group {
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -231,6 +238,14 @@
   display: flex;
   gap: 1rem;
   align-items: center;
+}
+
+/* Point bodies are prose, not a label. Kept narrow so the row doesn't stretch the
+   table, and pre-line so the line breaks the author typed survive. */
+.table__cell--prose {
+  max-width: 32rem;
+  white-space: pre-line;
+  color: var(--text-muted);
 }
 
 /* Hidden visually but still read by screen readers. */

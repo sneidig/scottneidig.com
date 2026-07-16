@@ -1,0 +1,37 @@
+@model ProjectPointFormModel
+
+<section>
+    <div class="container container--form">
+        <p class="topper">Points</p>
+        <h1 class="title">Edit point</h1>
+
+        <form method="post" asp-action="Edit" asp-route-projectId="@Model.ProjectId" asp-route-id="@Model.Id" class="form">
+            <div asp-validation-summary="ModelOnly" class="form__errors" role="alert"></div>
+
+            <div class="form__field">
+                <label asp-for="Title"></label>
+                <input asp-for="Title" autofocus />
+                <span asp-validation-for="Title" class="form__error"></span>
+            </div>
+
+            <div class="form__field">
+                <label asp-for="Body"></label>
+                <textarea asp-for="Body" rows="5"></textarea>
+                <span class="form__hint">Plain text. Line breaks are kept; there's no markdown here.</span>
+                <span asp-validation-for="Body" class="form__error"></span>
+            </div>
+
+            <div class="form__field">
+                <label asp-for="SortOrder"></label>
+                <input asp-for="SortOrder" type="number" />
+                <span class="form__hint">Lower shows first.</span>
+                <span asp-validation-for="SortOrder" class="form__error"></span>
+            </div>
+
+            <div class="form__actions">
+                <button class="button" type="submit">Save</button>
+                <a class="button--link" asp-action="Index" asp-route-projectId="@Model.ProjectId">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>

@@ -1,0 +1,86 @@
+@model ProjectPointsViewModel
+
+<section>
+    <div class="container">
+        <p class="topper">@Model.ProjectTitle</p>
+        <h1 class="title">Points</h1>
+        <p class="text">The bullet list on the project page. Lower sort order shows first.</p>
+
+        <p>
+            <a asp-controller="Projects" asp-action="Edit" asp-route-id="@Model.ProjectId">
+                Back to project
+            </a>
+        </p>
+
+        @if (Model.Points.Count == 0)
+        {
+            <p class="text">No points yet.</p>
+        }
+        else
+        {
+            <table class="table">
+                <caption class="visually-hidden">Points on @Model.ProjectTitle, in display order</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Sort</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Body</th>
+                        <th scope="col"><span class="visually-hidden">Actions</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var point in Model.Points)
+                    {
+                        <tr>
+                            <td>@point.SortOrder</td>
+                            <td>@point.Title</td>
+                            <td class="table__cell--prose">@point.Body</td>
+                            <td>
+                                <div class="table__actions">
+                                    <a asp-action="Edit" asp-route-projectId="@Model.ProjectId" asp-route-id="@point.Id">Edit</a>
+
+                                    <form asp-action="Delete" asp-route-projectId="@Model.ProjectId" asp-route-id="@point.Id"
+                                          method="post"
+                                          onsubmit="return confirm('Delete the point &quot;@point.Title&quot;? This cannot be undone.');">
+                                        <button class="button--link" type="submit">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+        <form method="post" asp-action="Create" asp-route-projectId="@Model.ProjectId" class="form form--add">
+            <fieldset class="form__group">
+                <legend>Add a point</legend>
+
+                <div asp-validation-summary="ModelOnly" class="form__errors" role="alert"></div>
+
+                <div class="form__field">
+                    <label asp-for="NewPoint.Title"></label>
+                    <input asp-for="NewPoint.Title" />
+                    <span asp-validation-for="NewPoint.Title" class="form__error"></span>
+                </div>
+
+                <div class="form__field">
+                    <label asp-for="NewPoint.Body"></label>
+                    <textarea asp-for="NewPoint.Body" rows="3"></textarea>
+                    <span class="form__hint">Plain text. Line breaks are kept; there's no markdown here.</span>
+                    <span asp-validation-for="NewPoint.Body" class="form__error"></span>
+                </div>
+
+                <div class="form__field">
+                    <label asp-for="NewPoint.SortOrder"></label>
+                    <input asp-for="NewPoint.SortOrder" type="number" />
+                    <span asp-validation-for="NewPoint.SortOrder" class="form__error"></span>
+                </div>
+
+                <div class="form__actions">
+                    <button class="button" type="submit">Add point</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</section>

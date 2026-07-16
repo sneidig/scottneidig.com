@@ -8,6 +8,16 @@
         <p class="topper">Projects</p>
         <h1 class="title">@(isEdit ? "Edit project" : "New project")</h1>
 
+        @* Points live on their own page, and a project has to exist before it can have any. *@
+        @if (isEdit)
+        {
+            <p>
+                <a asp-controller="ProjectPoints" asp-action="Index" asp-route-projectId="@Model.Id">
+                    Edit points
+                </a>
+            </p>
+        }
+
         <form method="post" asp-action="@(isEdit ? "Edit" : "Create")" asp-route-id="@Model.Id" class="form">
             <div asp-validation-summary="ModelOnly" class="form__errors" role="alert"></div>
 
