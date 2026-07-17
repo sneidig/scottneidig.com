@@ -24,9 +24,18 @@ builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(connection))
 builder.Services.Configure<AdminUserOptions>(
     builder.Configuration.GetSection(AdminUserOptions.SectionName));
 
+// Unlike AdminUser these are not secrets, so they live in appsettings and are safe to commit.
+builder.Services.Configure<ImageOptions>(
+    builder.Configuration.GetSection(ImageOptions.SectionName));
+
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectPointService, ProjectPointService>();
+builder.Services.AddScoped<IProjectImageService, ProjectImageService>();
+builder.Services.AddScoped<IImageStorage, ImageStorage>();
+
+// Stateless and holds nothing per-request, so one instance serves everything.
+builder.Services.AddSingleton<IImageProcessor, ImageProcessor>();
 
 // Roles are registered now even though nothing uses them yet, so adding one later
 // is a code change rather than a migration.

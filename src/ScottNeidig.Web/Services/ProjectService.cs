@@ -7,8 +7,13 @@ namespace ScottNeidig.Web.Services;
 public class ProjectService : IProjectService
 {
     private readonly AppDbContext _db;
+    private readonly IImageStorage _storage;
 
-    public ProjectService(AppDbContext db) => _db = db;
+    public ProjectService(AppDbContext db, IImageStorage storage)
+    {
+        _db = db;
+        _storage = storage;
+    }
 
     public Task<List<ProjectSummary>> GetAllAsync(CancellationToken ct = default) =>
         _db.Projects
@@ -25,6 +30,72 @@ public class ProjectService : IProjectService
                 p.Points.Count))
             .AsNoTracking()
             .ToListAsync(ct);
+
+    public Task<List<ProjectCard>> GetPublishedAsync(
+        string? categorySlug = null, int? take = null, CancellationToken ct = default)
+    {
+        var query = _db.Projects.Where(p => p.Published);
+
+        if (!string.IsNullOrWhiteSpace(categorySlug))
+        {
+            query = query.Where(p => p.Category != null && p.Category.Slug == categorySlug);
+        }
+
+        var ordered = query
+            .OrderBy(p => p.SortOrder)
+            .ThenBy(p => p.Title)
+            .Select(p => new ProjectCard(
+                p.Slug,
+                p.Title,
+                p.Summary,
+                p.MetaText,
+                p.Category != null ? p.Category.Name : null,
+                // Same hero rule as the detail page: the flagged one, else the first.
+                // Ordered inside the projection so it stays one query instead of one per row.
+                p.Images
+                    .OrderByDescending(i => i.IsHero)
+                    .ThenBy(i => i.SortOrder)
+                    .ThenBy(i => i.Id)
+                    .Select(i => i.FileName)
+                    .FirstOrDefault(),
+                p.Images
+                    .OrderByDescending(i => i.IsHero)
+                    .ThenBy(i => i.SortOrder)
+                    .ThenBy(i => i.Id)
+                    .Select(i => i.Caption)
+                    .FirstOrDefault()))
+            .AsNoTracking();
+
+        return take is > 0
+            ? ordered.Take(take.Value).ToListAsync(ct)
+            : ordered.ToListAsync(ct);
+    }
+
+    public Task<ProjectDetail?> GetPublishedBySlugAsync(string slug, CancellationToken ct = default) =>
+        _db.Projects
+            .Where(p => p.Published && p.Slug == slug)
+            .Select(p => new ProjectDetail(
+                p.Slug,
+                p.Title,
+                p.Summary,
+                p.MetaText,
+                p.LiveUrl,
+                p.Category != null ? p.Category.Name : null,
+                p.Category != null ? p.Category.Slug : null,
+                p.SeoTitle,
+                p.SeoDescription,
+                p.Points
+                    .OrderBy(pt => pt.SortOrder)
+                    .ThenBy(pt => pt.Id)
+                    .Select(pt => new ProjectPointSummary(pt.Id, pt.Title, pt.Body, pt.SortOrder))
+                    .ToList(),
+                p.Images
+                    .OrderBy(i => i.SortOrder)
+                    .ThenBy(i => i.Id)
+                    .Select(i => new ProjectImageSummary(i.Id, i.FileName, i.Caption, i.SortOrder, i.IsHero))
+                    .ToList()))
+            .AsNoTracking()
+            .FirstOrDefaultAsync(ct);
 
     /// <summary>Tracked, because the caller edits and saves it.</summary>
     public Task<Project?> GetByIdAsync(int id, CancellationToken ct = default) =>
@@ -74,9 +145,25 @@ public class ProjectService : IProjectService
             return false;
         }
 
+        // The FK cascade takes the image rows with the project, which would leave their
+        // files orphaned on disk with nothing pointing at them. Read the names while the
+        // rows still exist.
+        var fileNames = await _db.ProjectImages
+            .Where(i => i.ProjectId == id)
+            .Select(i => i.FileName)
+            .ToListAsync(ct);
+
         // Images and points go with it: the FKs are configured to cascade.
         _db.Projects.Remove(project);
         await _db.SaveChangesAsync(ct);
+
+        // Files last, once the delete has committed. The other order risks binning the
+        // files and then failing to save, leaving rows pointing at nothing.
+        foreach (var fileName in fileNames)
+        {
+            _storage.Delete(fileName);
+        }
+
         return true;
     }
 

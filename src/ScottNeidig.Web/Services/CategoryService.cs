@@ -19,6 +19,26 @@ public class CategoryService : ICategoryService
             .AsNoTracking()
             .ToListAsync(ct);
 
+    public Task<List<CategorySummary>> GetWithPublishedProjectsAsync(CancellationToken ct = default) =>
+        _db.Categories
+            .Where(c => c.Projects.Any(p => p.Published))
+            .OrderBy(c => c.SortOrder)
+            .ThenBy(c => c.Name)
+            // The count is published-only too. The admin list counts drafts as well, which
+            // is right there and wrong here.
+            .Select(c => new CategorySummary(
+                c.Id, c.Name, c.Slug, c.SortOrder, c.Projects.Count(p => p.Published)))
+            .AsNoTracking()
+            .ToListAsync(ct);
+
+    public Task<CategorySummary?> GetBySlugAsync(string slug, CancellationToken ct = default) =>
+        _db.Categories
+            .Where(c => c.Slug == slug)
+            .Select(c => new CategorySummary(
+                c.Id, c.Name, c.Slug, c.SortOrder, c.Projects.Count(p => p.Published)))
+            .AsNoTracking()
+            .FirstOrDefaultAsync(ct);
+
     public Task<Category?> GetByIdAsync(int id, CancellationToken ct = default) =>
         _db.Categories.FirstOrDefaultAsync(c => c.Id == id, ct);
 

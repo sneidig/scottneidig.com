@@ -1,0 +1,60 @@
+@using ScottNeidig.Web.Models
+@model WorkListViewModel
+
+<section>
+    <div class="container">
+        <p class="topper">Work</p>
+        <h1 class="title">@(Model.IsFiltered ? Model.SelectedCategory!.Name : "Selected work")</h1>
+        <p class="text">
+            @if (Model.IsFiltered)
+            {
+                <text>@Model.SelectedCategory!.Name projects. Every build below is live.</text>
+            }
+            else
+            {
+                <text>Sites and platforms I've built. Every one below is live.</text>
+            }
+        </p>
+
+        @if (Model.Categories.Count > 0)
+        {
+            <nav class="filters" aria-label="Filter by category">
+                @* Links, not buttons: each filter is a real page with its own URL, so it
+                   has to be crawlable and openable in a new tab. *@
+                <a class="filter @(Model.IsFiltered ? "" : "filter--on")"
+                   asp-action="Index"
+                   aria-current="@(Model.IsFiltered ? null : "page")">All</a>
+
+                @foreach (var category in Model.Categories)
+                {
+                    var on = Model.SelectedCategory?.Slug == category.Slug;
+
+                    <a class="filter @(on ? "filter--on" : "")"
+                       asp-action="Category"
+                       asp-route-slug="@category.Slug"
+                       aria-current="@(on ? "page" : null)">@category.Name</a>
+                }
+            </nav>
+        }
+
+        @if (Model.Projects.Count == 0)
+        {
+            <p class="text">Nothing here yet.</p>
+        }
+        else
+        {
+            <ul class="cards">
+                @foreach (var project in Model.Projects)
+                {
+                    @* h2: the page h1 sits directly above this grid. *@
+                    <partial name="_ProjectCard" model="@(new ProjectCardModel
+                            {
+                                Project = project,
+                                HeadingLevel = 2,
+                                ShowMeta = true
+                            })" />
+                }
+            </ul>
+        }
+    </div>
+</section>

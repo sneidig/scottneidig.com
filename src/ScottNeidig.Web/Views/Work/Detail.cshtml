@@ -1,0 +1,107 @@
+@using ScottNeidig.Web.Models
+@using ScottNeidig.Web.Services
+@model ProjectDetail
+
+<article>
+    <section class="section--lede">
+        <div class="container">
+            <p class="topper">@(Model.CategoryName ?? "Work")</p>
+            <h1 class="header">@Model.Title</h1>
+
+            @if (!string.IsNullOrWhiteSpace(Model.MetaText))
+            {
+                <p class="lede__meta">@Model.MetaText</p>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.Summary))
+            {
+                <p class="text lede__text">@Model.Summary</p>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.LiveUrl))
+            {
+                @* rel=noopener because target=_blank otherwise hands the new tab a
+                   reference back to this window. *@
+                <a class="button" href="@Model.LiveUrl" target="_blank" rel="noopener">
+                    Visit the live site
+                </a>
+            }
+
+            @if (Model.Hero is not null)
+            {
+                <partial name="_Picture" model="@(new PictureModel
+                        {
+                            FileName = Model.Hero.FileName,
+                            Alt = Model.Hero.Caption,
+                            AboveTheFold = true,
+                            CssClass = "hero"
+                        })" />
+            }
+        </div>
+    </section>
+
+    @if (Model.Points.Count > 0)
+    {
+        <section>
+            <div class="container">
+                <h2 class="title">What went into it</h2>
+
+                <ul class="points">
+                    @foreach (var point in Model.Points)
+                    {
+                        <li class="point">
+                            <h3 class="point__title">@point.Title</h3>
+
+                            @if (!string.IsNullOrWhiteSpace(point.Body))
+                            {
+                                @* pre-line in the CSS keeps the author's line breaks, so this
+                                   stays encoded text and never touches Html.Raw. *@
+                                <p class="point__body">@point.Body</p>
+                            }
+                        </li>
+                    }
+                </ul>
+            </div>
+        </section>
+    }
+
+    @if (Model.Gallery.Any())
+    {
+        <section>
+            <div class="container">
+                <h2 class="title">Screens</h2>
+
+                <ul class="gallery">
+                    @foreach (var image in Model.Gallery)
+                    {
+                        <li>
+                            <figure class="shot">
+                                <partial name="_Picture" model="@(new PictureModel
+                                        {
+                                            FileName = image.FileName,
+                                            Alt = image.Caption
+                                        })" />
+                                <figcaption class="shot__caption">@image.Caption</figcaption>
+                            </figure>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </section>
+    }
+
+    <section>
+        <div class="container">
+            <p>
+                <a asp-action="Index">Back to all work</a>
+                @if (Model.CategorySlug is not null)
+                {
+                    <text> or </text>
+                    <a asp-action="Category" asp-route-slug="@Model.CategorySlug">
+                        more @Model.CategoryName
+                    </a>
+                }
+            </p>
+        </div>
+    </section>
+</article>

@@ -3,6 +3,207 @@
     Section/component styles land here as each section gets built.
 */
 
+/* ---------- Buttons ----------
+   inline-block matters: .button is used on <a>, and vertical padding on an inline element
+   overflows the line box instead of expanding it. Same rule as admin.css. */
+.button {
+  display: inline-block;
+  background: var(--accent-strong);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.75rem 1.5rem;
+  font: inherit;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button:hover,
+.button:focus-visible {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* Alternating section background, to break up a long page. */
+.section--alt {
+  background: var(--surface);
+  border-block: 1px solid var(--border);
+}
+
+/* ---------- Category filters ---------- */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.filter {
+  display: inline-block;
+  padding: 0.375rem 0.875rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.filter:hover,
+.filter:focus-visible {
+  color: var(--text);
+  border-color: var(--text-muted);
+}
+
+/* The selected filter is marked with aria-current in the markup as well as this colour,
+   so it isn't signalled by colour alone. */
+.filter--on {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+  color: #fff;
+}
+
+/* ---------- Project cards ---------- */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.card:hover {
+  border-color: var(--text-muted);
+}
+
+/* The whole card is one link, so there's a single tab stop per project rather than one
+   for the image and another for the title. */
+.card__link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Fixed ratio here rather than in the file: the pipeline keeps each image's real aspect
+   so nothing is cropped on disk, and the grid does its own cropping for display only. */
+.card__media img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: top;
+  border-bottom: 1px solid var(--border);
+}
+
+.card__body {
+  padding: 1.25rem;
+}
+
+.card__category {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.375rem;
+}
+
+.card__title {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.card__link:hover .card__title {
+  color: var(--accent);
+}
+
+.card__meta {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.card__text {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.cards__more {
+  margin-top: 2rem;
+}
+
+/* ---------- Home: what I do ---------- */
+.offers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.offer__title {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.offer__text {
+  color: var(--text-muted);
+}
+
+/* ---------- Project detail: points ---------- */
+.points {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.point {
+  border-left: 2px solid var(--accent);
+  padding-left: 1.25rem;
+}
+
+.point__title {
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+
+/* pre-line keeps the line breaks typed into the admin without needing markdown or Html.Raw. */
+.point__body {
+  color: var(--text-muted);
+  white-space: pre-line;
+}
+
+/* ---------- Project detail: gallery ---------- */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.shot img {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.shot__caption {
+  margin-top: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
 /* ---------- Footer ---------- */
 .site-footer {
   border-top: 1px solid var(--border);

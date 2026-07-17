@@ -484,3 +484,8 @@ $RECYCLE.BIN/
 # Production config and secrets (never commit)
 appsettings.Production.json
 secrets.json
+
+# Uploaded images. Written at runtime and owned by whichever environment they were
+# uploaded to, so the repo is the wrong place for them. The FTP deploy is diff-based
+# and only pushes what it has, so it won't wipe the server's copies either.
+src/ScottNeidig.Web/wwwroot/uploads/

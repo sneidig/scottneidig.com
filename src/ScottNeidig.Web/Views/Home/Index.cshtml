@@ -1,15 +1,73 @@
-@{
-    ViewData["Title"] = "Web Developer";
-    ViewData["Description"] = "Scott Neidig — web developer. Fast, SEO-first websites for small business, and nopCommerce development.";
-}
+@using ScottNeidig.Web.Models
+@model HomeViewModel
 
-<section>
+@*
+    Copy here is placeholder-quality and Scott's call to rewrite. It's deliberately
+    understated: claims have to be ones that survive a client conversation.
+    The two service blocks link nowhere yet; /services/* is section 5.
+*@
+
+<section class="section--lede">
     <div class="container">
-        <p class="topper">Scaffold</p>
-        <h1 class="title">Scott Neidig</h1>
-        <p class="text">
-            Placeholder home page. Layout, design tokens, and the deferred-CSS pattern are in
-            place — sections get built from here.
+        <p class="topper">Web developer</p>
+        <h1 class="header">Websites that load fast and get found</h1>
+        <p class="text lede__text">
+            I build small-business websites and nopCommerce stores. Written by hand in
+            ASP.NET Core, with no page builder and no pile of plugins, which is most of why
+            they're quick and why search engines can read them.
         </p>
     </div>
 </section>
+
+<section class="section--alt">
+    <div class="container">
+        <p class="topper">What I do</p>
+        <h2 class="title">Two kinds of work</h2>
+
+        <ul class="offers">
+            <li class="offer">
+                <h3 class="offer__title">nopCommerce development</h3>
+                <p class="offer__text">
+                    Custom plugins, integrations and fixes on nopCommerce stores. I extend the
+                    platform through its plugin model rather than changing its core, so your
+                    store can still take an upgrade afterwards.
+                </p>
+            </li>
+
+            <li class="offer">
+                <h3 class="offer__title">Small business websites</h3>
+                <p class="offer__text">
+                    A site built to be found by people searching for what you do. Hand-written,
+                    quick to load, and readable by search engines on the first pass.
+                </p>
+            </li>
+        </ul>
+    </div>
+</section>
+
+@if (Model.FeaturedProjects.Count > 0)
+{
+    <section>
+        <div class="container">
+            <p class="topper">Work</p>
+            <h2 class="title">Recent builds</h2>
+
+            <ul class="cards">
+                @foreach (var project in Model.FeaturedProjects)
+                {
+                    @* h3: the "Recent builds" h2 sits above this grid, so h2 here would skip
+                       nothing but would flatten the outline. *@
+                    <partial name="_ProjectCard" model="@(new ProjectCardModel
+                            {
+                                Project = project,
+                                HeadingLevel = 3
+                            })" />
+                }
+            </ul>
+
+            <p class="cards__more">
+                <a asp-controller="Work" asp-action="Index">See all work</a>
+            </p>
+        </div>
+    </section>
+}

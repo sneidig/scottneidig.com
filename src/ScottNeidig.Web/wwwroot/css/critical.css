@@ -126,6 +126,13 @@ section {
   margin-bottom: 1rem;
 }
 
+/* The page's one h1. Bigger than .title, which is for section headings. */
+.header {
+  font-size: var(--headerFontSize);
+  font-weight: 900;
+  margin-bottom: 1rem;
+}
+
 .text {
   color: var(--text-muted);
   max-width: 46rem;
@@ -166,4 +173,47 @@ section {
   font-weight: 700;
   color: var(--text);
   text-decoration: none;
+}
+
+.site-nav__links {
+  display: flex;
+  gap: 1.5rem;
+  margin: 0;
+}
+
+.site-nav__links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.site-nav__links a:hover,
+.site-nav__links a:focus-visible {
+  color: var(--text);
+}
+
+/* ---------- Lede (above the fold on every public page) ----------
+   In critical.css because it's the first thing painted. The hero image inside it is the
+   LCP element on a project page, so its box has to be styled before first paint or the
+   layout shifts when the image lands. */
+.section--lede .lede__text {
+  margin-bottom: 1.5rem;
+}
+
+.lede__meta {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.hero {
+  margin-top: 2.5rem;
+}
+
+.hero img {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
 }

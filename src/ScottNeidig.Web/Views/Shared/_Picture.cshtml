@@ -1,0 +1,38 @@
+@*
+    The picture element, per the CodeStitch Page Speed Handbook.
+
+    The upload pipeline writes two files per image: {name}.webp and {name}-m.webp. This
+    builds both <source> tags from the stored base name, so the database never has to know
+    the variants exist. If the suffix here and ImageStorage.MobileSuffix ever disagree,
+    every mobile visitor gets a broken image while desktop looks fine, which is why that
+    naming has a test on it.
+
+    Reusable as-is on a client site: it depends on ImageOptions, not on anything here.
+*@
+@using Microsoft.Extensions.Options
+@using ScottNeidig.Web.Configuration
+@model ScottNeidig.Web.Models.PictureModel
+@inject IOptions<ImageOptions> ImageConfig
+
+@{
+    var folder = ImageConfig.Value.UploadFolder;
+    var desktop = Url.Content($"~/{folder}/{Model.FileName}.webp");
+    var mobile = Url.Content($"~/{folder}/{Model.FileName}-m.webp");
+}
+
+<picture class="@Model.CssClass">
+    <source media="(max-width: 600px)" srcset="@mobile" type="image/webp" />
+    <source media="(min-width: 601px)" srcset="@desktop" type="image/webp" />
+
+    @* The fallback img is what actually renders; the sources only pick the file.
+       decoding="async" goes on every image, loading="lazy" only below the fold.
+       A null attribute value is omitted by Razor, so fetchpriority appears on the hero
+       only, which is where it means anything. *@
+    <img src="@desktop"
+         alt="@Model.Alt"
+         width="@Model.Width"
+         height="@Model.Height"
+         decoding="async"
+         loading="@(Model.AboveTheFold ? "eager" : "lazy")"
+         fetchpriority="@(Model.AboveTheFold ? "high" : null)" />
+</picture>

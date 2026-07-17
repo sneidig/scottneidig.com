@@ -7,6 +7,15 @@ public interface ICategoryService
     /// <summary>Ordered for display, with project counts, in one query.</summary>
     Task<List<CategorySummary>> GetAllAsync(CancellationToken ct = default);
 
+    /// <summary>
+    /// Categories that have at least one published project. The public filter nav is built
+    /// from this, so it never offers a link to an empty page.
+    /// </summary>
+    Task<List<CategorySummary>> GetWithPublishedProjectsAsync(CancellationToken ct = default);
+
+    /// <summary>Null when the slug is unknown. The caller turns that into a 404.</summary>
+    Task<CategorySummary?> GetBySlugAsync(string slug, CancellationToken ct = default);
+
     Task<Category?> GetByIdAsync(int id, CancellationToken ct = default);
 
     /// <summary>Returns the new id.</summary>

@@ -1,0 +1,54 @@
+@using Microsoft.Extensions.Options
+@using ScottNeidig.Web.Configuration
+@model ProjectImageFormModel
+@inject IOptions<ImageOptions> ImageConfig
+
+@{
+    var folder = ImageConfig.Value.UploadFolder;
+}
+
+<section>
+    <div class="container container--form">
+        <p class="topper">Images</p>
+        <h1 class="title">Edit image</h1>
+
+        <img class="preview" src="~/@folder/@(Model.FileName).webp" alt="@Model.Caption" decoding="async" />
+
+        <form method="post" asp-action="Edit" asp-route-projectId="@Model.ProjectId" asp-route-id="@Model.Id" class="form">
+            <div asp-validation-summary="ModelOnly" class="form__errors" role="alert"></div>
+
+            <div class="form__field">
+                <span class="form__label">File</span>
+                <span class="form__readonly">
+                    <code>@(Model.FileName).webp</code> and <code>@(Model.FileName)-m.webp</code>
+                </span>
+                <span class="form__hint">To change the picture, upload a new one and delete this.</span>
+            </div>
+
+            <div class="form__field">
+                <label asp-for="Caption"></label>
+                <input asp-for="Caption" autofocus />
+                <span class="form__hint">Also the alt text.</span>
+                <span asp-validation-for="Caption" class="form__error"></span>
+            </div>
+
+            <div class="form__field">
+                <label asp-for="SortOrder"></label>
+                <input asp-for="SortOrder" type="number" />
+                <span class="form__hint">Lower shows first.</span>
+                <span asp-validation-for="SortOrder" class="form__error"></span>
+            </div>
+
+            <div class="form__field form__field--inline">
+                <input asp-for="IsHero" />
+                <label asp-for="IsHero"></label>
+            </div>
+            <span class="form__hint">The main image on the project page. Ticking this unticks whichever image holds it now.</span>
+
+            <div class="form__actions">
+                <button class="button" type="submit">Save</button>
+                <a class="button--link" asp-action="Index" asp-route-projectId="@Model.ProjectId">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>

@@ -240,6 +240,29 @@
   align-items: center;
 }
 
+/* Row thumbnail. The height attribute in the markup is a guess at the aspect ratio, so
+   height:auto lets the real image win while width/height still reserve space. */
+.thumb {
+  width: 120px;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  display: block;
+}
+
+.preview {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-top: 1.5rem;
+}
+
+.subnav {
+  display: flex;
+  gap: 1.5rem;
+}
+
 /* Point bodies are prose, not a label. Kept narrow so the row doesn't stretch the
    table, and pre-line so the line breaks the author typed survive. */
 .table__cell--prose {

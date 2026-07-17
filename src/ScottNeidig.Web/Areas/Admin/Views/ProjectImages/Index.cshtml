@@ -1,0 +1,111 @@
+@using Microsoft.Extensions.Options
+@using ScottNeidig.Web.Configuration
+@model ProjectImagesViewModel
+@inject IOptions<ImageOptions> ImageConfig
+
+@{
+    var folder = ImageConfig.Value.UploadFolder;
+}
+
+<section>
+    <div class="container">
+        <p class="topper">@Model.ProjectTitle</p>
+        <h1 class="title">Images</h1>
+        <p class="text">
+            Upload once at full size. The desktop and mobile WEBP versions are generated for you.
+        </p>
+
+        <p>
+            <a asp-controller="Projects" asp-action="Edit" asp-route-id="@Model.ProjectId">
+                Back to project
+            </a>
+        </p>
+
+        @if (Model.Images.Count == 0)
+        {
+            <p class="text">No images yet.</p>
+        }
+        else
+        {
+            <table class="table">
+                <caption class="visually-hidden">Images on @Model.ProjectTitle, in display order</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Sort</th>
+                        <th scope="col"><span class="visually-hidden">Preview</span></th>
+                        <th scope="col">Caption</th>
+                        <th scope="col">Role</th>
+                        <th scope="col"><span class="visually-hidden">Actions</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var image in Model.Images)
+                    {
+                        <tr>
+                            <td>@image.SortOrder</td>
+                            <td>
+                                @* The caption is the alt text everywhere this image appears. *@
+                                <img class="thumb" src="~/@folder/@(image.FileName).webp"
+                                     alt="@image.Caption" width="120" height="75"
+                                     loading="lazy" decoding="async" />
+                            </td>
+                            <td>
+                                @image.Caption
+                                <br />
+                                <code>@image.FileName</code>
+                            </td>
+                            <td>
+                                @if (image.IsHero)
+                                {
+                                    <span class="badge badge--live">Hero</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="table__actions">
+                                    <a asp-action="Edit" asp-route-projectId="@Model.ProjectId" asp-route-id="@image.Id">Edit</a>
+
+                                    <form asp-action="Delete" asp-route-projectId="@Model.ProjectId" asp-route-id="@image.Id"
+                                          method="post"
+                                          onsubmit="return confirm('Delete &quot;@image.Caption&quot;? The files go too. This cannot be undone.');">
+                                        <button class="button--link" type="submit">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+        @* enctype matters: without it the browser posts filenames, not file contents. *@
+        <form method="post" asp-action="Upload" asp-route-projectId="@Model.ProjectId"
+              enctype="multipart/form-data" class="form form--add">
+            <fieldset class="form__group">
+                <legend>Upload an image</legend>
+
+                <div asp-validation-summary="ModelOnly" class="form__errors" role="alert"></div>
+
+                <div class="form__field">
+                    <label asp-for="NewImage.Caption"></label>
+                    <input asp-for="NewImage.Caption" />
+                    <span class="form__hint">Used as the alt text and to name the file. Describe what's shown.</span>
+                    <span asp-validation-for="NewImage.Caption" class="form__error"></span>
+                </div>
+
+                <div class="form__field">
+                    <label asp-for="NewImage.File"></label>
+                    <input asp-for="NewImage.File" type="file" accept="image/*" />
+                    <span class="form__hint">
+                        JPG, PNG or WEBP, up to @(ImageConfig.Value.MaxUploadBytes / 1024 / 1024)MB.
+                        Biggest version you have; it gets resized down to @(ImageConfig.Value.DesktopWidth)px wide.
+                    </span>
+                    <span asp-validation-for="NewImage.File" class="form__error"></span>
+                </div>
+
+                <div class="form__actions">
+                    <button class="button" type="submit">Upload</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</section>

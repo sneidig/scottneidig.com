@@ -48,6 +48,8 @@
 
                                     <a asp-controller="ProjectPoints" asp-action="Index" asp-route-projectId="@project.Id">Points</a>
 
+                                    <a asp-controller="ProjectImages" asp-action="Index" asp-route-projectId="@project.Id">Images</a>
+
                                     <form asp-action="Delete" asp-route-id="@project.Id" method="post"
                                           onsubmit="return confirm('Delete @project.Title? Its images and points go too. This cannot be undone.');">
                                         <button class="button--link" type="submit">Delete</button>

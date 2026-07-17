@@ -8,12 +8,15 @@
         <p class="topper">Projects</p>
         <h1 class="title">@(isEdit ? "Edit project" : "New project")</h1>
 
-        @* Points live on their own page, and a project has to exist before it can have any. *@
+        @* Points and images live on their own pages, and a project has to exist first. *@
         @if (isEdit)
         {
-            <p>
+            <p class="subnav">
                 <a asp-controller="ProjectPoints" asp-action="Index" asp-route-projectId="@Model.Id">
                     Edit points
+                </a>
+                <a asp-controller="ProjectImages" asp-action="Index" asp-route-projectId="@Model.Id">
+                    Edit images
                 </a>
             </p>
         }

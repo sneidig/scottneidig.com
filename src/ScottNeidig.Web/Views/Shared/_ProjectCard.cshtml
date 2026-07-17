@@ -1,0 +1,54 @@
+@*
+    One project in a grid. Shared by /work and the home page so the two can't drift.
+*@
+@using ScottNeidig.Web.Models
+@model ProjectCardModel
+
+@{
+    var project = Model.Project;
+}
+
+<li class="card">
+    <a class="card__link" asp-controller="Work" asp-action="Detail" asp-route-slug="@project.Slug">
+        @if (project.HeroFileName is not null)
+        {
+            @* The caption is the alt text. The title below repeats most of it as real text,
+               but the two aren't reliably the same, so the alt stays rather than going empty. *@
+            <partial name="_Picture" model="@(new PictureModel
+                    {
+                        FileName = project.HeroFileName,
+                        Alt = project.HeroCaption ?? "",
+                        CssClass = "card__media"
+                    })" />
+        }
+
+        <div class="card__body">
+            @if (project.CategoryName is not null)
+            {
+                <p class="card__category">@project.CategoryName</p>
+            }
+
+            @* Switch rather than building the tag name in a string: it keeps the markup real
+               HTML that Razor and the editor can both see, and there's no Html.Raw involved. *@
+            @switch (Model.HeadingLevel)
+            {
+                case 3:
+                    <h3 class="card__title">@project.Title</h3>
+                    break;
+                default:
+                    <h2 class="card__title">@project.Title</h2>
+                    break;
+            }
+
+            @if (Model.ShowMeta && !string.IsNullOrWhiteSpace(project.MetaText))
+            {
+                <p class="card__meta">@project.MetaText</p>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(project.Summary))
+            {
+                <p class="card__text">@project.Summary</p>
+            }
+        </div>
+    </a>
+</li>
