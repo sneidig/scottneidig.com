@@ -29,20 +29,26 @@
             <a class="site-nav__brand" asp-controller="Home" asp-action="Index">Scott Neidig</a>
 
             @*
-                Nav grows as pages land, no dead links. Services are the front door; Work is
-                deliberately NOT here (it's proof reached from inside a service page). About and
-                Blog join when they're built.
+                Services dropdown. Native <details>/<summary>: a click/touch-friendly,
+                keyboard-accessible menu with zero JavaScript, which is why it's this element
+                and not a hover menu (hover doesn't work on touch) or a JS widget. The summary
+                is the toggle; the hub link lives inside as "All services" since a <summary>
+                can't also be a link. About and Blog join as siblings when they're built.
 
-                The quote CTA is split out of the link list and styled as a button so it's the
-                one thing that stands out, and it uses the same "Schedule a consultation" wording
-                as every service-page CTA so the whole site asks for one action. The header is
-                sticky (see critical.css), so this stays on screen the whole way down the page.
+                No Contact link: the "Schedule a consultation" CTA already goes there, so a
+                second Contact entry would be redundant. The CTA is a button and sits far right
+                so it reads as the one primary action. The header is sticky (critical.css), so
+                it all stays on screen the whole way down the page.
             *@
-            <ul class="site-nav__links">
-                <li><a asp-controller="Services" asp-action="NopCommerce">nopCommerce</a></li>
-                <li><a asp-controller="Services" asp-action="DotNet">.NET</a></li>
-                <li><a asp-controller="Services" asp-action="SmallBusiness">Websites</a></li>
-            </ul>
+            <details class="nav-menu">
+                <summary class="nav-menu__label">Services</summary>
+                <ul class="nav-menu__list">
+                    <li><a asp-controller="Services" asp-action="Index">All services</a></li>
+                    <li><a asp-controller="Services" asp-action="NopCommerce">nopCommerce</a></li>
+                    <li><a asp-controller="Services" asp-action="DotNet">.NET applications</a></li>
+                    <li><a asp-controller="Services" asp-action="SmallBusiness">Websites</a></li>
+                </ul>
+            </details>
 
             <a class="button site-nav__cta" asp-controller="Contact" asp-action="Index">Schedule a consultation</a>
         </nav>
