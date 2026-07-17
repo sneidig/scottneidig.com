@@ -1,0 +1,89 @@
+@model ContactFormModel
+
+@*
+    Copy here is placeholder and Scott's to rewrite. Structure follows a standard
+    conversion contact page: one clear ask, a short form, reassurance right at the button.
+*@
+
+<section class="section--lede">
+    <div class="container container--form">
+        <p class="topper">Contact</p>
+        <h1 class="header">Schedule a consultation</h1>
+        <p class="text lede__text">
+            Tell me what you're working with and what you need. nopCommerce, an existing .NET
+            application, or a new site. Call or email for pricing and estimates, or send a few
+            lines below and I'll get back to you.
+        </p>
+
+        @*
+            Phone and email are placeholders. Scott is putting a real number out to handle calls,
+            and needs to drop in a business email. Both must be swapped before this goes live, or
+            the tel:/mailto: links dial and address nothing. Kept as visible text AND links so a
+            phone taps to call on mobile and an address opens the mail client.
+        *@
+        <ul class="contact-methods">
+            <li>
+                <span class="contact-methods__label">Call</span>
+                <a href="tel:+10000000000">(000) 000-0000</a>
+                <span class="form__hint">[PLACEHOLDER — swap for the real number]</span>
+            </li>
+            <li>
+                <span class="contact-methods__label">Email</span>
+                <a href="mailto:you@example.com">you@example.com</a>
+                <span class="form__hint">[PLACEHOLDER — swap for the real address]</span>
+            </li>
+        </ul>
+
+        @*
+            Authority line, not a price line. "Competitive with agencies" is a value claim
+            (ex-agency work, direct, no agency overhead), backed by Scott having worked at
+            agencies and knowing what they bill. Deliberately NOT "affordable" — that reads as
+            junior and undercuts the org-tier positioning. Placeholder wording for Scott.
+        *@
+        <p class="contact-authority">
+            I've done this work inside agencies, where it bills at a premium. Direct, my rates
+            are competitive with theirs, without the overhead in between.
+        </p>
+
+        <form method="post" class="form form--contact">
+            <div asp-validation-summary="ModelOnly" class="form__errors" role="alert"></div>
+
+            <div class="form__field">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" autocomplete="name" />
+                <span asp-validation-for="Name" class="form__error"></span>
+            </div>
+
+            <div class="form__field">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" type="email" autocomplete="email" />
+                <span asp-validation-for="Email" class="form__error"></span>
+            </div>
+
+            <div class="form__field">
+                <label asp-for="Message"></label>
+                <textarea asp-for="Message" rows="6"></textarea>
+                <span asp-validation-for="Message" class="form__error"></span>
+            </div>
+
+            @*
+                Honeypot. Hidden from people and from the accessibility tree, so no human or
+                screen reader ever fills it; a bot that does gets silently dropped. aria-hidden
+                and tabindex keep it out of keyboard and AT flow.
+            *@
+            <div class="hp" aria-hidden="true">
+                <label asp-for="Website">Website</label>
+                <input asp-for="Website" tabindex="-1" autocomplete="off" />
+            </div>
+
+            <div class="form__actions">
+                <button class="button" type="submit">Send message</button>
+            </div>
+
+            <p class="form__reassure">
+                Goes straight to me, and a real person reads it. I usually reply within a
+                business day.
+            </p>
+        </form>
+    </div>
+</section>

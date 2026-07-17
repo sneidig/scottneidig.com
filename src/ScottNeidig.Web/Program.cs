@@ -32,6 +32,7 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectPointService, ProjectPointService>();
 builder.Services.AddScoped<IProjectImageService, ProjectImageService>();
+builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<IImageStorage, ImageStorage>();
 
 // Stateless and holds nothing per-request, so one instance serves everything.

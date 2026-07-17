@@ -1,0 +1,50 @@
+@using ScottNeidig.Web.Services
+@model List<ContactMessageSummary>
+
+<section>
+    <div class="container">
+        <p class="topper">Admin</p>
+        <h1 class="title">Messages</h1>
+
+        @if (Model.Count == 0)
+        {
+            <p class="text">No messages yet.</p>
+        }
+        else
+        {
+            <table class="table">
+                <caption class="visually-hidden">Contact enquiries, newest first</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Received</th>
+                        <th scope="col">From</th>
+                        <th scope="col">Message</th>
+                        <th scope="col"><span class="visually-hidden">Actions</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var message in Model)
+                    {
+                        <tr>
+                            @* Stored UTC, shown as the server's local time. Fine for a one-person inbox. *@
+                            <td>@message.CreatedUtc.ToLocalTime().ToString("d MMM yyyy, HH:mm")</td>
+                            <td>
+                                @message.Name
+                                <br />
+                                @* mailto so a reply is one click. The subject seeds the thread. *@
+                                <a href="mailto:@message.Email?subject=Re: your enquiry">@message.Email</a>
+                            </td>
+                            <td class="table__cell--prose">@message.Message</td>
+                            <td>
+                                <form asp-action="Delete" asp-route-id="@message.Id" method="post"
+                                      onsubmit="return confirm('Delete this message? This cannot be undone.');">
+                                    <button class="button--link" type="submit">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</section>
