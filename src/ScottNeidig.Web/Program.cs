@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ScottNeidig.Web.Configuration;
 using ScottNeidig.Web.Data;
+using ScottNeidig.Web.Health;
+using ScottNeidig.Web.Middleware;
 using ScottNeidig.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,6 +39,10 @@ builder.Services.AddScoped<IProjectPointService, ProjectPointService>();
 builder.Services.AddScoped<IProjectImageService, ProjectImageService>();
 builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<ISeoService, SeoService>();
+
+// Liveness that actually depends on the database, so a monitor learns the truth.
+builder.Services.AddHealthChecks()
+    .AddCheck<DatabaseHealthCheck>("database");
 builder.Services.AddScoped<IImageStorage, ImageStorage>();
 
 // Stateless and holds nothing per-request, so one instance serves everything.
@@ -71,11 +77,19 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 var app = builder.Build();
 
+// Security headers first, so every response including errors and static files carries them.
+app.UseSecurityHeaders();
+
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    // Production: friendly 500 page. Dev keeps the detailed developer exception page.
+    app.UseExceptionHandler("/error");
     app.UseHsts();
 }
+
+// Re-execute to the branded status page for 404s and the like, keeping the original status
+// code. Active in every environment so 404s can be checked locally.
+app.UseStatusCodePagesWithReExecute("/error/{0}");
 
 app.UseHttpsRedirection();
 app.UseRouting();
@@ -95,6 +109,9 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
+
+// Reports Healthy only when the database is reachable. Public, but it exposes only a status.
+app.MapHealthChecks("/health");
 
 using (var scope = app.Services.CreateScope())
 {

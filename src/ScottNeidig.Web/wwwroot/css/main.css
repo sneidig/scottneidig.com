@@ -386,6 +386,15 @@
   font-weight: 600;
 }
 
+/* ---------- 404 page ---------- */
+.notfound-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
 /* ---------- Footer ---------- */
 .site-footer {
   border-top: 1px solid var(--border);

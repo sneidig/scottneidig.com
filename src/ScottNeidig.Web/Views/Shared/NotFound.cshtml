@@ -1,0 +1,23 @@
+@*
+    404 page. In Shared so both the ErrorController and any direct NotFound() result find it.
+    The re-execute middleware keeps the 404 status on the response, so this renders with the
+    right code rather than a soft 404.
+*@
+
+<section class="section--lede">
+    <div class="container container--prose">
+        <p class="topper">Not found</p>
+        <h1 class="header">That page isn't here</h1>
+        <p class="text lede__text">
+            The page you were after doesn't exist, or it moved. Nothing you did wrong. Here's
+            the way back.
+        </p>
+
+        <nav class="notfound-links" aria-label="Where to next">
+            <a class="button" asp-controller="Home" asp-action="Index">Home</a>
+            <a asp-controller="Services" asp-action="Index">Services</a>
+            <a asp-controller="Work" asp-action="Index">Work</a>
+            <a asp-controller="Contact" asp-action="Index">Contact</a>
+        </nav>
+    </div>
+</section>

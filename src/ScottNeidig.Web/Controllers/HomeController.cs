@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using ScottNeidig.Web.Models;
 using ScottNeidig.Web.Services;
@@ -25,8 +24,4 @@ public class HomeController : Controller
             FeaturedProjects = await _projects.GetPublishedAsync(take: FeaturedCount, ct: ct)
         });
     }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error() =>
-        View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 }
