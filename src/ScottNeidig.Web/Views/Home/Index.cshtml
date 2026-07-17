@@ -3,43 +3,64 @@
 
 @*
     Copy here is placeholder-quality and Scott's call to rewrite. It's deliberately
-    understated: claims have to be ones that survive a client conversation.
-    The two service blocks link nowhere yet; /services/* is section 5.
+    understated: claims have to be ones that survive a client conversation. No "hand-written"
+    claim (he guides AI to write code; claiming hand-coded is false and the first thing a
+    client interview would expose). Services-led, not portfolio-led, per the IA.
 *@
 
 <section class="section--lede">
     <div class="container">
-        <p class="topper">Web developer</p>
-        <h1 class="header">Websites that load fast and get found</h1>
+        <p class="topper">Web and application developer</p>
+        <h1 class="header">Development for businesses and organizations</h1>
         <p class="text lede__text">
-            I build small-business websites and nopCommerce stores. Written by hand in
-            ASP.NET Core, with no page builder and no pile of plugins, which is most of why
-            they're quick and why search engines can read them.
+            I build and maintain .NET applications, nopCommerce stores, and websites for small
+            businesses. Real development on live systems, fast and built to last, by someone
+            who's done this inside agencies for years.
         </p>
+        <a class="button button--lg" asp-controller="Contact" asp-action="Index">Schedule a consultation</a>
     </div>
 </section>
 
 <section class="section--alt">
     <div class="container">
         <p class="topper">What I do</p>
-        <h2 class="title">Two kinds of work</h2>
+        <h2 class="title">How I can help</h2>
 
+        @* Each offer links into its service page. Order matches the services hub:
+           nopCommerce first (sharpest wedge), .NET second, websites last. *@
         <ul class="offers">
-            <li class="offer">
-                <h3 class="offer__title">nopCommerce development</h3>
-                <p class="offer__text">
-                    Custom plugins, integrations and fixes on nopCommerce stores. I extend the
-                    platform through its plugin model rather than changing its core, so your
-                    store can still take an upgrade afterwards.
-                </p>
+            <li>
+                <a class="offer" asp-controller="Services" asp-action="NopCommerce">
+                    <h3 class="offer__title">nopCommerce development</h3>
+                    <p class="offer__text">
+                        Custom plugins, integrations, upgrades and fixes on existing stores.
+                        Agency experience, working with you directly.
+                    </p>
+                    @* Decorative: the whole card is one link named by the h3, so this repeat
+                       is hidden from screen readers to avoid announcing the title twice. *@
+                    <span class="offer__more" aria-hidden="true">Learn more</span>
+                </a>
             </li>
 
-            <li class="offer">
-                <h3 class="offer__title">Small business websites</h3>
-                <p class="offer__text">
-                    A site built to be found by people searching for what you do. Hand-written,
-                    quick to load, and readable by search engines on the first pass.
-                </p>
+            <li>
+                <a class="offer" asp-controller="Services" asp-action="DotNet">
+                    <h3 class="offer__title">.NET application development</h3>
+                    <p class="offer__text">
+                        Maintenance, fixes and new features on an existing .NET application, or
+                        a new build. The back end, not just the front. 25 years of it.
+                    </p>
+                    <span class="offer__more" aria-hidden="true">Learn more</span>
+                </a>
+            </li>
+
+            <li>
+                <a class="offer" asp-controller="Services" asp-action="SmallBusiness">
+                    <h3 class="offer__title">Small business websites</h3>
+                    <p class="offer__text">
+                        A fast, clean site built to be found by people searching for what you do.
+                    </p>
+                    <span class="offer__more" aria-hidden="true">Learn more</span>
+                </a>
             </li>
         </ul>
     </div>

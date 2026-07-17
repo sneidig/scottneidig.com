@@ -162,6 +162,25 @@
   margin-top: 2rem;
 }
 
+/* The whole offer is one link, so there's one tab stop per service and the whole card is a
+   target, not just the title. */
+.offer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  color: inherit;
+  text-decoration: none;
+}
+
+.offer:hover,
+.offer:focus-visible {
+  border-color: var(--text-muted);
+}
+
 .offer__title {
   font-size: 1.25rem;
   margin-bottom: 0.5rem;
@@ -169,6 +188,19 @@
 
 .offer__text {
   color: var(--text-muted);
+}
+
+/* Pushed to the bottom of the card and coloured like a link, as the "go here" affordance. */
+.offer__more {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.offer:hover .offer__more::after,
+.offer:focus-visible .offer__more::after {
+  content: " \2192"; /* → nudges on hover */
 }
 
 /* ---------- Project detail: points ---------- */
