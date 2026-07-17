@@ -28,11 +28,15 @@ builder.Services.Configure<AdminUserOptions>(
 builder.Services.Configure<ImageOptions>(
     builder.Configuration.GetSection(ImageOptions.SectionName));
 
+builder.Services.Configure<SiteOptions>(
+    builder.Configuration.GetSection(SiteOptions.SectionName));
+
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectPointService, ProjectPointService>();
 builder.Services.AddScoped<IProjectImageService, ProjectImageService>();
 builder.Services.AddScoped<IContactService, ContactService>();
+builder.Services.AddScoped<ISeoService, SeoService>();
 builder.Services.AddScoped<IImageStorage, ImageStorage>();
 
 // Stateless and holds nothing per-request, so one instance serves everything.

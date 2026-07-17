@@ -7,19 +7,66 @@
       - <noscript> fallback loads main.css for JS-disabled browsers
     Analytics, when added, goes at the BOTTOM of <head> right above <title> (render blocking).
 *@
+@inject Microsoft.Extensions.Options.IOptions<ScottNeidig.Web.Configuration.SiteOptions> Site
+@{
+    var site = Site.Value;
+
+    // Configured BaseUrl wins so a canonical host can be pinned; otherwise the request origin,
+    // which is right for local dev. Matches SeoController.Origin().
+    var origin = !string.IsNullOrWhiteSpace(site.BaseUrl)
+        ? site.BaseUrl.TrimEnd('/')
+        : $"{Context.Request.Scheme}://{Context.Request.Host}";
+
+    // Canonical is path-only (query stripped) so filtered/tracked variants don't read as
+    // separate pages.
+    var canonical = origin + Context.Request.Path;
+
+    var pageTitle = ViewData["Title"] as string;
+    var fullTitle = string.IsNullOrWhiteSpace(pageTitle) ? site.SiteName : $"{pageTitle} | {site.SiteName}";
+    var description = ViewData["Description"] as string ?? "";
+
+    // Serialized rather than hand-written so the JSON is always valid, and the serializer's
+    // default encoder escapes any < > & so it can't break out of the script element.
+    // Keys must serialize as "@context"/"@type" for valid JSON-LD. Inside this code block the
+    // @ in a string literal is a literal character (Razor only reparses @ in markup regions),
+    // so no escaping is needed. Serialized rather than hand-written so the JSON is always valid.
+    var personJsonLd = System.Text.Json.JsonSerializer.Serialize(new Dictionary<string, object>
+    {
+        ["@context"] = "https://schema.org",
+        ["@type"] = "Person",
+        ["name"] = site.PersonName,
+        ["url"] = origin,
+        ["jobTitle"] = site.JobTitle,
+    });
+}
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="@ViewData["Description"]" />
+    <meta name="description" content="@description" />
+
+    <link rel="canonical" href="@canonical" />
+
+    @* Open Graph + Twitter, so a shared link renders a proper card. No og:image yet: there's
+       no share asset. Add one (1200x630) and an og:image tag when it exists. *@
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="@site.SiteName" />
+    <meta property="og:title" content="@fullTitle" />
+    <meta property="og:description" content="@description" />
+    <meta property="og:url" content="@canonical" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="@fullTitle" />
+    <meta name="twitter:description" content="@description" />
+
+    <script type="application/ld+json">@Html.Raw(personJsonLd)</script>
 
     <link rel="stylesheet" href="~/css/critical.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/main.css" asp-append-version="true"
           media="print" onload="this.media='all'; this.onload=null;" />
     <noscript><link rel="stylesheet" href="~/css/main.css" asp-append-version="true" /></noscript>
 
-    <title>@ViewData["Title"] | Scott Neidig</title>
+    <title>@fullTitle</title>
 </head>
 <body>
     <a class="skip-link" href="#main">Skip to content</a>
