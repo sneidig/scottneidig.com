@@ -1,0 +1,57 @@
+@*
+    Small-business service page. This is a SHELL, not a live pitch. Per the spec's plan-vs-done
+    rule: Scott has no small-business build to point at yet, so this page has the same structure
+    as the nopCommerce one but NO proof section and deliberately soft claims. It goes live for
+    real once the roofer site ships and there's something true to say. Copy is placeholder.
+
+    Do NOT write present-tense claims here that imply an established small-business practice.
+*@
+
+<section class="section--lede">
+    <div class="container">
+        <p class="topper">Small business websites</p>
+        <h1 class="header">A website built to be found</h1>
+        <p class="text lede__text">
+            A fast, clean site for your business that search engines can actually read. Built
+            on the Colorado Front Range, for local businesses.
+        </p>
+        <a class="button button--lg" asp-controller="Contact" asp-action="Index">Schedule a consultation</a>
+    </div>
+</section>
+
+<section class="section--alt">
+    <div class="container">
+        <p class="topper">What you get</p>
+        <h2 class="title">The essentials, done well</h2>
+
+        <ul class="features">
+            <li class="feature">
+                <h3 class="feature__title">Fast</h3>
+                <p class="feature__text">
+                    Built to load quickly on a phone, which is where most of your customers
+                    will find you.
+                </p>
+            </li>
+            <li class="feature">
+                <h3 class="feature__title">Findable</h3>
+                <p class="feature__text">
+                    Real pages search engines can read on the first pass, so you show up when
+                    someone searches for what you do.
+                </p>
+            </li>
+            <li class="feature">
+                <h3 class="feature__title">Yours</h3>
+                <p class="feature__text">
+                    A site built around your business, not squeezed into a generic template.
+                </p>
+            </li>
+        </ul>
+    </div>
+</section>
+
+@*
+    No proof section yet, on purpose. When the roofer site is live, a proof block goes here
+    linking to it, matching the nopCommerce page.
+*@
+
+<partial name="_CallToAction" model="@("Thinking about a new site?")" />

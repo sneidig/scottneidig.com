@@ -1,0 +1,17 @@
+@*
+    The conversion block that closes every service page. One shared partial so the ask is
+    identical everywhere and can't drift. Restates the offer at the point of decision, then
+    sends the reader to /contact.
+*@
+@model string
+
+<section class="section--cta">
+    <div class="container">
+        <h2 class="title">@Model</h2>
+        <p class="text">
+            Tell me what you're working with and what you need. No obligation, and a real
+            person reads it.
+        </p>
+        <a class="button button--lg" asp-controller="Contact" asp-action="Index">Schedule a consultation</a>
+    </div>
+</section>

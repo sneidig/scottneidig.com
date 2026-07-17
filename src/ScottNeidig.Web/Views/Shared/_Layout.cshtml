@@ -28,9 +28,23 @@
         <nav class="site-nav" aria-label="Main">
             <a class="site-nav__brand" asp-controller="Home" asp-action="Index">Scott Neidig</a>
 
+            @*
+                Nav grows as pages land, no dead links. Services are the front door; Work is
+                deliberately NOT here (it's proof reached from inside a service page). About and
+                Blog join when they're built.
+
+                The quote CTA is split out of the link list and styled as a button so it's the
+                one thing that stands out, and it uses the same "Schedule a consultation" wording
+                as every service-page CTA so the whole site asks for one action. The header is
+                sticky (see critical.css), so this stays on screen the whole way down the page.
+            *@
             <ul class="site-nav__links">
-                <li><a asp-controller="Work" asp-action="Index">Work</a></li>
+                <li><a asp-controller="Services" asp-action="NopCommerce">nopCommerce</a></li>
+                <li><a asp-controller="Services" asp-action="DotNet">.NET</a></li>
+                <li><a asp-controller="Services" asp-action="SmallBusiness">Websites</a></li>
             </ul>
+
+            <a class="button site-nav__cta" asp-controller="Contact" asp-action="Index">Schedule a consultation</a>
         </nav>
     </header>
 
@@ -39,6 +53,13 @@
     </main>
 
     <footer class="site-footer">
+        @* Footer carries the fuller nav, including the services hub and Work, which are kept
+           out of the top nav to keep it focused. Grows as About/Blog land. *@
+        <nav class="footer-nav" aria-label="Footer">
+            <a asp-controller="Services" asp-action="Index">Services</a>
+            <a asp-controller="Work" asp-action="Index">Work</a>
+            <a asp-controller="Contact" asp-action="Index">Contact</a>
+        </nav>
         <p>&copy; @DateTime.UtcNow.Year Scott Neidig</p>
     </footer>
 

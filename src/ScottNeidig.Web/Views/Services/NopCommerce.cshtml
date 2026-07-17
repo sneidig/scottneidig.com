@@ -1,0 +1,80 @@
+@*
+    nopCommerce service page. This is the BACKED pitch: Scott is an ex-agency nop developer,
+    Jambalam is live and his, and the positioning (ex-agency quality below agency rate) is
+    defensible. Copy below is restrained placeholder for Scott to sharpen; every claim in it
+    is one he can stand behind. Do not add anything he'd have to hedge on.
+*@
+
+<section class="section--lede">
+    <div class="container">
+        <p class="topper">nopCommerce development</p>
+        <h1 class="header">Ongoing help for your nopCommerce store</h1>
+        <p class="text lede__text">
+            Already running on nopCommerce and need someone who knows it? I do custom plugins,
+            integrations, upgrades and fixes on existing stores, without the agency price tag.
+        </p>
+        <a class="button button--lg" asp-controller="Contact" asp-action="Index">Schedule a consultation</a>
+    </div>
+</section>
+
+<section class="section--alt">
+    <div class="container">
+        <p class="topper">What I help with</p>
+        <h2 class="title">Work on live stores</h2>
+
+        <ul class="features">
+            <li class="feature">
+                <h3 class="feature__title">Custom plugins</h3>
+                <p class="feature__text">
+                    New functionality built as a plugin, extending the platform through its
+                    own model rather than changing its core, so the store still upgrades.
+                </p>
+            </li>
+            <li class="feature">
+                <h3 class="feature__title">Integrations</h3>
+                <p class="feature__text">
+                    Connecting the store to the other tools a business runs on: payments,
+                    shipping, and third-party services.
+                </p>
+            </li>
+            <li class="feature">
+                <h3 class="feature__title">Upgrades and fixes</h3>
+                <p class="feature__text">
+                    Moving an older store forward, and sorting the things that break, on a
+                    retainer or a one-off basis.
+                </p>
+            </li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <p class="topper">Why me</p>
+        <h2 class="title">Agency experience, without the agency rate</h2>
+        <p class="text">
+            I worked on nopCommerce at agencies, where this work bills at $150 an hour and up.
+            Working directly with me, it doesn't. You get the same experience on your store,
+            and you're talking to the person doing the work.
+        </p>
+    </div>
+</section>
+
+@* Proof: Jambalam is the backed portfolio piece for this pitch. Links into /work. *@
+<section class="section--alt">
+    <div class="container">
+        <p class="topper">Proof</p>
+        <h2 class="title">A platform I built on nopCommerce</h2>
+        <p class="text">
+            Jambalam is a live community platform I built as a custom nopCommerce plugin,
+            end to end. It's the clearest example of what the plugin model can do.
+        </p>
+        <p>
+            <a asp-controller="Work" asp-action="Detail" asp-route-slug="jambalam">
+                See how Jambalam was built
+            </a>
+        </p>
+    </div>
+</section>
+
+<partial name="_CallToAction" model="@("Need work done on your nopCommerce store?")" />

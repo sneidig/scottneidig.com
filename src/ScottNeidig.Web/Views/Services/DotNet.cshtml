@@ -1,0 +1,120 @@
+@*
+    .NET application development page. BACKED: Scott has 25 years of .NET behind him, so this
+    leads with existing-app work (maintain / fix / extend), which is his strongest, most
+    defensible claim and the widest market. Fresh builds are one option, not the headline, so
+    nobody reads him as fresh-builds-only.
+
+    Copy is restrained placeholder for Scott to sharpen. Every claim is one he can stand behind.
+    Do NOT name any organization (ASRS etc.) as a client: those are targets he hopes for, not
+    work he's done. "Professional associations / membership platforms" as a KIND of client is
+    fine; implying he's served one is not.
+*@
+
+<section class="section--lede">
+    <div class="container">
+        <p class="topper">.NET application development</p>
+        <h1 class="header">Help with your existing .NET application</h1>
+        <p class="text lede__text">
+            Got a .NET site or application that needs looking after? I maintain, fix and extend
+            existing systems, add the features you've been putting off, and build new ones when
+            that's what's needed.
+        </p>
+        <a class="button button--lg" asp-controller="Contact" asp-action="Index">Schedule a consultation</a>
+    </div>
+</section>
+
+<section class="section--alt">
+    <div class="container">
+        <p class="topper">What I help with</p>
+        <h2 class="title">Existing systems, not just new ones</h2>
+
+        <ul class="features">
+            <li class="feature">
+                <h3 class="feature__title">Maintenance and fixes</h3>
+                <p class="feature__text">
+                    Keeping a working application working: bugs, breakages, and the things that
+                    have been on the list too long.
+                </p>
+            </li>
+            <li class="feature">
+                <h3 class="feature__title">New features</h3>
+                <p class="feature__text">
+                    Adding to what you already run, without a rebuild, and without breaking what
+                    already works.
+                </p>
+            </li>
+            <li class="feature">
+                <h3 class="feature__title">Integrations</h3>
+                <p class="feature__text">
+                    Connecting your application to the other systems your organization depends
+                    on: payments, membership, events, third-party services.
+                </p>
+            </li>
+            <li class="feature">
+                <h3 class="feature__title">New builds</h3>
+                <p class="feature__text">
+                    When a new application is the right call, built on ASP.NET Core and made to
+                    last.
+                </p>
+            </li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <p class="topper">Who it's for</p>
+        <h2 class="title">Organizations running on .NET</h2>
+        <p class="text">
+            Businesses and professional organizations with a .NET application they rely on and
+            need a steady hand for, whether that's a membership platform, an internal system, or
+            a customer-facing site. Someone who can pick up an existing codebase and work in it,
+            not only start from scratch.
+        </p>
+    </div>
+</section>
+
+@*
+    The backend/AI edge (Scott's positioning, 2026-07-17). This is his moat: web-only builders
+    can't do the back end. Aimed at the larger-org tier, which is the buyer that has real
+    problems and cares about AI (small-business owners don't). AI is a BACKED capability, not a
+    claimed expertise: Jambalam ships ONE real AI feature, so the honest line is "built AI into a
+    live product," never "AI specialist/expert." Keep it that way.
+*@
+<section class="section--alt">
+    <div class="container">
+        <p class="topper">The hard part</p>
+        <h2 class="title">The back end, not just the front</h2>
+        <p class="text">
+            Plenty of people can put up a page. Fewer can build what sits behind it: the
+            database, the business logic, the system that actually solves the problem. That's
+            the work I do, and it's where a real application pulls ahead of a template.
+        </p>
+        <p class="text">
+            That includes AI where it earns its place. I've built AI into a live product,
+            Jambalam, using Azure AI to power a working feature people use, not a demo. If your
+            organization is weighing what AI could do in your systems, that's a conversation I
+            can have from experience.
+        </p>
+        <p>
+            <a asp-controller="Work" asp-action="Detail" asp-route-slug="jambalam">
+                See what I built into Jambalam
+            </a>
+        </p>
+    </div>
+</section>
+
+<section class="section--alt">
+    <div class="container">
+        <p class="topper">Why me</p>
+        <h2 class="title">25 years of .NET, working directly with you</h2>
+        <p class="text">
+            I've spent my career building and maintaining .NET applications, a lot of it at
+            agencies where this work bills at a premium. Working with me directly, you get that
+            experience without the agency layer in between, and you talk to the person doing the
+            work.
+        </p>
+    </div>
+</section>
+
+<partial name="_CallToAction" model="@("Need work on your .NET application?")" />

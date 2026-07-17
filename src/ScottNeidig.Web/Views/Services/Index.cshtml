@@ -1,0 +1,65 @@
+@*
+    Services hub. Presents all three services together, then routes into each. The pattern
+    borrowed (structure only, not copy) from an agency Scott worked at: lead each service with
+    a pain-point question that names the reader's problem before pitching. The question is about
+    the reader, so it makes no claim about Scott and is safe to write freely.
+
+    Order is deliberate: nopCommerce first (sharpest Upwork wedge, best proof), .NET second
+    (strongest backed claim, widest market), websites last (least backed). Copy is placeholder.
+*@
+
+<section class="section--lede">
+    <div class="container">
+        <p class="topper">Services</p>
+        <h1 class="header">What I can help with</h1>
+        <p class="text lede__text">
+            Three ways I work with businesses and organizations. All of it is real development,
+            on live systems, by someone who's done this inside agencies for years.
+        </p>
+        <a class="button button--lg" asp-controller="Contact" asp-action="Index">Schedule a consultation</a>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <ul class="services">
+            <li class="service">
+                <h2 class="service__title">nopCommerce development</h2>
+                <p class="service__hook">Running a nopCommerce store that needs ongoing help?</p>
+                <p class="service__text">
+                    Custom plugins, integrations, upgrades and fixes on existing stores. Agency
+                    experience, working with you directly.
+                </p>
+                <a class="service__link" asp-controller="Services" asp-action="NopCommerce">
+                    nopCommerce development
+                </a>
+            </li>
+
+            <li class="service">
+                <h2 class="service__title">.NET application development</h2>
+                <p class="service__hook">Got a .NET application nobody's looking after?</p>
+                <p class="service__text">
+                    Maintenance, fixes, new features and integrations on existing .NET systems,
+                    plus new builds. The back end, not just the front. 25 years of it.
+                </p>
+                <a class="service__link" asp-controller="Services" asp-action="DotNet">
+                    .NET application development
+                </a>
+            </li>
+
+            <li class="service">
+                <h2 class="service__title">Small business websites</h2>
+                <p class="service__hook">Need a site people can actually find?</p>
+                <p class="service__text">
+                    A fast, clean website built to be read by search engines, for businesses on
+                    the Colorado Front Range.
+                </p>
+                <a class="service__link" asp-controller="Services" asp-action="SmallBusiness">
+                    Small business websites
+                </a>
+            </li>
+        </ul>
+    </div>
+</section>
+
+<partial name="_CallToAction" model="@("Not sure which fits? Let's talk it through.")" />
