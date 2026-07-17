@@ -17,6 +17,8 @@
   --border: #2a2926;
   --accent: #6ea8fe;
   --accent-strong: #4d8bff;
+  /* A light red that reads on the dark background. Light theme overrides it below. */
+  --error: #ff8a8a;
 
   /* Fluid type scale — responsive with no media queries. */
   --topperFontSize: clamp(0.8125rem, 1.6vw, 1rem);
@@ -40,6 +42,8 @@
   --border: #dedbd6;
   --accent: #2563c9;
   --accent-strong: #1b4fa8;
+  /* Darker red for contrast on the off-white background (the dark pastel fails WCAG here). */
+  --error: #b3261e;
 }
 
 /* ---------- Reset ---------- */
@@ -141,6 +145,12 @@ section {
 .text {
   color: var(--text-muted);
   max-width: 46rem;
+}
+
+/* Consecutive body paragraphs need a gap; the reset zeroes <p> margins. Adjacent-sibling
+   so single .text uses (under a heading, in a card) aren't pushed down. */
+.text + .text {
+  margin-top: 1.25rem;
 }
 
 /* ---------- Skip link (a11y) ---------- */

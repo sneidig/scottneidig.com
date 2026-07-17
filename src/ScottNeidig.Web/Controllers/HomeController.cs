@@ -15,9 +15,11 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index(CancellationToken ct)
     {
-        ViewData["Title"] = "Web Developer";
+        // Title carries the primary local term ("Boulder web developer") since it's the
+        // strongest on-page ranking signal. Kept natural, not stuffed.
+        ViewData["Title"] = "Web Developer in Boulder, CO";
         ViewData["Description"] =
-            "Scott Neidig, web developer. Fast, SEO-first websites for small business, and nopCommerce development.";
+            "Scott Neidig, a web and application developer in Boulder, Colorado. nopCommerce and .NET work, and websites for small businesses across the Denver metro and Front Range.";
 
         return View(new HomeViewModel
         {

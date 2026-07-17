@@ -43,9 +43,9 @@ public class ServicesController : Controller
     [HttpGet("small-business-websites")]
     public IActionResult SmallBusiness()
     {
-        ViewData["Title"] = "Small business websites";
+        ViewData["Title"] = "Small Business Websites in Boulder & Denver";
         ViewData["Description"] =
-            "Fast, search-friendly websites for small businesses on the Colorado Front Range.";
+            "Fast, search-friendly websites for small businesses in Boulder, the Denver metro, and the Colorado Front Range.";
 
         return View();
     }

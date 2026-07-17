@@ -30,6 +30,8 @@
     // Keys must serialize as "@context"/"@type" for valid JSON-LD. Inside this code block the
     // @ in a string literal is a literal character (Razor only reparses @ in markup regions),
     // so no escaping is needed. Serialized rather than hand-written so the JSON is always valid.
+    // address (city/region) and areaServed are the local-SEO signals: they tell search engines
+    // where he is and which areas he covers.
     var personJsonLd = System.Text.Json.JsonSerializer.Serialize(new Dictionary<string, object>
     {
         ["@context"] = "https://schema.org",
@@ -37,10 +39,20 @@
         ["name"] = site.PersonName,
         ["url"] = origin,
         ["jobTitle"] = site.JobTitle,
+        ["address"] = new Dictionary<string, object>
+        {
+            ["@type"] = "PostalAddress",
+            ["addressLocality"] = site.Locality,
+            ["addressRegion"] = site.Region,
+            ["addressCountry"] = "US",
+        },
+        ["areaServed"] = site.AreasServed,
     });
 }
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+@* Light is the default theme. The dark palette stays in critical.css under :root as the
+   alternate, ready if a toggle is added later. *@
+<html lang="en" data-theme="light">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -121,6 +133,11 @@
             <a asp-controller="Blog" asp-action="Index">Blog</a>
             <a asp-controller="Contact" asp-action="Index">Contact</a>
         </nav>
+        @* Location in the footer is an honest local-SEO signal and appears on every page. *@
+        <p class="site-footer__location">
+            Web developer in @site.Locality, @site.Region. Serving the Denver metro and the
+            Colorado Front Range.
+        </p>
         <p>&copy; @DateTime.UtcNow.Year Scott Neidig</p>
     </footer>
 
