@@ -103,6 +103,11 @@ h1, h2, h3 {
   padding-inline: 1rem;
 }
 
+/* Narrower measure for reading-heavy pages (About), so lines don't run too wide to scan. */
+.container--prose {
+  max-width: 42rem;
+}
+
 section {
   padding: var(--sectionPadding);
 }
@@ -288,6 +293,19 @@ section {
 .nav-menu__list a:hover,
 .nav-menu__list a:focus-visible {
   background: var(--bg);
+  color: var(--text);
+}
+
+/* A plain top-level nav link (About, later Blog), styled to match the dropdown label. */
+.site-nav__link {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 1.5rem;
+}
+
+.site-nav__link:hover,
+.site-nav__link:focus-visible {
   color: var(--text);
 }
 

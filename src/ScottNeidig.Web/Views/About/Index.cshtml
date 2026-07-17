@@ -1,0 +1,71 @@
+@*
+    About page. Scott's strongest honest card: 25 years, ex-agency, direct. Copy is
+    placeholder and heavily his to write, especially the personal narrative. Every claim
+    baked in here is BACKED (25 years .NET, agency background, direct, backend depth,
+    Jambalam). Do NOT invent biography: employers, schools, hometown, dates. Those are
+    marked as prompts for Scott to fill, not written for him.
+*@
+
+<section class="section--lede">
+    <div class="container container--prose">
+        <p class="topper">About</p>
+        <h1 class="header">Scott Neidig</h1>
+        <p class="text lede__text">
+            Web and application developer on the Colorado Front Range, with 25 years of .NET
+            behind me. I work directly with businesses and organizations on the systems they
+            run on.
+        </p>
+
+        @*
+            Optional headshot. A face builds trust on an about page, but it's not required and
+            it's Scott's to add. Drop the image in wwwroot and uncomment:
+            <img class="about__photo" src="~/img/scott.jpg" alt="Scott Neidig" width="240" height="240" decoding="async" />
+        *@
+    </div>
+</section>
+
+<section class="section--alt">
+    <div class="container container--prose">
+        <p class="topper">Background</p>
+        <h2 class="title">Where I come from</h2>
+        <p class="text">
+            @* PROMPT for Scott: the narrative. How you got into development, the kind of work
+               you did at agencies, what you're known for. Keep it plain and true. Backed facts
+               to draw on: 25 years .NET, agency experience, senior-level. Don't overclaim. *@
+            [Your story goes here. Twenty-five years of building and maintaining .NET
+            applications, much of it inside agencies. Write it in your own voice.]
+        </p>
+    </div>
+</section>
+
+<section>
+    <div class="container container--prose">
+        <p class="topper">How I work</p>
+        <h2 class="title">Direct, and on the hard part</h2>
+        <p class="text">
+            No agency layer between you and the person doing the work. I take on the back end,
+            the database, the business logic, the parts that actually solve the problem, not
+            just the page on top. It's where a real application pulls ahead of a template, and
+            it's the work I've done for years.
+        </p>
+        <p class="text">
+            That includes AI where it earns its place. I've built it into a live product,
+            Jambalam, as a working feature people use.
+        </p>
+    </div>
+</section>
+
+<section class="section--alt">
+    <div class="container container--prose">
+        <p class="topper">Proof</p>
+        <h2 class="title">See the work</h2>
+        <p class="text">
+            The clearest picture of what I do is what I've built.
+        </p>
+        <p>
+            <a asp-controller="Work" asp-action="Index">Have a look at my work</a>
+        </p>
+    </div>
+</section>
+
+<partial name="_CallToAction" model="@("Want to talk about your project?")" />
