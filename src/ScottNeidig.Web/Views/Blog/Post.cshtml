@@ -1,0 +1,48 @@
+@using ScottNeidig.Web.Services
+@model BlogPostDetail
+
+@{
+    // Article structured data for this post, on top of the site-wide Person in the layout.
+    // Serialized so the JSON is always valid; @ in a code-block string literal is a literal.
+    var articleJsonLd = System.Text.Json.JsonSerializer.Serialize(new Dictionary<string, object?>
+    {
+        ["@context"] = "https://schema.org",
+        ["@type"] = "BlogPosting",
+        ["headline"] = Model.Title,
+        ["datePublished"] = Model.PublishedUtc?.ToString("yyyy-MM-dd"),
+        ["author"] = new Dictionary<string, object> { ["@type"] = "Person", ["name"] = "Scott Neidig" },
+    });
+}
+
+@section Head {
+    <script type="application/ld+json">@Html.Raw(articleJsonLd)</script>
+}
+
+<article>
+    <section class="section--lede">
+        <div class="container container--prose">
+            <p class="topper">Blog</p>
+            <h1 class="header">@Model.Title</h1>
+
+            @if (Model.PublishedUtc is { } published)
+            {
+                <p class="lede__meta">
+                    <time datetime="@published.ToString("yyyy-MM-dd")">@published.ToString("d MMMM yyyy")</time>
+                </p>
+            }
+        </div>
+    </section>
+
+    <section>
+        <div class="container container--prose">
+            @* Rendered from markdown in BlogService. Trusted single-author content, output raw. *@
+            <div class="prose">
+                @Html.Raw(Model.BodyHtml)
+            </div>
+
+            <p class="prose__back">
+                <a asp-action="Index">All posts</a>
+            </p>
+        </div>
+    </section>
+</article>

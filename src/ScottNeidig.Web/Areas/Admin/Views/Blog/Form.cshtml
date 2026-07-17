@@ -1,0 +1,79 @@
+@model BlogPostFormModel
+@{
+    var isEdit = Model.Id.HasValue;
+}
+
+<section>
+    <div class="container container--form">
+        <p class="topper">Blog</p>
+        <h1 class="title">@(isEdit ? "Edit post" : "New post")</h1>
+
+        <form method="post" asp-action="@(isEdit ? "Edit" : "Create")" asp-route-id="@Model.Id" class="form">
+            <div asp-validation-summary="ModelOnly" class="form__errors" role="alert"></div>
+
+            <div class="form__field">
+                <label asp-for="Title"></label>
+                <input asp-for="Title" autofocus />
+                <span asp-validation-for="Title" class="form__error"></span>
+            </div>
+
+            <div class="form__field">
+                <label asp-for="Slug"></label>
+                <input asp-for="Slug" placeholder="@(isEdit ? "" : "Generated from the title if left blank")" />
+                <span class="form__hint">
+                    @if (isEdit)
+                    {
+                        <text>Post lives at <code>/blog/@Model.Slug</code>. Changing this breaks existing links.</text>
+                    }
+                    else
+                    {
+                        <text>Leave blank to generate from the title.</text>
+                    }
+                </span>
+                <span asp-validation-for="Slug" class="form__error"></span>
+            </div>
+
+            <div class="form__field">
+                <label asp-for="MarkdownBody"></label>
+                <textarea asp-for="MarkdownBody" rows="20" class="mono"></textarea>
+                <span class="form__hint">Markdown. Rendered to HTML on the public post page.</span>
+                <span asp-validation-for="MarkdownBody" class="form__error"></span>
+            </div>
+
+            <div class="form__field">
+                <label asp-for="Excerpt"></label>
+                <textarea asp-for="Excerpt" rows="3"></textarea>
+                <span class="form__hint">Shown on the blog list, and the fallback meta description.</span>
+                <span asp-validation-for="Excerpt" class="form__error"></span>
+            </div>
+
+            <div class="form__field form__field--inline">
+                <input asp-for="Published" />
+                <label asp-for="Published">Published</label>
+            </div>
+
+            <fieldset class="form__group">
+                <legend>Search engines</legend>
+
+                <div class="form__field">
+                    <label asp-for="SeoTitle"></label>
+                    <input asp-for="SeoTitle" />
+                    <span class="form__hint">Falls back to the title. Aim for under 60 characters.</span>
+                    <span asp-validation-for="SeoTitle" class="form__error"></span>
+                </div>
+
+                <div class="form__field">
+                    <label asp-for="SeoDescription"></label>
+                    <textarea asp-for="SeoDescription" rows="3"></textarea>
+                    <span class="form__hint">Falls back to the excerpt. Aim for under 160 characters.</span>
+                    <span asp-validation-for="SeoDescription" class="form__error"></span>
+                </div>
+            </fieldset>
+
+            <div class="form__actions">
+                <button class="button" type="submit">Save</button>
+                <a class="button--link" asp-action="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>

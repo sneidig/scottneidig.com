@@ -20,6 +20,7 @@ public class SeoService : ISeoService
             new("/services/dotnet-development", Priority: 0.8),
             new("/services/small-business-websites", Priority: 0.8),
             new("/work", Priority: 0.8),
+            new("/blog", Priority: 0.7),
             new("/about", Priority: 0.7),
             new("/contact", Priority: 0.7),
         };
@@ -45,6 +46,17 @@ public class SeoService : ISeoService
             .ToListAsync(ct);
 
         entries.AddRange(categories.Select(slug => new SitemapEntry($"/work/category/{slug}", Priority: 0.6)));
+
+        // Published blog posts, with the publish date as lastmod. Drafts excluded, same as the
+        // public list.
+        var posts = await _db.BlogPosts
+            .Where(p => p.Published)
+            .OrderByDescending(p => p.PublishedUtc)
+            .Select(p => new { p.Slug, p.PublishedUtc })
+            .AsNoTracking()
+            .ToListAsync(ct);
+
+        entries.AddRange(posts.Select(p => new SitemapEntry($"/blog/{p.Slug}", p.PublishedUtc, 0.6)));
 
         return entries;
     }

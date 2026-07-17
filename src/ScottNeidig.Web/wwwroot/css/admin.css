@@ -198,6 +198,11 @@
   font-size: 0.85rem;
 }
 
+/* Monospace for the markdown editor textarea, so the source lines up as written. */
+.mono {
+  font-family: var(--font-mono);
+}
+
 /* ---------- Admin nav ---------- */
 .admin-nav {
   display: flex;

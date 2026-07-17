@@ -38,7 +38,11 @@ builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectPointService, ProjectPointService>();
 builder.Services.AddScoped<IProjectImageService, ProjectImageService>();
 builder.Services.AddScoped<IContactService, ContactService>();
+builder.Services.AddScoped<IBlogService, BlogService>();
 builder.Services.AddScoped<ISeoService, SeoService>();
+
+// Stateless and immutable, so one instance serves every render.
+builder.Services.AddSingleton<IMarkdownRenderer, MarkdownRenderer>();
 
 // Liveness that actually depends on the database, so a monitor learns the truth.
 builder.Services.AddHealthChecks()

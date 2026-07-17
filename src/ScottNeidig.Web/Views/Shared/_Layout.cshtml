@@ -66,6 +66,9 @@
           media="print" onload="this.media='all'; this.onload=null;" />
     <noscript><link rel="stylesheet" href="~/css/main.css" asp-append-version="true" /></noscript>
 
+    @* Per-page head additions, e.g. a blog post's Article JSON-LD. *@
+    @await RenderSectionAsync("Head", required: false)
+
     <title>@fullTitle</title>
 </head>
 <body>
@@ -98,6 +101,7 @@
             </details>
 
             <a class="site-nav__link" asp-controller="About" asp-action="Index">About</a>
+            <a class="site-nav__link" asp-controller="Blog" asp-action="Index">Blog</a>
 
             <a class="button site-nav__cta" asp-controller="Contact" asp-action="Index">Schedule a consultation</a>
         </nav>
@@ -114,6 +118,7 @@
             <a asp-controller="Services" asp-action="Index">Services</a>
             <a asp-controller="About" asp-action="Index">About</a>
             <a asp-controller="Work" asp-action="Index">Work</a>
+            <a asp-controller="Blog" asp-action="Index">Blog</a>
             <a asp-controller="Contact" asp-action="Index">Contact</a>
         </nav>
         <p>&copy; @DateTime.UtcNow.Year Scott Neidig</p>
