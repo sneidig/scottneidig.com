@@ -343,7 +343,7 @@
 
 .form__errors:not(:empty),
 .form__error:not(:empty) {
-  color: #ff8a8a;
+  color: var(--error);
   font-size: 0.9rem;
 }
 
