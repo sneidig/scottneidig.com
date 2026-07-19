@@ -54,8 +54,9 @@ jobs:
             set ssl:verify-certificate no;
             set net:max-retries 3;
             set net:timeout 20;
+            set ftp:use-site-chmod false;
             open -u \"$FTP_USERNAME\",\"$FTP_PASSWORD\" \"$FTP_SERVER\";
-            mirror -R --delete -X app_offline.htm --parallel=1 --verbose ./publish/ /staging.scottneidig.com/;
+            mirror -R --delete -X app_offline.htm --no-perms --parallel=1 --verbose ./publish/ /staging.scottneidig.com/;
           "
 
       # Removing app_offline.htm restarts the app, which applies migrations and seeds on boot.
