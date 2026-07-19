@@ -36,19 +36,27 @@ jobs:
           curl --ssl-reqd -k -T app_offline.htm "ftp://${{ secrets.FTP_SERVER }}/staging.scottneidig.com/" \
             --user "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}"
 
-      # Diff-based: keeps a state file on the server and uploads only changed files. First run
-      # is a full sync; every one after is seconds.
+      - name: Install lftp
+        run: sudo apt-get update && sudo apt-get install -y lftp
+
+      # lftp over the previous action because it handles FTPS data-channel TLS on shared hosts,
+      # which basic-ftp was choking on. mirror -R uploads only changed files (diff by size/time),
+      # --delete removes stale ones, and -X keeps app_offline.htm so the offline step still works.
       - name: Deploy
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps
-          # Host's FTP cert is expired, so don't reject it. Still TLS-encrypted in transit.
-          security: loose
-          local-dir: ./publish/
-          server-dir: /staging.scottneidig.com/
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          lftp -c "
+            set ftp:ssl-force true;
+            set ftp:ssl-protect-data true;
+            set ssl:verify-certificate no;
+            set net:max-retries 3;
+            set net:timeout 20;
+            open -u \"$FTP_USERNAME\",\"$FTP_PASSWORD\" \"$FTP_SERVER\";
+            mirror -R --delete -X app_offline.htm --parallel=1 --verbose ./publish/ /staging.scottneidig.com/;
+          "
 
       # Removing app_offline.htm restarts the app, which applies migrations and seeds on boot.
       - name: Bring app online
