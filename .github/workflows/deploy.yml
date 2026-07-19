@@ -40,8 +40,9 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y lftp
 
       # lftp over the previous action because it handles FTPS data-channel TLS on shared hosts,
-      # which basic-ftp was choking on. mirror -R uploads only changed files (diff by size/time),
-      # --delete removes stale ones, and -X keeps app_offline.htm so the offline step still works.
+      # which basic-ftp was choking on. mirror -R uploads only changed files (diff by size/time).
+      # No --delete on purpose: it would remove server files not in the publish output, namely the
+      # manually-uploaded appsettings.Production.json and the runtime wwwroot/uploads images.
       - name: Deploy
         env:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
@@ -56,7 +57,7 @@ jobs:
             set net:timeout 20;
             set ftp:use-site-chmod false;
             open -u \"$FTP_USERNAME\",\"$FTP_PASSWORD\" \"$FTP_SERVER\";
-            mirror -R --delete -X app_offline.htm --no-perms --parallel=1 --verbose ./publish/ /staging.scottneidig.com/;
+            mirror -R -X app_offline.htm --no-perms --parallel=1 --verbose ./publish/ /staging.scottneidig.com/;
           "
 
       # Removing app_offline.htm restarts the app, which applies migrations and seeds on boot.
