@@ -96,6 +96,12 @@ if (!app.Environment.IsDevelopment())
 app.UseStatusCodePagesWithReExecute("/error/{0}");
 
 app.UseHttpsRedirection();
+
+// MapStaticAssets below serves the build-time assets (css, etc.) fingerprinted and compressed.
+// It does NOT serve files added at runtime, so uploaded images in wwwroot/uploads need the
+// classic static-file middleware to be reachable.
+app.UseStaticFiles();
+
 app.UseRouting();
 
 app.UseAuthentication();
