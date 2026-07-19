@@ -119,8 +119,19 @@ app.MapHealthChecks("/health");
 
 using (var scope = app.Services.CreateScope())
 {
-    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-    await AdminSeeder.SeedAsync(scope.ServiceProvider, logger);
+    var services = scope.ServiceProvider;
+    var logger = services.GetRequiredService<ILogger<Program>>();
+
+    // Apply pending migrations on startup, so a deploy only needs the built app and an
+    // existing (empty) database. The app-pool user on the shared host usually can't
+    // CREATE DATABASE, so the database itself has to exist first; this brings its schema up
+    // to date. Single instance, so there's no migrate-on-startup race to worry about.
+    var db = services.GetRequiredService<AppDbContext>();
+    await db.Database.MigrateAsync();
+    logger.LogInformation("Database migrations applied");
+
+    // Seeding needs the tables, so it runs after the migrate.
+    await AdminSeeder.SeedAsync(services, logger);
 }
 
 app.Run();
