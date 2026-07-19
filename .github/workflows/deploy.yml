@@ -23,8 +23,10 @@ jobs:
       - name: Test
         run: dotnet test tests/ScottNeidig.Web.Tests/ScottNeidig.Web.Tests.csproj -c Release --no-build
 
+      # win-x64 framework-dependent: the server is Windows, so this ships only the Windows
+      # native libs instead of every platform's, which cut the publish from ~480MB to ~110MB.
       - name: Publish
-        run: dotnet publish src/ScottNeidig.Web/ScottNeidig.Web.csproj -c Release -o publish --no-build
+        run: dotnet publish src/ScottNeidig.Web/ScottNeidig.Web.csproj -c Release -r win-x64 --self-contained false -o publish
 
       # Stops the IIS app so the running DLLs unlock and can be overwritten. This is what fixed
       # the file-lock problem from the manual v1 deploys.
