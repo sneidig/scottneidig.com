@@ -31,7 +31,7 @@ jobs:
       - name: Take app offline
         run: |
           echo "Deploying, back shortly." > app_offline.htm
-          curl --ssl-reqd -T app_offline.htm "ftp://${{ secrets.FTP_SERVER }}/staging.scottneidig.com/" \
+          curl --ssl-reqd -k -T app_offline.htm "ftp://${{ secrets.FTP_SERVER }}/staging.scottneidig.com/" \
             --user "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}"
 
       # Diff-based: keeps a state file on the server and uploads only changed files. First run
@@ -43,6 +43,8 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
+          # Host's FTP cert is expired, so don't reject it. Still TLS-encrypted in transit.
+          security: loose
           local-dir: ./publish/
           server-dir: /staging.scottneidig.com/
 
@@ -50,6 +52,6 @@ jobs:
       - name: Bring app online
         if: always()
         run: |
-          curl --ssl-reqd "ftp://${{ secrets.FTP_SERVER }}/staging.scottneidig.com/" \
+          curl --ssl-reqd -k "ftp://${{ secrets.FTP_SERVER }}/staging.scottneidig.com/" \
             --user "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" \
             -Q "DELE app_offline.htm"
