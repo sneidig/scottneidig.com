@@ -52,6 +52,8 @@ jobs:
       - name: Bring app online
         if: always()
         run: |
-          curl --ssl-reqd -k "ftp://${{ secrets.FTP_SERVER }}/staging.scottneidig.com/" \
+          # -Q runs at the login root, so CD into the site folder first, then delete. Tolerate
+          # failure so a missing file doesn't fail the run.
+          curl --ssl-reqd -k "ftp://${{ secrets.FTP_SERVER }}/" \
             --user "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" \
-            -Q "DELE app_offline.htm"
+            -Q "CWD staging.scottneidig.com" -Q "DELE app_offline.htm" || echo "app_offline.htm already removed"
