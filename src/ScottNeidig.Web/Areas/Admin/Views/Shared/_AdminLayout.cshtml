@@ -27,6 +27,10 @@
                     <li><a asp-area="Admin" asp-controller="Messages" asp-action="Index">Messages</a></li>
                 </ul>
 
+                @* asp-area="" is required to link out of the Admin area; without it the link
+                   stays inside the area and doesn't resolve to the public site. *@
+                <a class="button button--quiet" asp-area="" asp-controller="Home" asp-action="Index">View site</a>
+
                 <form asp-area="Admin" asp-controller="Account" asp-action="Logout" method="post">
                     <button class="button button--quiet" type="submit">Sign out</button>
                 </form>
