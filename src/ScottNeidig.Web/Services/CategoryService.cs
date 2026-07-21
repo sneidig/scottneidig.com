@@ -15,7 +15,8 @@ public class CategoryService : ICategoryService
         _db.Categories
             .OrderBy(c => c.SortOrder)
             .ThenBy(c => c.Name)
-            .Select(c => new CategorySummary(c.Id, c.Name, c.Slug, c.SortOrder, c.Projects.Count))
+            .Select(c => new CategorySummary(
+                c.Id, c.Name, c.Slug, c.SortOrder, c.Projects.Count, c.ServiceKey))
             .AsNoTracking()
             .ToListAsync(ct);
 
@@ -39,16 +40,25 @@ public class CategoryService : ICategoryService
             .AsNoTracking()
             .FirstOrDefaultAsync(ct);
 
+    public Task<CategorySummary?> GetByServiceKeyAsync(string serviceKey, CancellationToken ct = default) =>
+        _db.Categories
+            .Where(c => c.ServiceKey == serviceKey)
+            .Select(c => new CategorySummary(
+                c.Id, c.Name, c.Slug, c.SortOrder, c.Projects.Count(p => p.Published), c.ServiceKey))
+            .AsNoTracking()
+            .FirstOrDefaultAsync(ct);
+
     public Task<Category?> GetByIdAsync(int id, CancellationToken ct = default) =>
         _db.Categories.FirstOrDefaultAsync(c => c.Id == id, ct);
 
-    public async Task<int> CreateAsync(string name, int sortOrder, CancellationToken ct = default)
+    public async Task<int> CreateAsync(string name, int sortOrder, string? serviceKey, CancellationToken ct = default)
     {
         var category = new Category
         {
             Name = name.Trim(),
             Slug = SlugGenerator.Generate(name),
-            SortOrder = sortOrder
+            SortOrder = sortOrder,
+            ServiceKey = serviceKey
         };
 
         _db.Categories.Add(category);
@@ -57,7 +67,8 @@ public class CategoryService : ICategoryService
         return category.Id;
     }
 
-    public async Task<bool> UpdateAsync(int id, string name, int sortOrder, CancellationToken ct = default)
+    public async Task<bool> UpdateAsync(
+        int id, string name, int sortOrder, string? serviceKey, CancellationToken ct = default)
     {
         var category = await GetByIdAsync(id, ct);
         if (category is null)
@@ -70,6 +81,7 @@ public class CategoryService : ICategoryService
         // acceptable here because categories are filters, not indexed landing pages.
         category.Slug = SlugGenerator.Generate(name);
         category.SortOrder = sortOrder;
+        category.ServiceKey = serviceKey;
 
         await _db.SaveChangesAsync(ct);
         return true;

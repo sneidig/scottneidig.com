@@ -1,0 +1,35 @@
+@*
+    Proof section on a service page: the published projects from whichever category is assigned
+    to this page in the admin. Renders nothing when no category is assigned or it has no
+    published work, so an unproven service page stays honest rather than showing an empty shell.
+*@
+@using ScottNeidig.Web.Models
+@model ServicePageModel
+
+@if (Model.HasProjects)
+{
+    <section class="section--alt">
+        <div class="container">
+            <p class="topper">Proof</p>
+            <h2 class="title">Related work</h2>
+
+            <ul class="cards">
+                @foreach (var project in Model.Projects)
+                {
+                    @* h3: the section h2 above sits over this grid. *@
+                    <partial name="_ProjectCard" model="@(new ProjectCardModel
+                            {
+                                Project = project,
+                                HeadingLevel = 3
+                            })" />
+                }
+            </ul>
+
+            <p class="cards__more">
+                <a asp-controller="Work" asp-action="Category" asp-route-slug="@Model.CategorySlug">
+                    See all @Model.CategoryName work
+                </a>
+            </p>
+        </div>
+    </section>
+}

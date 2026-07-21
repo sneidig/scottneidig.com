@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ScottNeidig.Web.Areas.Admin.Models;
 
@@ -19,4 +20,14 @@ public class CategoryFormModel
 
     /// <summary>Shown read-only on the edit form so the resulting URL is visible.</summary>
     public string? Slug { get; set; }
+
+    /// <summary>
+    /// Which service page shows this category's work. Blank means none. Only one category can
+    /// feed each page, enforced by a unique index.
+    /// </summary>
+    [Display(Name = "Feeds service page")]
+    public string? ServiceKey { get; set; }
+
+    /// <summary>Populated by the controller. Not posted back.</summary>
+    public List<SelectListItem> ServiceOptions { get; set; } = [];
 }

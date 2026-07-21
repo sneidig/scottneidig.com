@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using ScottNeidig.Web.Areas.Admin.Models;
 using ScottNeidig.Web.Services;
 using ScottNeidig.Web.Utilities;
@@ -25,7 +26,11 @@ public class CategoriesController : Controller
     public IActionResult Create()
     {
         ViewData["Title"] = "New category";
-        return View("Form", new CategoryFormModel());
+
+        var model = new CategoryFormModel();
+        PopulateServiceOptions(model);
+
+        return View("Form", model);
     }
 
     [HttpPost]
@@ -36,10 +41,11 @@ public class CategoriesController : Controller
 
         if (!await IsValidAsync(model, ct))
         {
+            PopulateServiceOptions(model);
             return View("Form", model);
         }
 
-        await _categories.CreateAsync(model.Name, model.SortOrder, ct);
+        await _categories.CreateAsync(model.Name, model.SortOrder, Normalize(model.ServiceKey), ct);
         return RedirectToAction(nameof(Index));
     }
 
@@ -54,13 +60,17 @@ public class CategoriesController : Controller
 
         ViewData["Title"] = "Edit category";
 
-        return View("Form", new CategoryFormModel
+        var model = new CategoryFormModel
         {
             Id = category.Id,
             Name = category.Name,
             SortOrder = category.SortOrder,
-            Slug = category.Slug
-        });
+            Slug = category.Slug,
+            ServiceKey = category.ServiceKey
+        };
+
+        PopulateServiceOptions(model);
+        return View("Form", model);
     }
 
     [HttpPost]
@@ -72,10 +82,11 @@ public class CategoriesController : Controller
 
         if (!await IsValidAsync(model, ct))
         {
+            PopulateServiceOptions(model);
             return View("Form", model);
         }
 
-        return await _categories.UpdateAsync(id, model.Name, model.SortOrder, ct)
+        return await _categories.UpdateAsync(id, model.Name, model.SortOrder, Normalize(model.ServiceKey), ct)
             ? RedirectToAction(nameof(Index))
             : NotFound();
     }
@@ -115,6 +126,30 @@ public class CategoriesController : Controller
             return false;
         }
 
+        // Each service page shows one category, so catch a double assignment here rather than
+        // letting the unique index throw.
+        var serviceKey = Normalize(model.ServiceKey);
+        if (serviceKey is not null)
+        {
+            var holder = await _categories.GetByServiceKeyAsync(serviceKey, ct);
+            if (holder is not null && holder.Id != model.Id)
+            {
+                ModelState.AddModelError(
+                    nameof(model.ServiceKey),
+                    $"\"{holder.Name}\" already feeds that service page. Clear it there first.");
+                return false;
+            }
+        }
+
         return true;
     }
+
+    /// <summary>Empty selection posts as an empty string; store null so the index ignores it.</summary>
+    private static string? Normalize(string? serviceKey) =>
+        string.IsNullOrWhiteSpace(serviceKey) ? null : serviceKey;
+
+    private static void PopulateServiceOptions(CategoryFormModel model) =>
+        model.ServiceOptions = ServicePages.All
+            .Select(pair => new SelectListItem(pair.Value, pair.Key))
+            .ToList();
 }

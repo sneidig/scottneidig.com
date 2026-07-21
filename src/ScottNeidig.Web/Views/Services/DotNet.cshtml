@@ -1,3 +1,4 @@
+@model ScottNeidig.Web.Models.ServicePageModel
 @*
     .NET application development page. BACKED: Scott has 25 years of .NET behind him, so this
     leads with existing-app work (maintain / fix / extend), which is his strongest, most
@@ -96,11 +97,6 @@
             organization is weighing what AI could do in your systems, that's a conversation I
             can have from experience.
         </p>
-        <p>
-            <a asp-controller="Work" asp-action="Detail" asp-route-slug="jambalam">
-                See what I built into Jambalam
-            </a>
-        </p>
     </div>
 </section>
 
@@ -116,5 +112,8 @@
         </p>
     </div>
 </section>
+
+@* Proof comes from the category assigned to this page in the admin. *@
+<partial name="_RelatedProjects" model="Model" />
 
 <partial name="_CallToAction" model="@("Need work on your .NET application?")" />

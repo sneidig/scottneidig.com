@@ -8,4 +8,8 @@ namespace ScottNeidig.Web.Services;
 /// <param name="ProjectCount">
 /// Shown before deleting, so it's clear how much work is about to be unfiled.
 /// </param>
-public record CategorySummary(int Id, string Name, string Slug, int SortOrder, int ProjectCount);
+/// <param name="ServiceKey">
+/// Which service landing page this category feeds, or null. See ServicePages.
+/// </param>
+public record CategorySummary(
+    int Id, string Name, string Slug, int SortOrder, int ProjectCount, string? ServiceKey = null);

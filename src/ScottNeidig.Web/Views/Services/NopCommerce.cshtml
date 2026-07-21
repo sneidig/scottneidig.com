@@ -1,3 +1,4 @@
+@model ScottNeidig.Web.Models.ServicePageModel
 @*
     nopCommerce service page. This is the BACKED pitch: Scott is an ex-agency nop developer,
     Jambalam is live and his, and the positioning (ex-agency quality below agency rate) is
@@ -60,21 +61,8 @@
     </div>
 </section>
 
-@* Proof: Jambalam is the backed portfolio piece for this pitch. Links into /work. *@
-<section class="section--alt">
-    <div class="container">
-        <p class="topper">Proof</p>
-        <h2 class="title">A platform I built on nopCommerce</h2>
-        <p class="text">
-            Jambalam is a live community platform I built as a custom nopCommerce plugin,
-            end to end. It's the clearest example of what the plugin model can do.
-        </p>
-        <p>
-            <a asp-controller="Work" asp-action="Detail" asp-route-slug="jambalam">
-                See how Jambalam was built
-            </a>
-        </p>
-    </div>
-</section>
+@* Proof comes from the category assigned to this page in the admin, so adding a project to it
+   surfaces here automatically. *@
+<partial name="_RelatedProjects" model="Model" />
 
 <partial name="_CallToAction" model="@("Need work done on your nopCommerce store?")" />

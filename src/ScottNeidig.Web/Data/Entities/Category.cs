@@ -18,5 +18,13 @@ public class Category
 
     public int SortOrder { get; set; }
 
+    /// <summary>
+    /// Which service landing page this category feeds, or null for none. Values come from
+    /// ServicePages. A unique index (filtered to non-nulls) stops two categories claiming the
+    /// same page, since each page shows exactly one category's work.
+    /// </summary>
+    [MaxLength(50)]
+    public string? ServiceKey { get; set; }
+
     public List<Project> Projects { get; set; } = [];
 }

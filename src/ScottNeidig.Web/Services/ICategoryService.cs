@@ -16,13 +16,19 @@ public interface ICategoryService
     /// <summary>Null when the slug is unknown. The caller turns that into a 404.</summary>
     Task<CategorySummary?> GetBySlugAsync(string slug, CancellationToken ct = default);
 
+    /// <summary>
+    /// The category assigned to a service landing page, or null if none is assigned. Drives the
+    /// related-work section on the service pages.
+    /// </summary>
+    Task<CategorySummary?> GetByServiceKeyAsync(string serviceKey, CancellationToken ct = default);
+
     Task<Category?> GetByIdAsync(int id, CancellationToken ct = default);
 
     /// <summary>Returns the new id.</summary>
-    Task<int> CreateAsync(string name, int sortOrder, CancellationToken ct = default);
+    Task<int> CreateAsync(string name, int sortOrder, string? serviceKey, CancellationToken ct = default);
 
     /// <summary>False when the category no longer exists.</summary>
-    Task<bool> UpdateAsync(int id, string name, int sortOrder, CancellationToken ct = default);
+    Task<bool> UpdateAsync(int id, string name, int sortOrder, string? serviceKey, CancellationToken ct = default);
 
     Task<bool> DeleteAsync(int id, CancellationToken ct = default);
 

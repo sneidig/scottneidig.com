@@ -24,6 +24,18 @@
                 <span asp-validation-for="SortOrder" class="form__error"></span>
             </div>
 
+            <div class="form__field">
+                <label asp-for="ServiceKey"></label>
+                <select asp-for="ServiceKey" asp-items="Model.ServiceOptions">
+                    <option value="">None</option>
+                </select>
+                <span class="form__hint">
+                    The chosen service page shows this category's published projects. Each page
+                    can only be fed by one category.
+                </span>
+                <span asp-validation-for="ServiceKey" class="form__error"></span>
+            </div>
+
             @if (isEdit)
             {
                 <div class="form__field">

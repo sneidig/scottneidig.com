@@ -1,3 +1,4 @@
+@model ScottNeidig.Web.Models.ServicePageModel
 @*
     Small-business service page. This is a SHELL, not a live pitch. Per the spec's plan-vs-done
     rule: Scott has no small-business build to point at yet, so this page has the same structure
@@ -49,9 +50,8 @@
     </div>
 </section>
 
-@*
-    No proof section yet, on purpose. When the roofer site is live, a proof block goes here
-    linking to it, matching the nopCommerce page.
-*@
+@* Proof appears once a category is assigned to this page and has published work in it, so this
+   stays empty and honest until there's something real to show. *@
+<partial name="_RelatedProjects" model="Model" />
 
 <partial name="_CallToAction" model="@("Thinking about a new site?")" />

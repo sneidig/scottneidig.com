@@ -32,6 +32,13 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
         b.Entity<BlogPost>().HasIndex(p => p.Slug).IsUnique();
         b.Entity<Category>().HasIndex(c => c.Slug).IsUnique();
 
+        // Each service page shows one category's work, so a service key can only be claimed once.
+        // Filtered to non-nulls, otherwise every unassigned category would collide on NULL.
+        b.Entity<Category>()
+            .HasIndex(c => c.ServiceKey)
+            .IsUnique()
+            .HasFilter("[ServiceKey] IS NOT NULL");
+
         // Deleting a category should not delete the work that was in it.
         b.Entity<Project>()
             .HasOne(p => p.Category)
