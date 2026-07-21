@@ -17,7 +17,7 @@
             <div class="form__field">
                 <label asp-for="Body"></label>
                 <textarea asp-for="Body" rows="5"></textarea>
-                <span class="form__hint">Plain text. Line breaks are kept; there's no markdown here.</span>
+                <span class="form__hint">Line breaks are kept. HTML is allowed, so you can include links.</span>
                 <span asp-validation-for="Body" class="form__error"></span>
             </div>
 

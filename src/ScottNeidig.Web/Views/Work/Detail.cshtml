@@ -54,9 +54,10 @@
 
                             @if (!string.IsNullOrWhiteSpace(point.Body))
                             {
-                                @* pre-line in the CSS keeps the author's line breaks, so this
-                                   stays encoded text and never touches Html.Raw. *@
-                                <p class="point__body">@point.Body</p>
+                                @* Rendered raw so points can carry links. Same trust model as the
+                                   blog body: only the single admin account writes these. pre-line
+                                   in the CSS still keeps the author's line breaks. *@
+                                <p class="point__body">@Html.Raw(point.Body)</p>
                             }
                         </li>
                     }
