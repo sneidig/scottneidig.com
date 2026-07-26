@@ -386,7 +386,90 @@
   font-weight: 600;
 }
 
-/* ---------- Blog list ---------- */
+/* ---------- Blog: view toggle ---------- */
+.view-toggle {
+  display: flex;
+  gap: 0.25rem;
+  margin: 2rem 0 1rem;
+}
+
+.view-toggle__option {
+  padding: 0.35rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.view-toggle__option--on {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+  color: #fff;
+}
+
+/* ---------- Blog: list (row) layout ---------- */
+.post-rows {
+  display: grid;
+  gap: 0;
+  margin: 1.5rem 0 0;
+}
+
+.post-row + .post-row {
+  border-top: 1px solid var(--border);
+}
+
+.post-row__link {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.75rem 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Fixed-width thumbnail on the left; text takes the rest. */
+.post-row__media {
+  flex: 0 0 14rem;
+  align-self: flex-start;
+}
+
+.post-row__media img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.post-row__title {
+  font-size: 1.4rem;
+  margin: 0.25rem 0;
+}
+
+.post-row__link:hover .post-row__title {
+  color: var(--accent);
+}
+
+.post-row__excerpt {
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+}
+
+/* Stack image over text on narrow screens. */
+@media (max-width: 34rem) {
+  .post-row__link {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .post-row__media {
+    flex-basis: auto;
+    width: 100%;
+  }
+}
+
+/* ---------- Blog list (used by related-reading fallback) ---------- */
 .post-list {
   display: grid;
   gap: 2.5rem;

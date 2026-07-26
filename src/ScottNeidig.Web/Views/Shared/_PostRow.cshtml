@@ -1,0 +1,44 @@
+@*
+    One post as a full-width row: thumbnail left, text right. The list-view alternative to the
+    card grid on /blog. Stacks to image-over-text on narrow screens.
+*@
+@using Microsoft.Extensions.Options
+@using ScottNeidig.Web.Configuration
+@using ScottNeidig.Web.Services
+@model BlogListItem
+@inject IOptions<ImageOptions> ImageConfig
+
+@{
+    var folder = ImageConfig.Value.UploadFolder;
+    var heroUrl = Model.HeroImage is null ? null : $"/{folder}/blog/{Model.Slug}/{Model.HeroImage}";
+}
+
+<li class="post-row">
+    <a class="post-row__link" asp-controller="Blog" asp-action="Post" asp-route-slug="@Model.Slug">
+        @if (heroUrl is not null)
+        {
+            <div class="post-row__media">
+                <img src="@heroUrl" alt="" loading="lazy" decoding="async" />
+            </div>
+        }
+
+        <div class="post-row__body">
+            @if (Model.CategoryName is not null)
+            {
+                <p class="card__category">@Model.CategoryName</p>
+            }
+
+            <h2 class="post-row__title">@Model.Title</h2>
+
+            @if (Model.PublishedUtc is { } published)
+            {
+                <p class="post-item__date">@published.ToString("d MMMM yyyy")</p>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.Excerpt))
+            {
+                <p class="post-row__excerpt">@Model.Excerpt</p>
+            }
+        </div>
+    </a>
+</li>

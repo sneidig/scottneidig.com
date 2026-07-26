@@ -15,4 +15,9 @@ public class BlogListViewModel
     public CategorySummary? SelectedTopic { get; init; }
 
     public bool IsFiltered => SelectedTopic is not null;
+
+    /// <summary>"list" (default, full-width rows) or "grid" (cards). Set from the ?view param.</summary>
+    public string Layout { get; init; } = "list";
+
+    public bool IsGrid => Layout == "grid";
 }

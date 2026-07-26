@@ -20,7 +20,7 @@ public class BlogController : Controller
     }
 
     [HttpGet("")]
-    public async Task<IActionResult> Index(CancellationToken ct)
+    public async Task<IActionResult> Index(string? view, CancellationToken ct)
     {
         ViewData["Title"] = "Blog";
         ViewData["Description"] =
@@ -29,12 +29,13 @@ public class BlogController : Controller
         return View(new BlogListViewModel
         {
             Posts = await _blog.GetPublishedAsync(ct: ct),
-            Topics = await _blog.GetTopicsAsync(ct)
+            Topics = await _blog.GetTopicsAsync(ct),
+            Layout = NormalizeView(view)
         });
     }
 
     [HttpGet("category/{slug}")]
-    public async Task<IActionResult> Category(string slug, CancellationToken ct)
+    public async Task<IActionResult> Category(string slug, string? view, CancellationToken ct)
     {
         var topics = await _blog.GetTopicsAsync(ct);
 
@@ -52,9 +53,13 @@ public class BlogController : Controller
         {
             Posts = await _blog.GetPublishedAsync(slug, ct),
             Topics = topics,
-            SelectedTopic = selected
+            SelectedTopic = selected,
+            Layout = NormalizeView(view)
         });
     }
+
+    /// <summary>Only "grid" flips off the default list view; anything else is the list.</summary>
+    private static string NormalizeView(string? view) => view == "grid" ? "grid" : "list";
 
     [HttpGet("{slug}")]
     public async Task<IActionResult> Post(string slug, CancellationToken ct)

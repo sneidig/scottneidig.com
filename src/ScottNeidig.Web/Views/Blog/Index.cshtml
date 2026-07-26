@@ -1,6 +1,17 @@
 @using ScottNeidig.Web.Models
 @model BlogListViewModel
 
+@{
+    // Toggle links keep the current topic (Index vs Category + slug) and just flip the view.
+    // Server-rendered, so no JS.
+    var listRoute = Model.IsFiltered
+        ? Url.Action("Category", new { slug = Model.SelectedTopic!.Slug, view = "list" })
+        : Url.Action("Index", new { view = "list" });
+    var gridRoute = Model.IsFiltered
+        ? Url.Action("Category", new { slug = Model.SelectedTopic!.Slug, view = "grid" })
+        : Url.Action("Index", new { view = "grid" });
+}
+
 <section class="section--lede">
     <div class="container">
         <p class="topper">Blog</p>
@@ -41,12 +52,31 @@
         }
         else
         {
-            <ul class="cards">
-                @foreach (var post in Model.Posts)
-                {
-                    <partial name="_PostCard" model="post" />
-                }
-            </ul>
+            <div class="view-toggle" role="group" aria-label="Layout">
+                <a class="view-toggle__option @(Model.IsGrid ? "" : "view-toggle__option--on")"
+                   href="@listRoute" aria-current="@(Model.IsGrid ? null : "true")">List</a>
+                <a class="view-toggle__option @(Model.IsGrid ? "view-toggle__option--on" : "")"
+                   href="@gridRoute" aria-current="@(Model.IsGrid ? "true" : null)">Grid</a>
+            </div>
+
+            @if (Model.IsGrid)
+            {
+                <ul class="cards">
+                    @foreach (var post in Model.Posts)
+                    {
+                        <partial name="_PostCard" model="post" />
+                    }
+                </ul>
+            }
+            else
+            {
+                <ul class="post-rows">
+                    @foreach (var post in Model.Posts)
+                    {
+                        <partial name="_PostRow" model="post" />
+                    }
+                </ul>
+            }
         }
     </div>
 </section>

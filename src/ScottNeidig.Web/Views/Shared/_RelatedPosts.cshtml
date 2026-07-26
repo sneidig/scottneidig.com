@@ -12,19 +12,11 @@
             <p class="topper">Writing</p>
             <h2 class="title">Related reading</h2>
 
-            <ul class="post-list">
+            @* Cards, so they match the project cards above with a thumbnail and category tag. *@
+            <ul class="cards">
                 @foreach (var post in Model.Posts)
                 {
-                    <li class="post-item">
-                        <h3 class="post-item__title">
-                            <a asp-controller="Blog" asp-action="Post" asp-route-slug="@post.Slug">@post.Title</a>
-                        </h3>
-
-                        @if (!string.IsNullOrWhiteSpace(post.Excerpt))
-                        {
-                            <p class="post-item__excerpt">@post.Excerpt</p>
-                        }
-                    </li>
+                    <partial name="_PostCard" model="post" />
                 }
             </ul>
         </div>
