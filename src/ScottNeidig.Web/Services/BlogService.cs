@@ -57,6 +57,7 @@ public class BlogService : IBlogService
         existing.SeoTitle = post.SeoTitle;
         existing.SeoDescription = post.SeoDescription;
         existing.CategoryId = post.CategoryId;
+        existing.HeroImage = post.HeroImage;
 
         await _db.SaveChangesAsync(ct);
         return true;
