@@ -41,4 +41,11 @@ public class BlogPost
     /// </summary>
     public int? CategoryId { get; set; }
     public Category? Category { get; set; }
+
+    /// <summary>
+    /// Filename of the image (already in the post's upload folder) used as the card thumbnail
+    /// and the top-of-post image. Null means no hero, and the card renders without one.
+    /// </summary>
+    [MaxLength(260)]
+    public string? HeroImage { get; set; }
 }

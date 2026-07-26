@@ -15,4 +15,7 @@ public interface IBlogImageStorage
     /// and get served after it's gone from the draft.
     /// </summary>
     void DeleteAllForPost(string slug);
+
+    /// <summary>The post's image filenames, for the hero-image picker. Empty if it has none.</summary>
+    IReadOnlyList<string> ListForPost(string slug);
 }

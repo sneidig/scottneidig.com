@@ -79,7 +79,7 @@ public class BlogController : Controller
         ViewData["Title"] = "New post";
 
         var model = new BlogPostFormModel();
-        await PopulateCategoriesAsync(model, ct);
+        await PopulateFormListsAsync(model, ct);
 
         return View("Form", model);
     }
@@ -94,7 +94,7 @@ public class BlogController : Controller
 
         if (!await IsValidAsync(model, slug, ct))
         {
-            await PopulateCategoriesAsync(model, ct);
+            await PopulateFormListsAsync(model, ct);
             return View("Form", model);
         }
 
@@ -126,7 +126,7 @@ public class BlogController : Controller
             CategoryId = post.CategoryId
         };
 
-        await PopulateCategoriesAsync(model, ct);
+        await PopulateFormListsAsync(model, ct);
         return View("Form", model);
     }
 
@@ -141,7 +141,7 @@ public class BlogController : Controller
 
         if (!await IsValidAsync(model, slug, ct))
         {
-            await PopulateCategoriesAsync(model, ct);
+            await PopulateFormListsAsync(model, ct);
             return View("Form", model);
         }
 
@@ -183,15 +183,25 @@ public class BlogController : Controller
         Published = model.Published,
         SeoTitle = model.SeoTitle?.Trim(),
         SeoDescription = model.SeoDescription?.Trim(),
-        CategoryId = model.CategoryId
+        CategoryId = model.CategoryId,
+        HeroImage = string.IsNullOrWhiteSpace(model.HeroImage) ? null : model.HeroImage
     };
 
-    private async Task PopulateCategoriesAsync(BlogPostFormModel model, CancellationToken ct)
+    private async Task PopulateFormListsAsync(BlogPostFormModel model, CancellationToken ct)
     {
         var categories = await _categories.GetAllAsync(ct);
         model.Categories = categories
             .Select(c => new SelectListItem(c.Name, c.Id.ToString()))
             .ToList();
+
+        // Hero options are the post's own uploaded images. New posts have none yet, so the
+        // picker is empty until images are imported.
+        var slug = model.Slug;
+        model.AvailableImages = string.IsNullOrWhiteSpace(slug)
+            ? []
+            : _images.ListForPost(slug)
+                .Select(name => new SelectListItem(name, name))
+                .ToList();
     }
 
     /// <summary>
@@ -265,6 +275,7 @@ public class BlogController : Controller
         _images.DeleteAllForPost(slug);
 
         var imageCount = 0;
+        string? firstImage = null;
         foreach (var entry in archive.Entries)
         {
             if (entry.Length == 0 || !ImageExtensions.Contains(Path.GetExtension(entry.Name)))
@@ -276,6 +287,7 @@ public class BlogController : Controller
             using var buffer = new MemoryStream();
             await stream.CopyToAsync(buffer, ct);
             await _images.SaveAsync(slug, entry.Name, buffer.ToArray(), ct);
+            firstImage ??= Path.GetFileName(entry.Name);
             imageCount++;
         }
 
@@ -292,7 +304,9 @@ public class BlogController : Controller
                 Excerpt = fields.Excerpt?.Trim(),
                 SeoTitle = fields.SeoTitle?.Trim(),
                 SeoDescription = fields.SeoDescription?.Trim(),
-                Published = false
+                Published = false,
+                // Default the hero to the first image; it's a pick you can change on review.
+                HeroImage = firstImage
             }, ct);
         }
         else
@@ -302,6 +316,13 @@ public class BlogController : Controller
             existing.Excerpt = fields.Excerpt?.Trim();
             existing.SeoTitle = fields.SeoTitle?.Trim();
             existing.SeoDescription = fields.SeoDescription?.Trim();
+            // Keep the chosen hero if that image is still in the new set, else fall back to the
+            // first image so a re-import never leaves a hero pointing at a deleted file.
+            var imagesNow = _images.ListForPost(slug);
+            if (existing.HeroImage is null || !imagesNow.Contains(existing.HeroImage))
+            {
+                existing.HeroImage = firstImage;
+            }
             // Published state and its date are left as they are: re-importing a live post updates
             // it without pulling it down.
             await _blog.UpdateAsync(existing, ct);

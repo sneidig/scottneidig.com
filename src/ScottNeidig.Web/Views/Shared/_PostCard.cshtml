@@ -1,0 +1,46 @@
+@*
+    One post in the blog grid: hero thumbnail (if the post has one), category tag, title, date,
+    excerpt. The whole card is one link, one tab stop per post. Reuses the project card's classes.
+*@
+@using Microsoft.Extensions.Options
+@using ScottNeidig.Web.Configuration
+@using ScottNeidig.Web.Services
+@model BlogListItem
+@inject IOptions<ImageOptions> ImageConfig
+
+@{
+    var folder = ImageConfig.Value.UploadFolder;
+    var heroUrl = Model.HeroImage is null ? null : $"/{folder}/blog/{Model.Slug}/{Model.HeroImage}";
+}
+
+<li class="card">
+    <a class="card__link" asp-controller="Blog" asp-action="Post" asp-route-slug="@Model.Slug">
+        @if (heroUrl is not null)
+        {
+            @* Blog heroes are usually SVG diagrams, served straight, not through the photo
+               pipeline. Lazy since the grid is below the fold. *@
+            <div class="card__media">
+                <img src="@heroUrl" alt="" loading="lazy" decoding="async" />
+            </div>
+        }
+
+        <div class="card__body">
+            @if (Model.CategoryName is not null)
+            {
+                <p class="card__category">@Model.CategoryName</p>
+            }
+
+            <h2 class="card__title">@Model.Title</h2>
+
+            @if (Model.PublishedUtc is { } published)
+            {
+                <p class="card__meta">@published.ToString("d MMM yyyy")</p>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.Excerpt))
+            {
+                <p class="card__text">@Model.Excerpt</p>
+            }
+        </div>
+    </a>
+</li>

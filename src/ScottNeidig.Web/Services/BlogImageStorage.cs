@@ -45,6 +45,22 @@ public class BlogImageStorage : IBlogImageStorage
         }
     }
 
+    public IReadOnlyList<string> ListForPost(string slug)
+    {
+        var dir = PostDir(slug);
+        if (!Directory.Exists(dir))
+        {
+            return [];
+        }
+
+        return Directory.EnumerateFiles(dir)
+            .Select(Path.GetFileName)
+            .Where(name => name is not null)
+            .Select(name => name!)
+            .OrderBy(name => name)
+            .ToList();
+    }
+
     /// <summary>GetFileName on the slug too, so a slug can't escape the blog folder.</summary>
     private string PostDir(string slug) => Path.Combine(_root, Path.GetFileName(slug));
 }

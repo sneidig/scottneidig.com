@@ -1,42 +1,50 @@
-@using ScottNeidig.Web.Services
-@model List<BlogListItem>
+@using ScottNeidig.Web.Models
+@model BlogListViewModel
 
 <section class="section--lede">
-    <div class="container container--prose">
+    <div class="container">
         <p class="topper">Blog</p>
-        <h1 class="header">Writing</h1>
+        <h1 class="header">@(Model.IsFiltered ? Model.SelectedTopic!.Name : "Writing")</h1>
         <p class="text lede__text">
-            Notes on nopCommerce, .NET, and building for the web.
+            @if (Model.IsFiltered)
+            {
+                <text>Posts on @Model.SelectedTopic!.Name.</text>
+            }
+            else
+            {
+                <text>Notes on nopCommerce, .NET, and building for the web.</text>
+            }
         </p>
 
-        @if (Model.Count == 0)
+        @if (Model.Topics.Count > 0)
+        {
+            <nav class="filters" aria-label="Filter by topic">
+                <a class="filter @(Model.IsFiltered ? "" : "filter--on")"
+                   asp-action="Index"
+                   aria-current="@(Model.IsFiltered ? null : "page")">All</a>
+
+                @foreach (var topic in Model.Topics)
+                {
+                    var on = Model.SelectedTopic?.Slug == topic.Slug;
+
+                    <a class="filter @(on ? "filter--on" : "")"
+                       asp-action="Category"
+                       asp-route-slug="@topic.Slug"
+                       aria-current="@(on ? "page" : null)">@topic.Name</a>
+                }
+            </nav>
+        }
+
+        @if (Model.Posts.Count == 0)
         {
             <p class="text">No posts yet. Check back soon.</p>
         }
         else
         {
-            <ul class="post-list post-list--top">
-                @foreach (var post in Model)
+            <ul class="cards">
+                @foreach (var post in Model.Posts)
                 {
-                    <li class="post-item">
-                        <h2 class="post-item__title">
-                            <a asp-action="Post" asp-route-slug="@post.Slug">@post.Title</a>
-                        </h2>
-
-                        @if (post.PublishedUtc is { } published)
-                        {
-                            <p class="post-item__date">
-                                <time datetime="@published.ToString("yyyy-MM-dd")">
-                                    @published.ToString("d MMMM yyyy")
-                                </time>
-                            </p>
-                        }
-
-                        @if (!string.IsNullOrWhiteSpace(post.Excerpt))
-                        {
-                            <p class="post-item__excerpt">@post.Excerpt</p>
-                        }
-                    </li>
+                    <partial name="_PostCard" model="post" />
                 }
             </ul>
         }

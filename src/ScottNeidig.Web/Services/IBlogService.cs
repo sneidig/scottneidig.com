@@ -26,7 +26,11 @@ public interface IBlogService
     /// Published posts only, newest first, for the public list. Kept separate from GetAllAsync
     /// so a draft can't leak onto a public page through a shared query.
     /// </summary>
-    Task<List<BlogListItem>> GetPublishedAsync(CancellationToken ct = default);
+    /// <param name="categorySlug">Null for all posts, otherwise limits to that category.</param>
+    Task<List<BlogListItem>> GetPublishedAsync(string? categorySlug = null, CancellationToken ct = default);
+
+    /// <summary>Categories that have published posts, for the blog filter nav.</summary>
+    Task<List<CategorySummary>> GetTopicsAsync(CancellationToken ct = default);
 
     /// <summary>Null when the slug is unknown or the post isn't published. The caller 404s.</summary>
     Task<BlogPostDetail?> GetPublishedBySlugAsync(string slug, CancellationToken ct = default);

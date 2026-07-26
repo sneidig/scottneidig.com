@@ -63,6 +63,21 @@
                 </span>
             </div>
 
+            <div class="form__field">
+                <label asp-for="HeroImage"></label>
+                @if (Model.AvailableImages.Count == 0)
+                {
+                    <p class="form__readonly">No images yet. Import the post's zip to add some.</p>
+                }
+                else
+                {
+                    <select asp-for="HeroImage" asp-items="Model.AvailableImages">
+                        <option value="">None</option>
+                    </select>
+                    <span class="form__hint">The card thumbnail and the image at the top of the post.</span>
+                }
+            </div>
+
             <div class="form__field form__field--inline">
                 <input asp-for="Published" />
                 <label asp-for="Published">Published</label>

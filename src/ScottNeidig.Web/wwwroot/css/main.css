@@ -436,6 +436,15 @@
   margin-top: 1.5rem;
 }
 
+/* Hero image at the top of a post, between the meta and the body. */
+.post-hero {
+  width: 100%;
+  height: auto;
+  margin: 1.5rem 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
 .prose h2,
 .prose h3 {
   margin-top: 2rem;

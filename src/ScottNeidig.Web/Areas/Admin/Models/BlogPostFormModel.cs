@@ -44,6 +44,13 @@ public class BlogPostFormModel
     [Display(Name = "Category")]
     public int? CategoryId { get; set; }
 
+    /// <summary>Filename of the chosen hero image, or blank for none.</summary>
+    [Display(Name = "Hero image")]
+    public string? HeroImage { get; set; }
+
     /// <summary>Populated by the controller. Not posted back.</summary>
     public List<SelectListItem> Categories { get; set; } = [];
+
+    /// <summary>The post's uploaded images, for the hero picker. Populated by the controller.</summary>
+    public List<SelectListItem> AvailableImages { get; set; } = [];
 }

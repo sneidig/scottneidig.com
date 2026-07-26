@@ -13,7 +13,9 @@ public record BlogListItem(
     string Slug,
     string Title,
     string? Excerpt,
-    DateTime? PublishedUtc);
+    DateTime? PublishedUtc,
+    string? HeroImage = null,
+    string? CategoryName = null);
 
 /// <summary>
 /// A rendered post for /blog/{slug}. BodyHtml is already rendered from markdown, so the view
@@ -29,7 +31,8 @@ public record BlogPostDetail(
     string? Excerpt,
     string? CategoryName = null,
     string? CategorySlug = null,
-    string? CategoryServiceKey = null)
+    string? CategoryServiceKey = null,
+    string? HeroImage = null)
 {
     public string PageTitle => string.IsNullOrWhiteSpace(SeoTitle) ? Title : SeoTitle;
 

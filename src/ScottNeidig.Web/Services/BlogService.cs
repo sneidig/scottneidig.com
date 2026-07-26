@@ -78,12 +78,35 @@ public class BlogService : IBlogService
     public Task<bool> SlugExistsAsync(string slug, int? excludingId = null, CancellationToken ct = default) =>
         _db.BlogPosts.AnyAsync(p => p.Slug == slug && (excludingId == null || p.Id != excludingId), ct);
 
-    public Task<List<BlogListItem>> GetPublishedAsync(CancellationToken ct = default) =>
-        _db.BlogPosts
-            .Where(p => p.Published)
+    public Task<List<BlogListItem>> GetPublishedAsync(string? categorySlug = null, CancellationToken ct = default)
+    {
+        var query = _db.BlogPosts.Where(p => p.Published);
+
+        if (!string.IsNullOrWhiteSpace(categorySlug))
+        {
+            query = query.Where(p => p.Category != null && p.Category.Slug == categorySlug);
+        }
+
+        return query
             .OrderByDescending(p => p.PublishedUtc)
             .ThenByDescending(p => p.Id)
-            .Select(p => new BlogListItem(p.Slug, p.Title, p.Excerpt, p.PublishedUtc))
+            .Select(p => new BlogListItem(
+                p.Slug, p.Title, p.Excerpt, p.PublishedUtc,
+                p.HeroImage,
+                p.Category != null ? p.Category.Name : null))
+            .AsNoTracking()
+            .ToListAsync(ct);
+    }
+
+    public Task<List<CategorySummary>> GetTopicsAsync(CancellationToken ct = default) =>
+        // Categories that have at least one published post, for the blog filter nav. ProjectCount
+        // here carries the published-post count; the filter only uses Name and Slug.
+        _db.Categories
+            .Where(c => c.BlogPosts.Any(p => p.Published))
+            .OrderBy(c => c.SortOrder)
+            .ThenBy(c => c.Name)
+            .Select(c => new CategorySummary(
+                c.Id, c.Name, c.Slug, c.SortOrder, c.BlogPosts.Count(p => p.Published), c.ServiceKey))
             .AsNoTracking()
             .ToListAsync(ct);
 
@@ -120,7 +143,8 @@ public class BlogService : IBlogService
             post.Excerpt,
             category?.Name,
             category?.Slug,
-            category?.ServiceKey);
+            category?.ServiceKey,
+            post.HeroImage);
     }
 
     public Task<List<BlogListItem>> GetPublishedByCategoryAsync(
@@ -132,7 +156,10 @@ public class BlogService : IBlogService
             .OrderByDescending(p => p.PublishedUtc)
             .ThenByDescending(p => p.Id)
             .Take(take)
-            .Select(p => new BlogListItem(p.Slug, p.Title, p.Excerpt, p.PublishedUtc))
+            .Select(p => new BlogListItem(
+                p.Slug, p.Title, p.Excerpt, p.PublishedUtc,
+                p.HeroImage,
+                p.Category != null ? p.Category.Name : null))
             .AsNoTracking()
             .ToListAsync(ct);
 }

@@ -26,7 +26,34 @@ public class BlogController : Controller
         ViewData["Description"] =
             "Writing on nopCommerce, .NET, and building for the web, by Scott Neidig.";
 
-        return View(await _blog.GetPublishedAsync(ct));
+        return View(new BlogListViewModel
+        {
+            Posts = await _blog.GetPublishedAsync(ct: ct),
+            Topics = await _blog.GetTopicsAsync(ct)
+        });
+    }
+
+    [HttpGet("category/{slug}")]
+    public async Task<IActionResult> Category(string slug, CancellationToken ct)
+    {
+        var topics = await _blog.GetTopicsAsync(ct);
+
+        // An unknown topic, or one with no published posts, isn't a real page.
+        var selected = topics.FirstOrDefault(t => t.Slug == slug);
+        if (selected is null)
+        {
+            return NotFound();
+        }
+
+        ViewData["Title"] = $"{selected.Name} posts";
+        ViewData["Description"] = $"Writing on {selected.Name} by Scott Neidig.";
+
+        return View(nameof(Index), new BlogListViewModel
+        {
+            Posts = await _blog.GetPublishedAsync(slug, ct),
+            Topics = topics,
+            SelectedTopic = selected
+        });
     }
 
     [HttpGet("{slug}")]
