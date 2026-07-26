@@ -30,4 +30,11 @@ public interface IBlogService
 
     /// <summary>Null when the slug is unknown or the post isn't published. The caller 404s.</summary>
     Task<BlogPostDetail?> GetPublishedBySlugAsync(string slug, CancellationToken ct = default);
+
+    /// <summary>
+    /// Published posts in a category, newest first, excluding one slug (the post you're already
+    /// reading). Powers the related-writing section on a service page and cross-links.
+    /// </summary>
+    Task<List<BlogListItem>> GetPublishedByCategoryAsync(
+        string categorySlug, int take, string? excludeSlug = null, CancellationToken ct = default);
 }

@@ -52,6 +52,17 @@
                 <span asp-validation-for="Excerpt" class="form__error"></span>
             </div>
 
+            <div class="form__field">
+                <label asp-for="CategoryId"></label>
+                <select asp-for="CategoryId" asp-items="Model.Categories">
+                    <option value="">None</option>
+                </select>
+                <span class="form__hint">
+                    Matches the post to a service page. If the category feeds a service, the two
+                    cross-link.
+                </span>
+            </div>
+
             <div class="form__field form__field--inline">
                 <input asp-for="Published" />
                 <label asp-for="Published">Published</label>

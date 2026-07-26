@@ -46,6 +46,13 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
             .HasForeignKey(p => p.CategoryId)
             .OnDelete(DeleteBehavior.SetNull);
 
+        // Same for posts: deleting a category just unlinks it, the post stays.
+        b.Entity<BlogPost>()
+            .HasOne(p => p.Category)
+            .WithMany(c => c.BlogPosts)
+            .HasForeignKey(p => p.CategoryId)
+            .OnDelete(DeleteBehavior.SetNull);
+
         // Images and points have no meaning without their project, so they go with it.
         b.Entity<ProjectImage>()
             .HasOne(i => i.Project)

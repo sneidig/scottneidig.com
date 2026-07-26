@@ -27,4 +27,5 @@ public class Category
     public string? ServiceKey { get; set; }
 
     public List<Project> Projects { get; set; } = [];
+    public List<BlogPost> BlogPosts { get; set; } = [];
 }

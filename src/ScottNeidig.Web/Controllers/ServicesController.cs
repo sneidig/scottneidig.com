@@ -18,11 +18,13 @@ public class ServicesController : Controller
 
     private readonly ICategoryService _categories;
     private readonly IProjectService _projects;
+    private readonly IBlogService _blog;
 
-    public ServicesController(ICategoryService categories, IProjectService projects)
+    public ServicesController(ICategoryService categories, IProjectService projects, IBlogService blog)
     {
         _categories = categories;
         _projects = projects;
+        _blog = blog;
     }
 
     [HttpGet("")]
@@ -81,7 +83,8 @@ public class ServicesController : Controller
         {
             CategoryName = category.Name,
             CategorySlug = category.Slug,
-            Projects = await _projects.GetPublishedAsync(category.Slug, RelatedCount, ct)
+            Projects = await _projects.GetPublishedAsync(category.Slug, RelatedCount, ct),
+            Posts = await _blog.GetPublishedByCategoryAsync(category.Slug, RelatedCount, ct: ct)
         };
     }
 }

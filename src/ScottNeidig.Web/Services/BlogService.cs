@@ -56,6 +56,7 @@ public class BlogService : IBlogService
         existing.PublishedUtc = post.PublishedUtc;
         existing.SeoTitle = post.SeoTitle;
         existing.SeoDescription = post.SeoDescription;
+        existing.CategoryId = post.CategoryId;
 
         await _db.SaveChangesAsync(ct);
         return true;
@@ -98,6 +99,15 @@ public class BlogService : IBlogService
             return null;
         }
 
+        // Category pulled in the same query so the post page can cross-link to a service.
+        var category = post.CategoryId is null
+            ? null
+            : await _db.Categories
+                .Where(c => c.Id == post.CategoryId)
+                .Select(c => new { c.Name, c.Slug, c.ServiceKey })
+                .AsNoTracking()
+                .FirstOrDefaultAsync(ct);
+
         // Rendered here rather than in the view so Markdig stays out of the views and the
         // detail hands the page ready-to-output HTML.
         return new BlogPostDetail(
@@ -107,6 +117,22 @@ public class BlogService : IBlogService
             post.PublishedUtc,
             post.SeoTitle,
             post.SeoDescription,
-            post.Excerpt);
+            post.Excerpt,
+            category?.Name,
+            category?.Slug,
+            category?.ServiceKey);
     }
+
+    public Task<List<BlogListItem>> GetPublishedByCategoryAsync(
+        string categorySlug, int take, string? excludeSlug = null, CancellationToken ct = default) =>
+        _db.BlogPosts
+            .Where(p => p.Published
+                && p.Category != null && p.Category.Slug == categorySlug
+                && (excludeSlug == null || p.Slug != excludeSlug))
+            .OrderByDescending(p => p.PublishedUtc)
+            .ThenByDescending(p => p.Id)
+            .Take(take)
+            .Select(p => new BlogListItem(p.Slug, p.Title, p.Excerpt, p.PublishedUtc))
+            .AsNoTracking()
+            .ToListAsync(ct);
 }

@@ -16,4 +16,9 @@ public class ServicePageModel
     public IReadOnlyList<ProjectCard> Projects { get; init; } = [];
 
     public bool HasProjects => Projects.Count > 0;
+
+    /// <summary>Published posts in the same category. Empty means the writing section hides.</summary>
+    public IReadOnlyList<BlogListItem> Posts { get; init; } = [];
+
+    public bool HasPosts => Posts.Count > 0;
 }

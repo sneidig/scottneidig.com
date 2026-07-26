@@ -1,6 +1,7 @@
 using System.IO.Compression;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using ScottNeidig.Web.Areas.Admin.Models;
 using ScottNeidig.Web.Data.Entities;
 using ScottNeidig.Web.Services;
@@ -18,12 +19,15 @@ public class BlogController : Controller
 
     private readonly IBlogService _blog;
     private readonly IBlogImageStorage _images;
+    private readonly ICategoryService _categories;
     private readonly ILogger<BlogController> _log;
 
-    public BlogController(IBlogService blog, IBlogImageStorage images, ILogger<BlogController> log)
+    public BlogController(
+        IBlogService blog, IBlogImageStorage images, ICategoryService categories, ILogger<BlogController> log)
     {
         _blog = blog;
         _images = images;
+        _categories = categories;
         _log = log;
     }
 
@@ -70,10 +74,14 @@ public class BlogController : Controller
     }
 
     [HttpGet]
-    public IActionResult Create()
+    public async Task<IActionResult> Create(CancellationToken ct)
     {
         ViewData["Title"] = "New post";
-        return View("Form", new BlogPostFormModel());
+
+        var model = new BlogPostFormModel();
+        await PopulateCategoriesAsync(model, ct);
+
+        return View("Form", model);
     }
 
     [HttpPost]
@@ -86,6 +94,7 @@ public class BlogController : Controller
 
         if (!await IsValidAsync(model, slug, ct))
         {
+            await PopulateCategoriesAsync(model, ct);
             return View("Form", model);
         }
 
@@ -104,7 +113,7 @@ public class BlogController : Controller
 
         ViewData["Title"] = "Edit post";
 
-        return View("Form", new BlogPostFormModel
+        var model = new BlogPostFormModel
         {
             Id = post.Id,
             Title = post.Title,
@@ -113,8 +122,12 @@ public class BlogController : Controller
             Excerpt = post.Excerpt,
             Published = post.Published,
             SeoTitle = post.SeoTitle,
-            SeoDescription = post.SeoDescription
-        });
+            SeoDescription = post.SeoDescription,
+            CategoryId = post.CategoryId
+        };
+
+        await PopulateCategoriesAsync(model, ct);
+        return View("Form", model);
     }
 
     [HttpPost]
@@ -128,6 +141,7 @@ public class BlogController : Controller
 
         if (!await IsValidAsync(model, slug, ct))
         {
+            await PopulateCategoriesAsync(model, ct);
             return View("Form", model);
         }
 
@@ -168,8 +182,17 @@ public class BlogController : Controller
         Excerpt = model.Excerpt?.Trim(),
         Published = model.Published,
         SeoTitle = model.SeoTitle?.Trim(),
-        SeoDescription = model.SeoDescription?.Trim()
+        SeoDescription = model.SeoDescription?.Trim(),
+        CategoryId = model.CategoryId
     };
+
+    private async Task PopulateCategoriesAsync(BlogPostFormModel model, CancellationToken ct)
+    {
+        var categories = await _categories.GetAllAsync(ct);
+        model.Categories = categories
+            .Select(c => new SelectListItem(c.Name, c.Id.ToString()))
+            .ToList();
+    }
 
     /// <summary>
     /// Stamp PublishedUtc the first time a post goes public and keep it after. Unpublishing

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ScottNeidig.Web.Areas.Admin.Models;
 
@@ -38,4 +39,11 @@ public class BlogPostFormModel
     [DataType(DataType.MultilineText)]
     [Display(Name = "SEO description")]
     public string? SeoDescription { get; set; }
+
+    /// <summary>Optional. Ties the post to a service page's related sections.</summary>
+    [Display(Name = "Category")]
+    public int? CategoryId { get; set; }
+
+    /// <summary>Populated by the controller. Not posted back.</summary>
+    public List<SelectListItem> Categories { get; set; } = [];
 }

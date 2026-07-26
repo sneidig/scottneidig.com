@@ -430,6 +430,12 @@
   line-height: 1.7;
 }
 
+/* Body sits in the same section as the post heading, so just a little separation, not a full
+   section's worth of padding. */
+.prose--top {
+  margin-top: 1.5rem;
+}
+
 .prose h2,
 .prose h3 {
   margin-top: 2rem;

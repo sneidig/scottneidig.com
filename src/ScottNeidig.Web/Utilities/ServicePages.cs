@@ -21,4 +21,15 @@ public static class ServicePages
 
     public static string? DisplayName(string? key) =>
         key is not null && All.TryGetValue(key, out var name) ? name : null;
+
+    /// <summary>Key to the ServicesController action that renders that page, for building links.</summary>
+    private static readonly IReadOnlyDictionary<string, string> Actions = new Dictionary<string, string>
+    {
+        [NopCommerce] = "NopCommerce",
+        [DotNet] = "DotNet",
+        [SmallBusiness] = "SmallBusiness",
+    };
+
+    public static string? ActionName(string? key) =>
+        key is not null && Actions.TryGetValue(key, out var action) ? action : null;
 }

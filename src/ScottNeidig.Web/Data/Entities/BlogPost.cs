@@ -34,4 +34,11 @@ public class BlogPost
 
     [MaxLength(200)]
     public string? SeoDescription { get; set; }
+
+    /// <summary>
+    /// Optional. The same category taxonomy projects use, so a post and the service page can be
+    /// matched when they share one. Null means the post isn't tied to a service.
+    /// </summary>
+    public int? CategoryId { get; set; }
+    public Category? Category { get; set; }
 }

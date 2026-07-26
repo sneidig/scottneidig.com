@@ -1,0 +1,32 @@
+@*
+    Writing on this service's topic: published posts in the assigned category. Renders nothing
+    when there are none, so a service with no matching posts shows no empty section.
+*@
+@using ScottNeidig.Web.Models
+@model ServicePageModel
+
+@if (Model.HasPosts)
+{
+    <section>
+        <div class="container">
+            <p class="topper">Writing</p>
+            <h2 class="title">Related reading</h2>
+
+            <ul class="post-list">
+                @foreach (var post in Model.Posts)
+                {
+                    <li class="post-item">
+                        <h3 class="post-item__title">
+                            <a asp-controller="Blog" asp-action="Post" asp-route-slug="@post.Slug">@post.Title</a>
+                        </h3>
+
+                        @if (!string.IsNullOrWhiteSpace(post.Excerpt))
+                        {
+                            <p class="post-item__excerpt">@post.Excerpt</p>
+                        }
+                    </li>
+                }
+            </ul>
+        </div>
+    </section>
+}

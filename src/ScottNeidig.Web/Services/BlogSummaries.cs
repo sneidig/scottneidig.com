@@ -26,7 +26,10 @@ public record BlogPostDetail(
     DateTime? PublishedUtc,
     string? SeoTitle,
     string? SeoDescription,
-    string? Excerpt)
+    string? Excerpt,
+    string? CategoryName = null,
+    string? CategorySlug = null,
+    string? CategoryServiceKey = null)
 {
     public string PageTitle => string.IsNullOrWhiteSpace(SeoTitle) ? Title : SeoTitle;
 

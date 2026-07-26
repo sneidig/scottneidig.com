@@ -1,15 +1,17 @@
-@using ScottNeidig.Web.Services
-@model BlogPostDetail
+@using ScottNeidig.Web.Models
+@model BlogPostViewModel
 
 @{
+    var post = Model.Post;
+
     // Article structured data for this post, on top of the site-wide Person in the layout.
     // Serialized so the JSON is always valid; @ in a code-block string literal is a literal.
     var articleJsonLd = System.Text.Json.JsonSerializer.Serialize(new Dictionary<string, object?>
     {
         ["@context"] = "https://schema.org",
         ["@type"] = "BlogPosting",
-        ["headline"] = Model.Title,
-        ["datePublished"] = Model.PublishedUtc?.ToString("yyyy-MM-dd"),
+        ["headline"] = post.Title,
+        ["datePublished"] = post.PublishedUtc?.ToString("yyyy-MM-dd"),
         ["author"] = new Dictionary<string, object> { ["@type"] = "Person", ["name"] = "Scott Neidig" },
     });
 }
@@ -22,22 +24,18 @@
     <section class="section--lede">
         <div class="container container--prose">
             <p class="topper">Blog</p>
-            <h1 class="header">@Model.Title</h1>
+            <h1 class="header">@post.Title</h1>
 
-            @if (Model.PublishedUtc is { } published)
+            @if (post.PublishedUtc is { } published)
             {
                 <p class="lede__meta">
                     <time datetime="@published.ToString("yyyy-MM-dd")">@published.ToString("d MMMM yyyy")</time>
                 </p>
             }
-        </div>
-    </section>
 
-    <section>
-        <div class="container container--prose">
             @* Rendered from markdown in BlogService. Trusted single-author content, output raw. *@
-            <div class="prose">
-                @Html.Raw(Model.BodyHtml)
+            <div class="prose prose--top">
+                @Html.Raw(post.BodyHtml)
             </div>
 
             <p class="prose__back">
@@ -45,6 +43,36 @@
             </p>
         </div>
     </section>
+
+    @* Cross-link: when this post's category feeds a service page, show that work as proof and a
+       route to the service. HasServiceLink is false when there's no service or no work, so this
+       section simply doesn't render then. *@
+    @if (Model.HasServiceLink)
+    {
+        <section class="section--alt">
+            <div class="container">
+                <p class="topper">Related work</p>
+                <h2 class="title">@Model.ServiceName</h2>
+
+                <ul class="cards">
+                    @foreach (var project in Model.RelatedProjects)
+                    {
+                        <partial name="_ProjectCard" model="@(new ProjectCardModel
+                                {
+                                    Project = project,
+                                    HeadingLevel = 3
+                                })" />
+                    }
+                </ul>
+
+                <p class="cards__more">
+                    <a asp-controller="Services" asp-action="@Model.ServiceAction">
+                        More on @Model.ServiceName
+                    </a>
+                </p>
+            </div>
+        </section>
+    }
 </article>
 
 @section Scripts {
