@@ -46,3 +46,8 @@
         </div>
     </section>
 </article>
+
+@section Scripts {
+    @* Blog-post only, deferred: click-to-enlarge for the diagrams. The rest of the site ships no JS. *@
+    <script src="~/js/lightbox.js" asp-append-version="true" defer></script>
+}
