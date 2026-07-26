@@ -8,6 +8,11 @@
         <p class="topper">Blog</p>
         <h1 class="title">@(isEdit ? "Edit post" : "New post")</h1>
 
+        @if (TempData["Message"] is string message)
+        {
+            <p class="notice" role="status">@message</p>
+        }
+
         <form method="post" asp-action="@(isEdit ? "Edit" : "Create")" asp-route-id="@Model.Id" class="form">
             <div asp-validation-summary="ModelOnly" class="form__errors" role="alert"></div>
 

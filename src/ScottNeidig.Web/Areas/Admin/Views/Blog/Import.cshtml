@@ -1,0 +1,32 @@
+@{
+    ViewData["Title"] = "Import post";
+}
+
+<section>
+    <div class="container container--form">
+        <p class="topper">Blog</p>
+        <h1 class="title">Import post</h1>
+        <p class="text">
+            Drop the zip of a generated draft: the markdown file plus its <code>images</code>
+            folder. The fields are read from the draft, the images are stored, and the post is
+            created as a draft for you to review.
+        </p>
+
+        <form method="post" enctype="multipart/form-data" class="form">
+            <div asp-validation-summary="All" class="form__errors" role="alert"></div>
+
+            <div class="form__field">
+                <label for="zip">Draft zip</label>
+                <input type="file" id="zip" name="zip" accept=".zip" />
+                <span class="form__hint">
+                    Re-importing a post with the same slug updates it in place, images included.
+                </span>
+            </div>
+
+            <div class="form__actions">
+                <button class="button" type="submit">Import</button>
+                <a class="button--link" asp-action="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>

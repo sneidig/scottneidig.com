@@ -39,6 +39,7 @@ builder.Services.AddScoped<IProjectPointService, ProjectPointService>();
 builder.Services.AddScoped<IProjectImageService, ProjectImageService>();
 builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<IBlogService, BlogService>();
+builder.Services.AddScoped<IBlogImageStorage, BlogImageStorage>();
 builder.Services.AddScoped<ISeoService, SeoService>();
 
 // Stateless and immutable, so one instance serves every render.

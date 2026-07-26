@@ -27,6 +27,9 @@ public class BlogService : IBlogService
     public Task<BlogPost?> GetByIdAsync(int id, CancellationToken ct = default) =>
         _db.BlogPosts.FirstOrDefaultAsync(p => p.Id == id, ct);
 
+    public Task<BlogPost?> GetBySlugForEditAsync(string slug, CancellationToken ct = default) =>
+        _db.BlogPosts.FirstOrDefaultAsync(p => p.Slug == slug, ct);
+
     public async Task<int> CreateAsync(BlogPost post, CancellationToken ct = default)
     {
         _db.BlogPosts.Add(post);

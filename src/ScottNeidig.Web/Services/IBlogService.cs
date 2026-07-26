@@ -9,6 +9,9 @@ public interface IBlogService
 
     Task<BlogPost?> GetByIdAsync(int id, CancellationToken ct = default);
 
+    /// <summary>Tracked lookup by slug for the admin, used by the importer to update in place.</summary>
+    Task<BlogPost?> GetBySlugForEditAsync(string slug, CancellationToken ct = default);
+
     Task<int> CreateAsync(BlogPost post, CancellationToken ct = default);
 
     /// <summary>False when the post no longer exists.</summary>

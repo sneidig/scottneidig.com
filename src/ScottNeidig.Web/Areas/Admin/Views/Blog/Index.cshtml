@@ -6,7 +6,10 @@
         <p class="topper">Admin</p>
         <h1 class="title">Blog</h1>
 
-        <a class="button" asp-action="Create">New post</a>
+        <div class="table__actions">
+            <a class="button" asp-action="Create">New post</a>
+            <a class="button button--quiet" asp-action="Import">Import from zip</a>
+        </div>
 
         @if (Model.Count == 0)
         {

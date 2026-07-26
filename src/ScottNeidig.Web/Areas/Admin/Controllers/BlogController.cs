@@ -1,3 +1,4 @@
+using System.IO.Compression;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScottNeidig.Web.Areas.Admin.Models;
@@ -11,15 +12,61 @@ namespace ScottNeidig.Web.Areas.Admin.Controllers;
 [Authorize]
 public class BlogController : Controller
 {
-    private readonly IBlogService _blog;
+    /// <summary>Image types allowed out of an imported zip. SVG is the usual one for diagrams.</summary>
+    private static readonly HashSet<string> ImageExtensions =
+        new(StringComparer.OrdinalIgnoreCase) { ".svg", ".png", ".jpg", ".jpeg", ".webp", ".gif" };
 
-    public BlogController(IBlogService blog) => _blog = blog;
+    private readonly IBlogService _blog;
+    private readonly IBlogImageStorage _images;
+    private readonly ILogger<BlogController> _log;
+
+    public BlogController(IBlogService blog, IBlogImageStorage images, ILogger<BlogController> log)
+    {
+        _blog = blog;
+        _images = images;
+        _log = log;
+    }
 
     [HttpGet]
     public async Task<IActionResult> Index(CancellationToken ct)
     {
         ViewData["Title"] = "Blog";
         return View(await _blog.GetAllAsync(ct));
+    }
+
+    [HttpGet]
+    public IActionResult Import()
+    {
+        ViewData["Title"] = "Import post";
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [RequestSizeLimit(20 * 1024 * 1024)]
+    public async Task<IActionResult> Import(IFormFile? zip, CancellationToken ct)
+    {
+        ViewData["Title"] = "Import post";
+
+        if (zip is null || zip.Length == 0)
+        {
+            ModelState.AddModelError("", "Choose a zip file to import.");
+            return View();
+        }
+
+        try
+        {
+            var id = await ProcessZipAsync(zip, ct);
+
+            // Land on the post's edit form, unpublished, so it gets a look before going live.
+            TempData["Message"] = "Imported as a draft. Review it and publish when it's ready.";
+            return RedirectToAction(nameof(Edit), new { id });
+        }
+        catch (ImportException ex)
+        {
+            ModelState.AddModelError("", ex.Message);
+            return View();
+        }
     }
 
     [HttpGet]
@@ -160,4 +207,106 @@ public class BlogController : Controller
 
         return true;
     }
+
+    /// <summary>
+    /// Reads the zip, upserts the post by slug, and stores its images. Re-importing the same slug
+    /// updates the existing post in place (its published state is kept), which is the edit path:
+    /// regenerate the draft, drop the zip again. New posts come in unpublished.
+    /// </summary>
+    private async Task<int> ProcessZipAsync(IFormFile zip, CancellationToken ct)
+    {
+        using var archive = OpenArchive(zip);
+
+        // The single .md entry is the post; anything with an image extension is an image.
+        var markdownEntry = archive.Entries.FirstOrDefault(e => e.Name.EndsWith(".md", StringComparison.OrdinalIgnoreCase))
+            ?? throw new ImportException("The zip has no .md file in it.");
+
+        var markdown = await ReadEntryText(markdownEntry, ct);
+
+        var fields = BlogImportParser.ParseFields(markdown);
+        var slug = SlugGenerator.Generate(fields.Slug ?? fields.Title);
+        if (string.IsNullOrEmpty(slug))
+        {
+            throw new ImportException("The draft is missing a Slug and Title, so it has no URL.");
+        }
+
+        if (string.IsNullOrWhiteSpace(fields.Title))
+        {
+            throw new ImportException("The draft is missing a Title.");
+        }
+
+        var body = BlogImportParser.RewriteImagePaths(BlogImportParser.StripFrontMatter(markdown), slug);
+
+        // Clear any previous images for this slug before writing the new set, so a removed or
+        // renamed image can't linger and get served.
+        _images.DeleteAllForPost(slug);
+
+        var imageCount = 0;
+        foreach (var entry in archive.Entries)
+        {
+            if (entry.Length == 0 || !ImageExtensions.Contains(Path.GetExtension(entry.Name)))
+            {
+                continue;
+            }
+
+            using var stream = entry.Open();
+            using var buffer = new MemoryStream();
+            await stream.CopyToAsync(buffer, ct);
+            await _images.SaveAsync(slug, entry.Name, buffer.ToArray(), ct);
+            imageCount++;
+        }
+
+        var existing = await _blog.GetBySlugForEditAsync(slug, ct);
+        int id;
+
+        if (existing is null)
+        {
+            id = await _blog.CreateAsync(new BlogPost
+            {
+                Slug = slug,
+                Title = fields.Title.Trim(),
+                MarkdownBody = body,
+                Excerpt = fields.Excerpt?.Trim(),
+                SeoTitle = fields.SeoTitle?.Trim(),
+                SeoDescription = fields.SeoDescription?.Trim(),
+                Published = false
+            }, ct);
+        }
+        else
+        {
+            existing.Title = fields.Title.Trim();
+            existing.MarkdownBody = body;
+            existing.Excerpt = fields.Excerpt?.Trim();
+            existing.SeoTitle = fields.SeoTitle?.Trim();
+            existing.SeoDescription = fields.SeoDescription?.Trim();
+            // Published state and its date are left as they are: re-importing a live post updates
+            // it without pulling it down.
+            await _blog.UpdateAsync(existing, ct);
+            id = existing.Id;
+        }
+
+        _log.LogInformation("Imported blog post {Slug} with {ImageCount} images", slug, imageCount);
+        return id;
+    }
+
+    private static ZipArchive OpenArchive(IFormFile zip)
+    {
+        try
+        {
+            return new ZipArchive(zip.OpenReadStream(), ZipArchiveMode.Read);
+        }
+        catch (InvalidDataException)
+        {
+            throw new ImportException("That file isn't a valid zip.");
+        }
+    }
+
+    private static async Task<string> ReadEntryText(ZipArchiveEntry entry, CancellationToken ct)
+    {
+        using var reader = new StreamReader(entry.Open());
+        return await reader.ReadToEndAsync(ct);
+    }
+
+    /// <summary>A problem with the uploaded file that's the user's to fix, shown on the form.</summary>
+    private sealed class ImportException(string message) : Exception(message);
 }
