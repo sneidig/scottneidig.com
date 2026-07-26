@@ -259,6 +259,9 @@
   flex-direction: column;
   gap: 1.25rem;
   margin-top: 2rem;
+  /* The page now uses the standard container so the heading lines up with other pages, but a
+     full-width form reads badly, so the form itself stays a narrow column. */
+  max-width: 34rem;
 }
 
 .form__field {
