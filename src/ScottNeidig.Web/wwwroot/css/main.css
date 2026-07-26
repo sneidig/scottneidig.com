@@ -393,6 +393,11 @@
   margin: 0;
 }
 
+/* When the list sits in the same section as the page heading, a little separation. */
+.post-list--top {
+  margin-top: 1rem;
+}
+
 .post-item__title {
   font-size: 1.5rem;
   margin-bottom: 0.25rem;
