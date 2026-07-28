@@ -4,6 +4,10 @@
 @{
     var post = Model.Post;
 
+    // Contextual admin-bar link. Read by _AdminBar, ignored when not signed in.
+    ViewData["EditUrl"] = Url.Action("Edit", "Blog", new { area = "Admin", id = post.Id });
+    ViewData["EditLabel"] = "Edit this post";
+
     // Article structured data for this post, on top of the site-wide Person in the layout.
     // Serialized so the JSON is always valid; @ in a code-block string literal is a literal.
     var articleJsonLd = System.Text.Json.JsonSerializer.Serialize(new Dictionary<string, object?>

@@ -75,6 +75,7 @@ public class ProjectService : IProjectService
         _db.Projects
             .Where(p => p.Published && p.Slug == slug)
             .Select(p => new ProjectDetail(
+                p.Id,
                 p.Slug,
                 p.Title,
                 p.Summary,

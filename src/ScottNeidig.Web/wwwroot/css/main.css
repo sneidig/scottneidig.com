@@ -668,6 +668,60 @@
   margin-top: 1.5rem;
 }
 
+/* ---------- Admin bar (signed-in only) ----------
+   A slim bar above the header. Not sticky, so it scrolls away and the header stays the sticky
+   element. Deferred styling is fine since it's admin-only, not a public first-paint concern. */
+.admin-bar {
+  background: #1c1b19;
+  color: #eceae7;
+  border-bottom: 1px solid #2a2926;
+  font-size: 0.85rem;
+}
+
+.admin-bar__inner {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: var(--maxWidth);
+  margin-inline: auto;
+  padding: 0.4rem 1rem;
+}
+
+.admin-bar__link {
+  color: #eceae7;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.admin-bar__link:hover,
+.admin-bar__link:focus-visible {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.admin-bar__link--edit {
+  color: #6ea8fe;
+}
+
+.admin-bar__signout {
+  margin-left: auto;
+}
+
+.admin-bar__signout button {
+  background: none;
+  border: none;
+  color: #a8a49e;
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
+.admin-bar__signout button:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
 /* ---------- Footer ---------- */
 .site-footer {
   border-top: 1px solid var(--border);

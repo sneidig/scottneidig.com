@@ -22,6 +22,7 @@ public record BlogListItem(
 /// only outputs it and the markdown pipeline stays out of the view.
 /// </summary>
 public record BlogPostDetail(
+    int Id,
     string Slug,
     string Title,
     string BodyHtml,

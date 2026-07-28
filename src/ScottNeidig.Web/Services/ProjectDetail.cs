@@ -4,6 +4,7 @@ namespace ScottNeidig.Web.Services;
 /// Everything /work/{slug} renders, in one round trip.
 /// </summary>
 public record ProjectDetail(
+    int Id,
     string Slug,
     string Title,
     string? Summary,

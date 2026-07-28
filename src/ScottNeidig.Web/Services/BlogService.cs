@@ -135,6 +135,7 @@ public class BlogService : IBlogService
         // Rendered here rather than in the view so Markdig stays out of the views and the
         // detail hands the page ready-to-output HTML.
         return new BlogPostDetail(
+            post.Id,
             post.Slug,
             post.Title,
             _markdown.ToHtml(post.MarkdownBody),

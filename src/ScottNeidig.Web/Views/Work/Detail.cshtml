@@ -2,6 +2,12 @@
 @using ScottNeidig.Web.Services
 @model ProjectDetail
 
+@{
+    // Contextual admin-bar link. Read by _AdminBar, ignored when not signed in.
+    ViewData["EditUrl"] = Url.Action("Edit", "Projects", new { area = "Admin", id = Model.Id });
+    ViewData["EditLabel"] = "Edit this project";
+}
+
 <article>
     <section class="section--lede">
         <div class="container">

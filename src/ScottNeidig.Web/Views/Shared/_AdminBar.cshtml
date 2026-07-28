@@ -1,0 +1,23 @@
+@*
+    Shown at the top of public pages only when signed in as admin. Gives a quick route into the
+    admin, plus a contextual "edit this" link when the current page sets ViewData["EditUrl"].
+    Renders nothing for anonymous visitors, so the public site is unaffected.
+*@
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <div class="admin-bar">
+        <div class="admin-bar__inner">
+            <a class="admin-bar__link" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Admin</a>
+
+            @if (ViewData["EditUrl"] is string editUrl)
+            {
+                var editLabel = ViewData["EditLabel"] as string ?? "Edit this page";
+                <a class="admin-bar__link admin-bar__link--edit" href="@editUrl">@editLabel</a>
+            }
+
+            <form class="admin-bar__signout" asp-area="Admin" asp-controller="Account" asp-action="Logout" method="post">
+                <button type="submit">Sign out</button>
+            </form>
+        </div>
+    </div>
+}
