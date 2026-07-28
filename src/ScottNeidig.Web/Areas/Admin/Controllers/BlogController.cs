@@ -123,7 +123,8 @@ public class BlogController : Controller
             Published = post.Published,
             SeoTitle = post.SeoTitle,
             SeoDescription = post.SeoDescription,
-            CategoryId = post.CategoryId
+            CategoryId = post.CategoryId,
+            HeroImage = post.HeroImage
         };
 
         await PopulateFormListsAsync(model, ct);
