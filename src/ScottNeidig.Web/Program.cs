@@ -41,6 +41,7 @@ builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<IBlogService, BlogService>();
 builder.Services.AddScoped<IBlogImageStorage, BlogImageStorage>();
 builder.Services.AddScoped<ISeoService, SeoService>();
+builder.Services.AddScoped<IErrorLogService, ErrorLogService>();
 
 // Stateless and immutable, so one instance serves every render.
 builder.Services.AddSingleton<IMarkdownRenderer, MarkdownRenderer>();

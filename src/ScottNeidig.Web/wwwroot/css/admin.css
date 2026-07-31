@@ -297,3 +297,22 @@
   white-space: nowrap;
   border: 0;
 }
+
+/* Error log: wrap long stack traces instead of scrolling off, and dim the reference line. */
+.log__trace {
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: auto;
+  max-height: 24rem;
+  margin: 0.5rem 0 0;
+  padding: 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+.log__ref {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin: 0.5rem 0 0;
+}

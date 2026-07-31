@@ -21,6 +21,7 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
     public DbSet<SkillGroup> SkillGroups => Set<SkillGroup>();
     public DbSet<Skill> Skills => Set<Skill>();
     public DbSet<ContactMessage> ContactMessages => Set<ContactMessage>();
+    public DbSet<ErrorLogEntry> ErrorLogs => Set<ErrorLogEntry>();
 
     protected override void OnModelCreating(ModelBuilder b)
     {
@@ -75,5 +76,8 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
         // The public site only ever reads published rows, and always in display order.
         b.Entity<Project>().HasIndex(p => new { p.Published, p.SortOrder });
         b.Entity<BlogPost>().HasIndex(p => new { p.Published, p.PublishedUtc });
+
+        // Error log is always read newest-first, so index the timestamp.
+        b.Entity<ErrorLogEntry>().HasIndex(e => e.CreatedUtc);
     }
 }

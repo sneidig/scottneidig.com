@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using ScottNeidig.Web.Models;
+using ScottNeidig.Web.Services;
 
 namespace ScottNeidig.Web.Controllers;
 
@@ -13,8 +14,13 @@ namespace ScottNeidig.Web.Controllers;
 public class ErrorController : Controller
 {
     private readonly ILogger<ErrorController> _log;
+    private readonly IErrorLogService _errorLog;
 
-    public ErrorController(ILogger<ErrorController> log) => _log = log;
+    public ErrorController(ILogger<ErrorController> log, IErrorLogService errorLog)
+    {
+        _log = log;
+        _errorLog = errorLog;
+    }
 
     /// <summary>
     /// The exception handler re-executes to here after an unhandled exception. It has already
@@ -22,15 +28,26 @@ public class ErrorController : Controller
     /// </summary>
     [Route("/error")]
     [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
-    public IActionResult Exception()
+    public async Task<IActionResult> Exception(CancellationToken ct)
     {
         var feature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+        var requestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+
         _log.LogError(feature?.Error, "Unhandled exception on {Path}", feature?.Path);
+
+        // Persist it so it is readable in the admin without server/log access. Only when there
+        // is an actual exception (this action is also reachable directly). LogAsync never throws.
+        if (feature?.Error is { } error)
+        {
+            await _errorLog.LogAsync(
+                error, feature.Path, HttpContext.Request.Method,
+                HttpContext.Response.StatusCode, requestId, ct);
+        }
 
         ViewData["Title"] = "Something went wrong";
         return View("Error", new ErrorViewModel
         {
-            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            RequestId = requestId
         });
     }
 
