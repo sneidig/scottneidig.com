@@ -9,9 +9,17 @@ public class HomeController : Controller
     /// <summary>How many projects the home page shows before sending you to /work.</summary>
     private const int FeaturedCount = 3;
 
-    private readonly IProjectService _projects;
+    /// <summary>How many posts the "Selected reading" strip shows before sending you to /blog.</summary>
+    private const int RecentPostCount = 3;
 
-    public HomeController(IProjectService projects) => _projects = projects;
+    private readonly IProjectService _projects;
+    private readonly IBlogService _blog;
+
+    public HomeController(IProjectService projects, IBlogService blog)
+    {
+        _projects = projects;
+        _blog = blog;
+    }
 
     public async Task<IActionResult> Index(CancellationToken ct)
     {
@@ -23,7 +31,8 @@ public class HomeController : Controller
 
         return View(new HomeViewModel
         {
-            FeaturedProjects = await _projects.GetPublishedAsync(take: FeaturedCount, ct: ct)
+            FeaturedProjects = await _projects.GetPublishedAsync(take: FeaturedCount, ct: ct),
+            RecentPosts = await _blog.GetPublishedAsync(take: RecentPostCount, ct: ct)
         });
     }
 }

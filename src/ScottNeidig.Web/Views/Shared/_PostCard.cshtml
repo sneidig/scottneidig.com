@@ -4,17 +4,18 @@
 *@
 @using Microsoft.Extensions.Options
 @using ScottNeidig.Web.Configuration
-@using ScottNeidig.Web.Services
-@model BlogListItem
+@using ScottNeidig.Web.Models
+@model PostCardModel
 @inject IOptions<ImageOptions> ImageConfig
 
 @{
+    var post = Model.Post;
     var folder = ImageConfig.Value.UploadFolder;
-    var heroUrl = Model.HeroImage is null ? null : $"/{folder}/blog/{Model.Slug}/{Model.HeroImage}";
+    var heroUrl = post.HeroImage is null ? null : $"/{folder}/blog/{post.Slug}/{post.HeroImage}";
 }
 
 <li class="card">
-    <a class="card__link" asp-controller="Blog" asp-action="Post" asp-route-slug="@Model.Slug">
+    <a class="card__link" asp-controller="Blog" asp-action="Post" asp-route-slug="@post.Slug">
         @if (heroUrl is not null)
         {
             @* Blog heroes are usually SVG diagrams, served straight, not through the photo
@@ -25,21 +26,31 @@
         }
 
         <div class="card__body">
-            @if (Model.CategoryName is not null)
+            @if (post.CategoryName is not null)
             {
-                <p class="card__category">@Model.CategoryName</p>
+                <p class="card__category">@post.CategoryName</p>
             }
 
-            <h2 class="card__title">@Model.Title</h2>
+            @* Switch rather than a string tag name, same reasoning as _ProjectCard: the
+               level depends on what heading sits above the grid. *@
+            @switch (Model.HeadingLevel)
+            {
+                case 3:
+                    <h3 class="card__title">@post.Title</h3>
+                    break;
+                default:
+                    <h2 class="card__title">@post.Title</h2>
+                    break;
+            }
 
-            @if (Model.PublishedUtc is { } published)
+            @if (post.PublishedUtc is { } published)
             {
                 <p class="card__meta">@published.ToString("d MMM yyyy")</p>
             }
 
-            @if (!string.IsNullOrWhiteSpace(Model.Excerpt))
+            @if (!string.IsNullOrWhiteSpace(post.Excerpt))
             {
-                <p class="card__text">@Model.Excerpt</p>
+                <p class="card__text">@post.Excerpt</p>
             }
         </div>
     </a>

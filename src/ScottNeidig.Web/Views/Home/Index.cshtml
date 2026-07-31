@@ -92,3 +92,30 @@
         </div>
     </section>
 }
+
+@if (Model.RecentPosts.Count > 0)
+{
+    <section class="section--alt">
+        <div class="container">
+            <p class="topper">Blog</p>
+            <h2 class="title">Selected reading</h2>
+
+            <ul class="cards">
+                @foreach (var post in Model.RecentPosts)
+                {
+                    @* h3: the section h2 above the grid already occupies level 2, same as the
+                       work cards, so the outline stays intact. *@
+                    <partial name="_PostCard" model="@(new PostCardModel
+                            {
+                                Post = post,
+                                HeadingLevel = 3
+                            })" />
+                }
+            </ul>
+
+            <p class="cards__more">
+                <a asp-controller="Blog" asp-action="Index">Read the blog</a>
+            </p>
+        </div>
+    </section>
+}

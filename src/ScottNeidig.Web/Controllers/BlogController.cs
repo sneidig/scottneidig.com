@@ -51,7 +51,7 @@ public class BlogController : Controller
 
         return View(nameof(Index), new BlogListViewModel
         {
-            Posts = await _blog.GetPublishedAsync(slug, ct),
+            Posts = await _blog.GetPublishedAsync(slug, ct: ct),
             Topics = topics,
             SelectedTopic = selected,
             Layout = NormalizeView(view)

@@ -64,7 +64,7 @@
                 <ul class="cards">
                     @foreach (var post in Model.Posts)
                     {
-                        <partial name="_PostCard" model="post" />
+                        <partial name="_PostCard" model="@(new PostCardModel { Post = post })" />
                     }
                 </ul>
             }

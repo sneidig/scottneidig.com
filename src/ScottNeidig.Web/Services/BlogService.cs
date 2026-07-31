@@ -79,7 +79,8 @@ public class BlogService : IBlogService
     public Task<bool> SlugExistsAsync(string slug, int? excludingId = null, CancellationToken ct = default) =>
         _db.BlogPosts.AnyAsync(p => p.Slug == slug && (excludingId == null || p.Id != excludingId), ct);
 
-    public Task<List<BlogListItem>> GetPublishedAsync(string? categorySlug = null, CancellationToken ct = default)
+    public Task<List<BlogListItem>> GetPublishedAsync(
+        string? categorySlug = null, int? take = null, CancellationToken ct = default)
     {
         var query = _db.BlogPosts.Where(p => p.Published);
 
@@ -88,15 +89,18 @@ public class BlogService : IBlogService
             query = query.Where(p => p.Category != null && p.Category.Slug == categorySlug);
         }
 
-        return query
+        var ordered = query
             .OrderByDescending(p => p.PublishedUtc)
             .ThenByDescending(p => p.Id)
             .Select(p => new BlogListItem(
                 p.Slug, p.Title, p.Excerpt, p.PublishedUtc,
                 p.HeroImage,
                 p.Category != null ? p.Category.Name : null))
-            .AsNoTracking()
-            .ToListAsync(ct);
+            .AsNoTracking();
+
+        return take is > 0
+            ? ordered.Take(take.Value).ToListAsync(ct)
+            : ordered.ToListAsync(ct);
     }
 
     public Task<List<CategorySummary>> GetTopicsAsync(CancellationToken ct = default) =>

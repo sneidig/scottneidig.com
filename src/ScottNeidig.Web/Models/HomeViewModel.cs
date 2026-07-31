@@ -10,4 +10,7 @@ public class HomeViewModel
     /// set once, and the admin list already shows the order.
     /// </summary>
     public IReadOnlyList<ProjectCard> FeaturedProjects { get; init; } = [];
+
+    /// <summary>The newest published posts, for the "Selected reading" strip. Empty hides it.</summary>
+    public IReadOnlyList<BlogListItem> RecentPosts { get; init; } = [];
 }

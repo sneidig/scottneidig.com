@@ -27,7 +27,9 @@ public interface IBlogService
     /// so a draft can't leak onto a public page through a shared query.
     /// </summary>
     /// <param name="categorySlug">Null for all posts, otherwise limits to that category.</param>
-    Task<List<BlogListItem>> GetPublishedAsync(string? categorySlug = null, CancellationToken ct = default);
+    /// <param name="take">Null for every post, otherwise the newest N (the home page shows a few).</param>
+    Task<List<BlogListItem>> GetPublishedAsync(
+        string? categorySlug = null, int? take = null, CancellationToken ct = default);
 
     /// <summary>Categories that have published posts, for the blog filter nav.</summary>
     Task<List<CategorySummary>> GetTopicsAsync(CancellationToken ct = default);
