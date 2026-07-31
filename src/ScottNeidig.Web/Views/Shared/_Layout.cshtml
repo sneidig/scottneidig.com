@@ -5,7 +5,9 @@
       - critical.css loads normally (above-the-fold styles + design tokens)
       - main.css is deferred via the media="print" onload trick so it doesn't render-block
       - <noscript> fallback loads main.css for JS-disabled browsers
-    Analytics, when added, goes at the BOTTOM of <head> right above <title> (render blocking).
+    Analytics: the Cloudflare Web Analytics beacon is deferred, so it sits at the end of <body>
+    (see _Analytics.cshtml), not in <head>. A render-blocking tag like GA would instead go at
+    the bottom of <head>, right above <title>.
 *@
 @inject Microsoft.Extensions.Options.IOptions<ScottNeidig.Web.Configuration.SiteOptions> Site
 @{
@@ -145,5 +147,9 @@
     </footer>
 
     @await RenderSectionAsync("Scripts", required: false)
+
+    @* Cloudflare Web Analytics beacon: deferred, cookieless, renders only outside Development
+       when a token is set. See _Analytics.cshtml. *@
+    <partial name="_Analytics" />
 </body>
 </html>

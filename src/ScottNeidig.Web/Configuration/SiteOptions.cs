@@ -29,4 +29,12 @@ public class SiteOptions
 
     /// <summary>Places the local services are offered, for schema areaServed and the footer.</summary>
     public string[] AreasServed { get; set; } = ["Boulder", "Denver metro", "Colorado Front Range"];
+
+    /// <summary>
+    /// Cloudflare Web Analytics beacon token. It ships in the page, so it is public, not a
+    /// secret, and lives here. Empty by default; the beacon only renders when this is set and
+    /// the environment is not Development (see _Analytics.cshtml), so local runs never report.
+    /// Get the token from the Cloudflare dashboard under Web Analytics.
+    /// </summary>
+    public string CloudflareAnalyticsToken { get; set; } = "";
 }

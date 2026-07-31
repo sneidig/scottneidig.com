@@ -485,6 +485,10 @@ $RECYCLE.BIN/
 appsettings.Production.json
 secrets.json
 
+# Claude Code project instructions: positioning, voice, and don't-oversell rules that
+# should not be public, same reason the rebuild spec lives outside the repo.
+CLAUDE.md
+
 # Uploaded images. Written at runtime and owned by whichever environment they were
 # uploaded to, so the repo is the wrong place for them. The FTP deploy is diff-based
 # and only pushes what it has, so it won't wipe the server's copies either.

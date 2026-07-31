@@ -13,7 +13,10 @@ public static class SecurityHeadersExtensions
 
             // CSP: everything defaults to same-origin. Scripts allow 'unsafe-inline' because the
             // deferred-CSS trick uses an inline onload handler and the JSON-LD is an inline
-            // block; there are no external or user-generated scripts, so the exposure is small.
+            // block; there are no user-generated scripts, so the exposure is small. The one
+            // external script is the Cloudflare Web Analytics beacon, so its host is allowed in
+            // script-src and the host it POSTs metrics to is allowed in connect-src (which would
+            // otherwise fall back to default-src 'self' and be blocked).
             // Styles stay strict ('self') since every stylesheet is a file, no inline styles.
             // Images allow data: for any inlined SVG. Framing is denied outright.
             headers.ContentSecurityPolicy =
@@ -23,7 +26,8 @@ public static class SecurityHeadersExtensions
                 "frame-ancestors 'none'; " +
                 "img-src 'self' data:; " +
                 "style-src 'self'; " +
-                "script-src 'self' 'unsafe-inline'; " +
+                "script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; " +
+                "connect-src 'self' https://cloudflareinsights.com; " +
                 "object-src 'none'";
 
             // Don't let a browser second-guess a declared content type (an XSS vector).

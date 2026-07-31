@@ -1,0 +1,28 @@
+@*
+    Cloudflare Web Analytics beacon.
+
+    Cookieless and privacy-first, so there is no consent banner to add. The script is deferred,
+    so it does not block rendering, which is why the layout drops this at the end of <body>.
+
+    It renders only when a token is configured AND the environment is not Development, so local
+    runs never report and a missing token is a silent no-op instead of a broken tag. The token
+    is public (it ships in the page), so it lives in SiteOptions/appsettings, not secrets.
+*@
+@inject Microsoft.Extensions.Options.IOptions<ScottNeidig.Web.Configuration.SiteOptions> Site
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Env
+@{
+    var token = Site.Value.CloudflareAnalyticsToken;
+    var enabled = !string.Equals(Env.EnvironmentName, "Development", StringComparison.OrdinalIgnoreCase)
+        && !string.IsNullOrWhiteSpace(token);
+
+    // Serialized so the token is safely encoded into the attribute, same approach as the
+    // JSON-LD in the layout. Razor attribute-encodes the quotes; the browser decodes them
+    // back to valid JSON for the beacon to read.
+    var beacon = enabled
+        ? System.Text.Json.JsonSerializer.Serialize(new { token })
+        : null;
+}
+@if (enabled)
+{
+    <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="@beacon"></script>
+}
