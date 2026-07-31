@@ -1,0 +1,70 @@
+@using ScottNeidig.Web.Services
+@model List<ErrorLogSummary>
+
+<section>
+    <div class="container">
+        <p class="topper">Admin</p>
+        <h1 class="title">Error log</h1>
+
+        @if (ViewData["LogError"] is string logError)
+        {
+            <p class="text">
+                <strong>Could not read the log.</strong> @logError
+                <br />
+                If this says the ErrorLogs object is invalid, the migration has not been applied
+                to this database yet.
+            </p>
+        }
+
+        @if (Model.Count == 0)
+        {
+            <p class="text">No errors logged.</p>
+        }
+        else
+        {
+            <form asp-action="Clear" method="post"
+                  onsubmit="return confirm('Clear the entire error log? This cannot be undone.');">
+                <button class="button--link" type="submit">Clear log</button>
+            </form>
+
+            <table class="table">
+                <caption class="visually-hidden">Recorded errors, newest first</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">When</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Path</th>
+                        <th scope="col">Error</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var entry in Model)
+                    {
+                        <tr>
+                            @* Stored UTC, shown as the server's local time, same as Messages. *@
+                            <td>@entry.CreatedUtc.ToLocalTime().ToString("d MMM yyyy, HH:mm:ss")</td>
+                            <td>@entry.StatusCode</td>
+                            <td>@entry.Method @entry.Path</td>
+                            <td class="table__cell--prose">
+                                <strong>@entry.ExceptionType</strong>
+                                <br />
+                                @entry.Message
+                                @if (!string.IsNullOrWhiteSpace(entry.StackTrace))
+                                {
+                                    <details>
+                                        <summary>Stack trace</summary>
+                                        <pre class="log__trace">@entry.StackTrace</pre>
+                                    </details>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(entry.RequestId))
+                                {
+                                    <p class="log__ref">Reference: @entry.RequestId</p>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</section>

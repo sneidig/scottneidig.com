@@ -16,7 +16,14 @@
             <ul class="cards">
                 @foreach (var post in Model.Posts)
                 {
-                    <partial name="_PostCard" model="post" />
+                    @* h3: the section h2 above sits over this grid. Wrapped in PostCardModel
+                       because _PostCard expects that, not a bare BlogListItem. Same shape as
+                       _RelatedProjects. *@
+                    <partial name="_PostCard" model="@(new PostCardModel
+                            {
+                                Post = post,
+                                HeadingLevel = 3
+                            })" />
                 }
             </ul>
         </div>
