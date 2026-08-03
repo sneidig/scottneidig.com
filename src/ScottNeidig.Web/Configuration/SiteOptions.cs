@@ -21,14 +21,8 @@ public class SiteOptions
 
     public string JobTitle { get; set; } = "Web and application developer";
 
-    // Local SEO. City-level only, no street address, so a home address isn't published. These
-    // feed the JSON-LD (addressLocality/addressRegion + areaServed) and the footer.
-    public string Locality { get; set; } = "Boulder";
-
-    public string Region { get; set; } = "CO";
-
-    /// <summary>Places the local services are offered, for schema areaServed and the footer.</summary>
-    public string[] AreasServed { get; set; } = ["Boulder", "Denver metro", "Colorado Front Range"];
+    // Locality, Region and AreasServed were removed with the local-SEO framing: this site is a
+    // portfolio, and location is a contact and territory signal that doesn't belong on one.
 
     /// <summary>
     /// Cloudflare Web Analytics beacon token. It ships in the page, so it is public, not a

@@ -12,21 +12,7 @@
   border-block: 1px solid var(--border);
 }
 
-/* ---------- Call to action ----------
-   The conversion block that closes every service page. Accent-tinted so it reads as the
-   decision point rather than just another section. */
-.section--cta {
-  background: color-mix(in srgb, var(--accent) 12%, var(--bg));
-  border-block: 1px solid var(--border);
-  text-align: center;
-}
-
-.section--cta .text {
-  margin-inline: auto;
-  margin-bottom: 1.75rem;
-}
-
-/* ---------- Service page features ---------- */
+/* ---------- Page features ---------- */
 .features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
@@ -247,114 +233,11 @@
   font-size: 0.875rem;
 }
 
-/* ---------- Contact form ----------
-   The admin has its own form styles in admin.css, which the public layout doesn't load.
-   These are the public equivalent, scoped to the contact form. */
-.container--form {
-  max-width: 40rem;
-}
+/* The public form styles (contact form, honeypot, contact methods, form errors) were removed
+   with the contact page. The public site has no forms now. Admin forms are unaffected: they
+   have their own rules in admin.css, which is the only stylesheet the admin layout loads. */
 
-.form--contact {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  margin-top: 2rem;
-  /* The page now uses the standard container so the heading lines up with other pages, but a
-     full-width form reads badly, so the form itself stays a narrow column. */
-  max-width: 34rem;
-}
-
-.form__field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.375rem;
-}
-
-.form__field label {
-  font-weight: 600;
-}
-
-.form--contact input,
-.form--contact textarea {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 0.75rem;
-  color: var(--text);
-  font: inherit;
-  width: 100%;
-}
-
-.form--contact input:focus-visible,
-.form--contact textarea:focus-visible {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent);
-}
-
-/* Honeypot: off-screen, not display:none. A bot reads the DOM and fills visible-in-markup
-   fields; keeping it in the layout but out of view catches more than display:none does,
-   which some bots specifically skip. aria-hidden + tabindex in the markup keep humans out. */
-.hp {
-  position: absolute;
-  left: -9999px;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-}
-
-.form__reassure {
-  color: var(--text-muted);
-  font-size: 0.9rem;
-}
-
-/* Phone and email above the form, for people who'd rather call than type. */
-.contact-methods {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 2rem;
-  margin: 1.5rem 0 0;
-  padding: 0;
-}
-
-.contact-methods li {
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-}
-
-.contact-methods__label {
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--accent);
-}
-
-.contact-methods a {
-  font-weight: 600;
-}
-
-/* Authority line. Accent left border sets it apart from the plain lede text as a claim
-   worth pausing on, without shouting. */
-.contact-authority {
-  border-left: 2px solid var(--accent);
-  padding-left: 1rem;
-  margin-top: 1.5rem;
-  color: var(--text);
-}
-
-.form__errors:not(:empty),
-.form__error:not(:empty) {
-  color: var(--error);
-  font-size: 0.9rem;
-}
-
-.form__errors ul {
-  margin: 0;
-}
-
-/* ---------- Services hub ---------- */
+/* ---------- What I do ---------- */
 .services {
   display: grid;
   gap: 1.5rem;
@@ -370,13 +253,6 @@
 
 .service__title {
   font-size: 1.4rem;
-  margin-bottom: 0.5rem;
-}
-
-/* The pain-point question. Accent colour so it reads as the hook, not body text. */
-.service__hook {
-  color: var(--accent);
-  font-weight: 600;
   margin-bottom: 0.5rem;
 }
 
@@ -749,7 +625,3 @@
   color: var(--text);
 }
 
-.site-footer__location {
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-}

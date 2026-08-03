@@ -6,9 +6,12 @@ using ScottNeidig.Web.Utilities;
 namespace ScottNeidig.Web.Controllers;
 
 /// <summary>
-/// The front door. Each service is a landing page whose job is to pitch and send the reader
-/// to /contact. The pitch copy lives in the views; the related projects are pulled from
+/// The three kinds of work, one page each, describing what the work is and what backs it.
+/// These are portfolio pages, not offers: no CTA, no pricing, nothing that asks the reader
+/// for anything. The copy lives in the views; the related projects and posts are pulled from
 /// whichever category is assigned to that page in the admin.
+///
+/// The routes still read /services because they are the indexed URLs. Only the framing changed.
 /// </summary>
 [Route("services")]
 public class ServicesController : Controller
@@ -30,9 +33,9 @@ public class ServicesController : Controller
     [HttpGet("")]
     public IActionResult Index()
     {
-        ViewData["Title"] = "Services";
+        ViewData["Title"] = "What I do";
         ViewData["Description"] =
-            "nopCommerce development, .NET application support, and small-business websites, by an ex-agency developer.";
+            "The kinds of projects I work on: nopCommerce development, .NET applications, and business websites.";
 
         return View();
     }
@@ -42,7 +45,7 @@ public class ServicesController : Controller
     {
         ViewData["Title"] = "nopCommerce development";
         ViewData["Description"] =
-            "Ongoing nopCommerce development and support for existing stores, by an ex-agency nopCommerce developer.";
+            "Custom plugins, integrations, upgrades and fixes on live nopCommerce stores. Certified nopCommerce developer.";
 
         return View(await BuildAsync(ServicePages.NopCommerce, ct));
     }
@@ -50,9 +53,9 @@ public class ServicesController : Controller
     [HttpGet("dotnet-development")]
     public async Task<IActionResult> DotNet(CancellationToken ct)
     {
-        ViewData["Title"] = ".NET application development and support";
+        ViewData["Title"] = ".NET application development";
         ViewData["Description"] =
-            "Maintenance, fixes and new features for existing .NET applications, plus new builds. 25 years of .NET.";
+            "Maintenance, fixes, features and integrations on existing .NET applications, plus new builds. Building on .NET since 2005.";
 
         return View(await BuildAsync(ServicePages.DotNet, ct));
     }
@@ -60,9 +63,9 @@ public class ServicesController : Controller
     [HttpGet("small-business-websites")]
     public async Task<IActionResult> SmallBusiness(CancellationToken ct)
     {
-        ViewData["Title"] = "Small Business Websites in Boulder & Denver";
+        ViewData["Title"] = "Business websites";
         ViewData["Description"] =
-            "Fast, search-friendly websites for small businesses in Boulder, the Denver metro, and the Colorado Front Range.";
+            "Fast, server-rendered business websites that search engines can read without running JavaScript.";
 
         return View(await BuildAsync(ServicePages.SmallBusiness, ct));
     }

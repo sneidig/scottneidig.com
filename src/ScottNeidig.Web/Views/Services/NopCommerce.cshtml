@@ -1,27 +1,27 @@
 @model ScottNeidig.Web.Models.ServicePageModel
 @*
-    nopCommerce service page. This is the BACKED pitch: Scott is an ex-agency nop developer,
-    Jambalam is live and his, and the positioning (ex-agency quality below agency rate) is
-    defensible. Copy below is restrained placeholder for Scott to sharpen; every claim in it
-    is one he can stand behind. Do not add anything he'd have to hedge on.
+    nopCommerce page. Portfolio framing: what this work is, what I've done in it, and the
+    proof underneath. No pitch, no rate talk, no CTA. Every claim is one Scott can stand
+    behind: ex-agency nop developer, certified, Jambalam is live and his. Do not add
+    anything he'd have to hedge on. Copy is his to sharpen.
 *@
 
 <section class="section--lede">
     <div class="container">
         <p class="topper">nopCommerce development</p>
-        <h1 class="header">Ongoing help for your nopCommerce store</h1>
+        <h1 class="header">Work on live nopCommerce stores</h1>
         <p class="text lede__text">
-            Already running on nopCommerce and need someone who knows it? I do custom plugins,
-            integrations, upgrades and fixes on existing stores, without the agency price tag.
+            Custom plugins, integrations, version upgrades and fixes, on stores that are
+            already running and can't afford to break. I did this work inside agencies, and
+            I still do it on my own platform.
         </p>
-        <a class="button button--lg" asp-controller="Contact" asp-action="Index">Schedule a consultation</a>
     </div>
 </section>
 
 <section class="section--alt">
     <div class="container">
-        <p class="topper">What I help with</p>
-        <h2 class="title">Work on live stores</h2>
+        <p class="topper">The work</p>
+        <h2 class="title">What these projects involve</h2>
 
         <ul class="features">
             <li class="feature">
@@ -34,15 +34,15 @@
             <li class="feature">
                 <h3 class="feature__title">Integrations</h3>
                 <p class="feature__text">
-                    Connecting the store to the other tools a business runs on: payments,
+                    Connecting a store to the other tools a business runs on: payments,
                     shipping, and third-party services.
                 </p>
             </li>
             <li class="feature">
                 <h3 class="feature__title">Upgrades and fixes</h3>
                 <p class="feature__text">
-                    Moving an older store forward, and sorting the things that break, on a
-                    retainer or a one-off basis.
+                    Moving an older store across major versions without losing its custom
+                    logic, and sorting the things that break.
                 </p>
             </li>
         </ul>
@@ -51,12 +51,14 @@
 
 <section>
     <div class="container">
-        <p class="topper">Why me</p>
-        <h2 class="title">Agency experience, without the agency rate</h2>
+        <p class="topper">Background</p>
+        <h2 class="title">Where the experience comes from</h2>
         <p class="text">
-            I worked on nopCommerce at agencies, where this work bills at $150 an hour and up.
-            Working directly with me, it doesn't. You get the same experience on your store,
-            and you're talking to the person doing the work.
+            I worked on nopCommerce at agencies, on client stores, which is where most of the
+            hard cases came from: custom checkout logic, version migrations, and integrations
+            that had to keep working afterwards. I'm a certified nopCommerce developer, and I
+            build and run Jambalam, a subscription platform of my own on nopCommerce and
+            ASP.NET Core.
         </p>
     </div>
 </section>
@@ -65,5 +67,3 @@
    surfaces here automatically. *@
 <partial name="_RelatedProjects" model="Model" />
 <partial name="_RelatedPosts" model="Model" />
-
-<partial name="_CallToAction" model="@("Need work done on your nopCommerce store?")" />

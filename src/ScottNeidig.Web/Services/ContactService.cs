@@ -7,33 +7,8 @@ namespace ScottNeidig.Web.Services;
 public class ContactService : IContactService
 {
     private readonly AppDbContext _db;
-    private readonly ILogger<ContactService> _log;
 
-    public ContactService(AppDbContext db, ILogger<ContactService> log)
-    {
-        _db = db;
-        _log = log;
-    }
-
-    public async Task<int> CreateAsync(string name, string email, string message, CancellationToken ct = default)
-    {
-        var enquiry = new ContactMessage
-        {
-            Name = name.Trim(),
-            Email = email.Trim(),
-            Message = message.Trim(),
-            CreatedUtc = DateTime.UtcNow
-        };
-
-        _db.ContactMessages.Add(enquiry);
-        await _db.SaveChangesAsync(ct);
-
-        // A lead is money. Logged at Information so it's visible even if the admin inbox
-        // isn't checked and email notification isn't wired up yet.
-        _log.LogInformation("Contact enquiry {Id} from {Email}", enquiry.Id, enquiry.Email);
-
-        return enquiry.Id;
-    }
+    public ContactService(AppDbContext db) => _db = db;
 
     public Task<List<ContactMessageSummary>> GetAllAsync(CancellationToken ct = default) =>
         _db.ContactMessages

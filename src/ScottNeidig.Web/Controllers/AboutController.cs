@@ -10,7 +10,7 @@ public class AboutController : Controller
     {
         ViewData["Title"] = "About";
         ViewData["Description"] =
-            "Scott Neidig, a web and application developer in Boulder, Colorado, building .NET applications and nopCommerce stores since 2005.";
+            "Scott Neidig, a web and application developer building .NET applications and nopCommerce stores since 2005.";
 
         return View();
     }

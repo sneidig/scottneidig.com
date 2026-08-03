@@ -1,22 +1,20 @@
 @*
-    Services hub. Presents all three services together, then routes into each. The pattern
-    borrowed (structure only, not copy) from an agency Scott worked at: lead each service with
-    a pain-point question that names the reader's problem before pitching. The question is about
-    the reader, so it makes no claim about Scott and is safe to write freely.
+    Overview of the three kinds of work, framed as a portfolio index rather than a pitch.
+    The pain-point hooks and the CTA are gone: each entry says what the work is and what
+    backs it, then links to the detail page. Copy is Scott's to sharpen.
 
-    Order is deliberate: nopCommerce first (sharpest Upwork wedge, best proof), .NET second
-    (strongest backed claim, widest market), websites last (least backed). Copy is placeholder.
+    Order is deliberate: nopCommerce first (best proof), .NET second (deepest experience),
+    websites last (least backed, so it claims least).
 *@
 
 <section class="section--lede">
     <div class="container">
-        <p class="topper">Services</p>
-        <h1 class="header">What I can help with</h1>
+        <p class="topper">What I do</p>
+        <h1 class="header">The kinds of projects I work on</h1>
         <p class="text lede__text">
-            Three ways I work with businesses and organizations. All of it is real development,
-            on live systems, by someone who's done this inside agencies for years.
+            Three areas, all of it real development on systems people depend on. Each one
+            links to what I've built in it.
         </p>
-        <a class="button button--lg" asp-controller="Contact" asp-action="Index">Schedule a consultation</a>
     </div>
 </section>
 
@@ -25,10 +23,10 @@
         <ul class="services">
             <li class="service">
                 <h2 class="service__title">nopCommerce development</h2>
-                <p class="service__hook">Running a nopCommerce store that needs ongoing help?</p>
                 <p class="service__text">
-                    Custom plugins, integrations, upgrades and fixes on existing stores. Agency
-                    experience, working with you directly.
+                    Custom plugins, integrations, version upgrades and fixes on live stores.
+                    I worked on nopCommerce inside agencies, I'm a certified nopCommerce
+                    developer, and I run my own platform built on it.
                 </p>
                 <a class="service__link" asp-controller="Services" asp-action="NopCommerce">
                     nopCommerce development
@@ -37,10 +35,10 @@
 
             <li class="service">
                 <h2 class="service__title">.NET application development</h2>
-                <p class="service__hook">Got a .NET application nobody's looking after?</p>
                 <p class="service__text">
                     Maintenance, fixes, new features and integrations on existing .NET systems,
-                    plus new builds. The back end, not just the front. 25 years of it.
+                    plus new builds. The back end, not just the front. I've been doing this
+                    since 2005.
                 </p>
                 <a class="service__link" asp-controller="Services" asp-action="DotNet">
                     .NET application development
@@ -48,18 +46,15 @@
             </li>
 
             <li class="service">
-                <h2 class="service__title">Small business websites</h2>
-                <p class="service__hook">Need a site people can actually find?</p>
+                <h2 class="service__title">Business websites</h2>
                 <p class="service__text">
-                    A fast, clean website built to be read by search engines, for businesses on
-                    the Colorado Front Range.
+                    Fast, server-rendered sites that search engines can read without running
+                    JavaScript. This site is one of them.
                 </p>
                 <a class="service__link" asp-controller="Services" asp-action="SmallBusiness">
-                    Small business websites
+                    Business websites
                 </a>
             </li>
         </ul>
     </div>
 </section>
-
-<partial name="_CallToAction" model="@("Not sure which fits? Let's talk it through.")" />

@@ -319,21 +319,14 @@ section {
   color: var(--text);
 }
 
-.site-nav__cta {
-  margin-left: auto;
-  /* A comfortable tap target on mobile; the research floor is ~44px and this clears it. */
-  padding-block: 0.6rem;
-}
-
 /* An anchored jump (e.g. the skip link, or a future #hash) must not land under the sticky
    header. scroll-margin pushes the target down by the header's height. */
 :target {
   scroll-margin-top: 5rem;
 }
 
-/* On narrow screens the nav wraps so the brand and Services sit on the top row and the CTA
-   drops to a full-width second row, rather than three things crushed onto one line. The
-   dropdown menu is absolutely positioned, so it opens over the content either way. */
+/* On narrow screens the nav wraps rather than crushing every item onto one line. The dropdown
+   menu is absolutely positioned, so it opens over the content either way. */
 @media (max-width: 34rem) {
   .site-nav {
     flex-wrap: wrap;
@@ -341,13 +334,6 @@ section {
 
   .nav-menu {
     margin-left: 1.25rem;
-  }
-
-  .site-nav__cta {
-    order: 3;
-    width: 100%;
-    margin-left: 0;
-    text-align: center;
   }
 }
 

@@ -122,6 +122,12 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+// The contact page is gone. These URLs are indexed and linked from elsewhere, so they 301 to
+// home rather than 404. Mapped here instead of a controller because a redirect is a route fact,
+// not a page.
+app.MapGet("/contact", () => Results.Redirect("/", permanent: true));
+app.MapGet("/contact/sent", () => Results.Redirect("/", permanent: true));
+
 // Reports Healthy only when the database is reachable. Public, but it exposes only a status.
 app.MapHealthChecks("/health");
 

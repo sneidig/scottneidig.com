@@ -25,7 +25,7 @@ public class WorkController : Controller
     {
         ViewData["Title"] = "Work";
         ViewData["Description"] =
-            "Websites and nopCommerce work built by Scott Neidig, a web developer on the Colorado Front Range.";
+            "Websites, nopCommerce stores and .NET applications built by Scott Neidig.";
 
         return View(new WorkListViewModel
         {

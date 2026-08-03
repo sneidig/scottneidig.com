@@ -1,49 +1,50 @@
 @model ScottNeidig.Web.Models.ServicePageModel
 @*
-    Small-business service page. This is a SHELL, not a live pitch. Per the spec's plan-vs-done
-    rule: Scott has no small-business build to point at yet, so this page has the same structure
-    as the nopCommerce one but NO proof section and deliberately soft claims. It goes live for
-    real once the roofer site ships and there's something true to say. Copy is placeholder.
+    Business websites page. The least-backed of the three, so it claims the least. Per the
+    spec's plan-vs-done rule there is still no client site to point at, so the only example
+    named here is this site, which is real and inspectable. The local/Colorado framing is gone
+    with the rest of the location signals.
 
-    Do NOT write present-tense claims here that imply an established small-business practice.
+    Do NOT write claims that imply an established practice or clients that don't exist.
 *@
 
 <section class="section--lede">
     <div class="container">
-        <p class="topper">Small business websites</p>
-        <h1 class="header">A website built to be found</h1>
+        <p class="topper">Business websites</p>
+        <h1 class="header">Sites built to be read by search engines</h1>
         <p class="text lede__text">
-            A fast, clean site for your business that search engines can actually read. Built
-            on the Colorado Front Range, for local businesses.
+            Server-rendered pages, no JavaScript framework in the way, and markup a crawler
+            can read on the first pass. The site you're on is built that way, and it's the
+            clearest example I have.
         </p>
-        <a class="button button--lg" asp-controller="Contact" asp-action="Index">Schedule a consultation</a>
     </div>
 </section>
 
 <section class="section--alt">
     <div class="container">
-        <p class="topper">What you get</p>
-        <h2 class="title">The essentials, done well</h2>
+        <p class="topper">The approach</p>
+        <h2 class="title">How these are built</h2>
 
         <ul class="features">
             <li class="feature">
                 <h3 class="feature__title">Fast</h3>
                 <p class="feature__text">
-                    Built to load quickly on a phone, which is where most of your customers
-                    will find you.
+                    Critical CSS inline-first, deferred everything else, compressed images
+                    generated on upload, and close to no JavaScript.
                 </p>
             </li>
             <li class="feature">
-                <h3 class="feature__title">Findable</h3>
+                <h3 class="feature__title">Readable by crawlers</h3>
                 <p class="feature__text">
-                    Real pages search engines can read on the first pass, so you show up when
-                    someone searches for what you do.
+                    Real HTML from the server, semantic structure, canonical URLs, generated
+                    sitemap, and JSON-LD. Nothing that depends on a script running first.
                 </p>
             </li>
             <li class="feature">
-                <h3 class="feature__title">Yours</h3>
+                <h3 class="feature__title">Editable</h3>
                 <p class="feature__text">
-                    A site built around your business, not squeezed into a generic template.
+                    A small admin behind the site so content, images and posts can be changed
+                    without a developer and without a page rebuild.
                 </p>
             </li>
         </ul>
@@ -54,5 +55,3 @@
    stays empty and honest until there's something real to show. *@
 <partial name="_RelatedProjects" model="Model" />
 <partial name="_RelatedPosts" model="Model" />
-
-<partial name="_CallToAction" model="@("Thinking about a new site?")" />

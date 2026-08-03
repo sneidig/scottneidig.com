@@ -31,9 +31,9 @@
     // default encoder escapes any < > & so it can't break out of the script element.
     // Keys must serialize as "@context"/"@type" for valid JSON-LD. Inside this code block the
     // @ in a string literal is a literal character (Razor only reparses @ in markup regions),
-    // so no escaping is needed. Serialized rather than hand-written so the JSON is always valid.
-    // address (city/region) and areaServed are the local-SEO signals: they tell search engines
-    // where he is and which areas he covers.
+    // so no escaping is needed.
+    // Identity only. No address, areaServed, email or telephone: this site is a portfolio, and
+    // those properties are contact and territory signals that don't belong on one.
     var personJsonLd = System.Text.Json.JsonSerializer.Serialize(new Dictionary<string, object>
     {
         ["@context"] = "https://schema.org",
@@ -41,14 +41,6 @@
         ["name"] = site.PersonName,
         ["url"] = origin,
         ["jobTitle"] = site.JobTitle,
-        ["address"] = new Dictionary<string, object>
-        {
-            ["@type"] = "PostalAddress",
-            ["addressLocality"] = site.Locality,
-            ["addressRegion"] = site.Region,
-            ["addressCountry"] = "US",
-        },
-        ["areaServed"] = site.AreasServed,
     });
 }
 <!DOCTYPE html>
@@ -96,31 +88,29 @@
             <a class="site-nav__brand" asp-controller="Home" asp-action="Index">Scott Neidig</a>
 
             @*
-                Services dropdown. Native <details>/<summary>: a click/touch-friendly,
+                "What I do" dropdown. Native <details>/<summary>: a click/touch-friendly,
                 keyboard-accessible menu with zero JavaScript, which is why it's this element
                 and not a hover menu (hover doesn't work on touch) or a JS widget. The summary
-                is the toggle; the hub link lives inside as "All services" since a <summary>
-                can't also be a link. About and Blog join as siblings when they're built.
+                is the toggle; the hub link lives inside as "Overview" since a <summary>
+                can't also be a link.
 
-                No Contact link: the "Schedule a consultation" CTA already goes there, so a
-                second Contact entry would be redundant. The CTA is a button and sits far right
-                so it reads as the one primary action. The header is sticky (critical.css), so
-                it all stays on screen the whole way down the page.
+                This is a portfolio, so Work is a top-level item and there is no CTA button.
+                The header is sticky (critical.css), so the nav stays on screen the whole way
+                down the page.
             *@
             <details class="nav-menu">
-                <summary class="nav-menu__label">Services</summary>
+                <summary class="nav-menu__label">What I do</summary>
                 <ul class="nav-menu__list">
-                    <li><a asp-controller="Services" asp-action="Index">All services</a></li>
+                    <li><a asp-controller="Services" asp-action="Index">Overview</a></li>
                     <li><a asp-controller="Services" asp-action="NopCommerce">nopCommerce</a></li>
                     <li><a asp-controller="Services" asp-action="DotNet">.NET applications</a></li>
                     <li><a asp-controller="Services" asp-action="SmallBusiness">Websites</a></li>
                 </ul>
             </details>
 
+            <a class="site-nav__link" asp-controller="Work" asp-action="Index">Work</a>
             <a class="site-nav__link" asp-controller="About" asp-action="Index">About</a>
             <a class="site-nav__link" asp-controller="Blog" asp-action="Index">Blog</a>
-
-            <a class="button site-nav__cta" asp-controller="Contact" asp-action="Index">Schedule a consultation</a>
         </nav>
     </header>
 
@@ -129,20 +119,13 @@
     </main>
 
     <footer class="site-footer">
-        @* Footer carries the fuller nav, including the services hub and Work, which are kept
-           out of the top nav to keep it focused. Grows as About/Blog land. *@
+        @* Mirrors the top nav. Every page the site has, one level, no dead ends. *@
         <nav class="footer-nav" aria-label="Footer">
-            <a asp-controller="Services" asp-action="Index">Services</a>
-            <a asp-controller="About" asp-action="Index">About</a>
+            <a asp-controller="Services" asp-action="Index">What I do</a>
             <a asp-controller="Work" asp-action="Index">Work</a>
+            <a asp-controller="About" asp-action="Index">About</a>
             <a asp-controller="Blog" asp-action="Index">Blog</a>
-            <a asp-controller="Contact" asp-action="Index">Contact</a>
         </nav>
-        @* Location in the footer is an honest local-SEO signal and appears on every page. *@
-        <p class="site-footer__location">
-            Web developer in @site.Locality, @site.Region. Serving the Denver metro, Colorado
-            Front Range and beyond.
-        </p>
         <p>&copy; @DateTime.UtcNow.Year Scott Neidig</p>
     </footer>
 

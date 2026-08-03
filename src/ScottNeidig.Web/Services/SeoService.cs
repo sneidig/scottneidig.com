@@ -22,7 +22,6 @@ public class SeoService : ISeoService
             new("/work", Priority: 0.8),
             new("/blog", Priority: 0.7),
             new("/about", Priority: 0.7),
-            new("/contact", Priority: 0.7),
         };
 
         // Published projects, with CreatedUtc as lastmod. Only published, matching the public
