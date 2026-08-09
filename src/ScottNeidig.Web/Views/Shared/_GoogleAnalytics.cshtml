@@ -1,0 +1,37 @@
+@*
+    Google Analytics 4 (gtag.js).
+
+    Renders only when a Measurement ID is configured AND the environment is not Development, so
+    local runs never report and a missing ID is a silent no-op instead of a broken tag. The ID
+    is public (it ships in the page), so it lives in SiteOptions/appsettings, not secrets.
+
+    Unlike the Cloudflare beacon, gtag loads in <head> (that's where GA expects it), which is
+    why the layout renders this just above <title> rather than at the end of <body>. gtag.js
+    itself is loaded async, so it does not block rendering.
+
+    GA4 sets cookies. There is no consent banner on this site today; add one before relying on
+    this for EU traffic.
+*@
+@inject Microsoft.Extensions.Options.IOptions<ScottNeidig.Web.Configuration.SiteOptions> Site
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Env
+@{
+    var gaId = Site.Value.GoogleAnalyticsId;
+    var enabled = !string.Equals(Env.EnvironmentName, "Development", StringComparison.OrdinalIgnoreCase)
+        && !string.IsNullOrWhiteSpace(gaId);
+
+    // Serialized so the ID is encoded as a safe JS string literal in the config call, same
+    // discipline as the JSON-LD in the layout and the beacon token in _Analytics.
+    var gaIdLiteral = enabled
+        ? System.Text.Json.JsonSerializer.Serialize(gaId)
+        : null;
+}
+@if (enabled)
+{
+    <script async src="https://www.googletagmanager.com/gtag/js?id=@gaId"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){ dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', @Html.Raw(gaIdLiteral));
+    </script>
+}

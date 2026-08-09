@@ -6,8 +6,8 @@
       - main.css is deferred via the media="print" onload trick so it doesn't render-block
       - <noscript> fallback loads main.css for JS-disabled browsers
     Analytics: the Cloudflare Web Analytics beacon is deferred, so it sits at the end of <body>
-    (see _Analytics.cshtml), not in <head>. A render-blocking tag like GA would instead go at
-    the bottom of <head>, right above <title>.
+    (see _Analytics.cshtml), not in <head>. Google Analytics (gtag) goes at the bottom of
+    <head>, right above <title>, where GA expects it (see _GoogleAnalytics.cshtml).
 *@
 @inject Microsoft.Extensions.Options.IOptions<ScottNeidig.Web.Configuration.SiteOptions> Site
 @{
@@ -74,6 +74,10 @@
 
     @* Per-page head additions, e.g. a blog post's Article JSON-LD. *@
     @await RenderSectionAsync("Head", required: false)
+
+    @* Google Analytics loads in <head>, just above <title>, per the CodeStitch handbook. Renders
+       only outside Development when a Measurement ID is set. See _GoogleAnalytics.cshtml. *@
+    <partial name="_GoogleAnalytics" />
 
     <title>@fullTitle</title>
 </head>

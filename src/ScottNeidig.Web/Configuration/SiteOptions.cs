@@ -31,4 +31,14 @@ public class SiteOptions
     /// Get the token from the Cloudflare dashboard under Web Analytics.
     /// </summary>
     public string CloudflareAnalyticsToken { get; set; } = "";
+
+    /// <summary>
+    /// Google Analytics 4 Measurement ID, e.g. G-XXXXXXXXXX. Public (it ships in the page), so
+    /// it lives here, not in secrets. Empty by default; gtag only renders when this is set and
+    /// the environment is not Development (see _GoogleAnalytics.cshtml), so local runs never
+    /// report. Get it from the GA4 property under Admin, Data streams, your web stream.
+    /// GA4 sets cookies, unlike the Cloudflare beacon, so a consent step may be needed for EU
+    /// visitors.
+    /// </summary>
+    public string GoogleAnalyticsId { get; set; } = "";
 }
