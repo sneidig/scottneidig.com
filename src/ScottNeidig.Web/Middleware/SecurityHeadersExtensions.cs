@@ -13,10 +13,14 @@ public static class SecurityHeadersExtensions
 
             // CSP: everything defaults to same-origin. Scripts allow 'unsafe-inline' because the
             // deferred-CSS trick uses an inline onload handler and the JSON-LD is an inline
-            // block; there are no user-generated scripts, so the exposure is small. The one
-            // external script is the Cloudflare Web Analytics beacon, so its host is allowed in
-            // script-src and the host it POSTs metrics to is allowed in connect-src (which would
-            // otherwise fall back to default-src 'self' and be blocked).
+            // block; there are no user-generated scripts, so the exposure is small. Two external
+            // analytics tools are allowed by host:
+            //   - Cloudflare Web Analytics: beacon on static.cloudflareinsights.com, POSTs to
+            //     cloudflareinsights.com.
+            //   - Google Analytics (gtag): script on www.googletagmanager.com, sends hits to the
+            //     google-analytics.com / analytics.google.com hosts (connect-src), with an
+            //     img-beacon fallback (img-src).
+            // Each host has to be listed or default-src 'self' blocks it.
             // Styles stay strict ('self') since every stylesheet is a file, no inline styles.
             // Images allow data: for any inlined SVG. Framing is denied outright.
             headers.ContentSecurityPolicy =
@@ -24,10 +28,10 @@ public static class SecurityHeadersExtensions
                 "base-uri 'self'; " +
                 "form-action 'self'; " +
                 "frame-ancestors 'none'; " +
-                "img-src 'self' data:; " +
+                "img-src 'self' data: https://*.google-analytics.com https://www.googletagmanager.com; " +
                 "style-src 'self'; " +
-                "script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; " +
-                "connect-src 'self' https://cloudflareinsights.com; " +
+                "script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com https://www.googletagmanager.com; " +
+                "connect-src 'self' https://cloudflareinsights.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; " +
                 "object-src 'none'";
 
             // Don't let a browser second-guess a declared content type (an XSS vector).
