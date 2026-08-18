@@ -3,16 +3,15 @@
 
 <section>
     <div class="container">
-        <p class="topper">Work</p>
         <h1 class="title">@(Model.IsFiltered ? Model.SelectedCategory!.Name : "Selected work")</h1>
         <p class="text">
             @if (Model.IsFiltered)
             {
-                <text>@Model.SelectedCategory!.Name projects. Every build below is live.</text>
+                <text>@Model.SelectedCategory!.Name projects.</text>
             }
             else
             {
-                <text>Sites and platforms I've built. Every one below is live.</text>
+                <text>Sites and platforms I've built.</text>
             }
         </p>
 
