@@ -92,27 +92,22 @@
             <a class="site-nav__brand" asp-controller="Home" asp-action="Index">Scott Neidig</a>
 
             @*
-                "What I do" dropdown. Native <details>/<summary>: a click/touch-friendly,
-                keyboard-accessible menu with zero JavaScript, which is why it's this element
-                and not a hover menu (hover doesn't work on touch) or a JS widget. The summary
-                is the toggle; the hub link lives inside as "Overview" since a <summary>
-                can't also be a link.
-
-                This is a portfolio, so Work is a top-level item and there is no CTA button.
-                The header is sticky (critical.css), so the nav stays on screen the whole way
-                down the page.
+                Services dropdown is hidden from the nav for now (Scott's call). The pages and
+                routes still exist; this only removes it from the menu. Uncomment to restore, and
+                relabel it (the old "What I do" label was dropped as an AI-cliche phrase, do not
+                reuse it). Native <details>/<summary> so it stays JS-free and touch-friendly.
             *@
-            <details class="nav-menu">
-                <summary class="nav-menu__label">What I do</summary>
+            @*<details class="nav-menu">
+                <summary class="nav-menu__label">Services</summary>
                 <ul class="nav-menu__list">
                     <li><a asp-controller="Services" asp-action="Index">Overview</a></li>
                     <li><a asp-controller="Services" asp-action="NopCommerce">nopCommerce</a></li>
                     <li><a asp-controller="Services" asp-action="DotNet">.NET applications</a></li>
                     <li><a asp-controller="Services" asp-action="SmallBusiness">Websites</a></li>
                 </ul>
-            </details>
+            </details>*@
 
-            <a class="site-nav__link" asp-controller="Work" asp-action="Index">Work</a>
+            <a class="site-nav__link" asp-controller="Work" asp-action="Index">Past work</a>
             <a class="site-nav__link" asp-controller="About" asp-action="Index">About</a>
             <a class="site-nav__link" asp-controller="Blog" asp-action="Index">Blog</a>
         </nav>
@@ -125,8 +120,8 @@
     <footer class="site-footer">
         @* Mirrors the top nav. Every page the site has, one level, no dead ends. *@
         <nav class="footer-nav" aria-label="Footer">
-            <a asp-controller="Services" asp-action="Index">What I do</a>
-            <a asp-controller="Work" asp-action="Index">Work</a>
+            @* Services link hidden from the footer too, mirroring the top nav, while the section is out. *@
+            <a asp-controller="Work" asp-action="Index">Past work</a>
             <a asp-controller="About" asp-action="Index">About</a>
             <a asp-controller="Blog" asp-action="Index">Blog</a>
         </nav>
