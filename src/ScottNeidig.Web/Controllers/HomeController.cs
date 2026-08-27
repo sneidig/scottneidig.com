@@ -27,7 +27,7 @@ public class HomeController : Controller
         // of the location signals when the site became a portfolio.
         ViewData["Title"] = "Web and application developer";
         ViewData["Description"] =
-            "Scott Neidig, a web and application developer. nopCommerce stores, .NET applications, and business websites, built since 2005.";
+            "Scott Neidig, a web and application developer. nopCommerce stores, .NET applications, and business websites.";
 
         return View(new HomeViewModel
         {
