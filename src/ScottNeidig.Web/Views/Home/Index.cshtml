@@ -69,32 +69,7 @@
     </div>
 </section>
 
-@if (Model.FeaturedProjects.Count > 0)
-{
-    <section>
-        <div class="container">
-            <p class="topper">Work</p>
-            <h2 class="title">Selected work</h2>
-
-            <ul class="cards">
-                @foreach (var project in Model.FeaturedProjects)
-                {
-                    @* h3: the "Recent builds" h2 sits above this grid, so h2 here would skip
-                       nothing but would flatten the outline. *@
-                    <partial name="_ProjectCard" model="@(new ProjectCardModel
-                            {
-                                Project = project,
-                                HeadingLevel = 3
-                            })" />
-                }
-            </ul>
-
-            <p class="cards__more">
-                <a asp-controller="Work" asp-action="Index">See all work</a>
-            </p>
-        </div>
-    </section>
-}
+@* Selected work section hidden while portfolio is not in use. Restore when needed. *@
 
 @if (Model.RecentPosts.Count > 0)
 {

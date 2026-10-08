@@ -107,7 +107,6 @@
                 </ul>
             </details>*@
 
-            <a class="site-nav__link" asp-controller="Work" asp-action="Index">Past work</a>
             <a class="site-nav__link" asp-controller="About" asp-action="Index">About</a>
             <a class="site-nav__link" asp-controller="Blog" asp-action="Index">Blog</a>
         </nav>
@@ -121,7 +120,7 @@
         @* Mirrors the top nav. Every page the site has, one level, no dead ends. *@
         <nav class="footer-nav" aria-label="Footer">
             @* Services link hidden from the footer too, mirroring the top nav, while the section is out. *@
-            <a asp-controller="Work" asp-action="Index">Past work</a>
+            @* Past work link hidden from nav/footer (mirroring the top nav) while the portfolio is not in use. *@
             <a asp-controller="About" asp-action="Index">About</a>
             <a asp-controller="Blog" asp-action="Index">Blog</a>
         </nav>
