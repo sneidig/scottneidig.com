@@ -48,30 +48,7 @@
         </div>
     </section>
 
-    @* Cross-link: when this post's category feeds a service page, show that work as proof and a
-       route to the service. HasServiceLink is false when there's no service or no work, so this
-       section simply doesn't render then. *@
-    @if (Model.HasServiceLink)
-    {
-        <section class="section--alt">
-            <div class="container">
-                <p class="topper">Related work</p>
-                <h2 class="title">@Model.ServiceName</h2>
-
-                <ul class="cards">
-                    @foreach (var project in Model.RelatedProjects)
-                    {
-                        <partial name="_ProjectCard" model="@(new ProjectCardModel
-                                {
-                                    Project = project,
-                                    HeadingLevel = 3
-                                })" />
-                    }
-                </ul>
-
-            </div>
-        </section>
-    }
+    @* Related work section hidden while portfolio is not in use. *@
 </article>
 
 @section Scripts {
