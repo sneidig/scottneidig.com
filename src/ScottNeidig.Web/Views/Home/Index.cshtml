@@ -23,51 +23,7 @@
     </div>
 </section>
 
-<section class="section--alt">
-    <div class="container">
-        <p class="topper">Services</p>
-        <h2 class="title">How I can help</h2>
-
-        @* Each card links into its detail page. Order is nopCommerce first (best proof),
-           .NET second (deepest experience), websites last. *@
-        <ul class="offers">
-            <li>
-                <a class="offer" asp-controller="Services" asp-action="NopCommerce">
-                    <h3 class="offer__title">nopCommerce development</h3>
-                    <p class="offer__text">
-                        Custom plugins, integrations, version upgrades and fixes on live
-                        stores. Certified nopCommerce developer, agency background.
-                    </p>
-                    @* Decorative: the whole card is one link named by the h3, so this repeat
-                       is hidden from screen readers to avoid announcing the title twice. *@
-                    <span class="offer__more" aria-hidden="true">See the work</span>
-                </a>
-            </li>
-
-            <li>
-                <a class="offer" asp-controller="Services" asp-action="DotNet">
-                    <h3 class="offer__title">.NET application development</h3>
-                    <p class="offer__text">
-                        Maintenance, fixes and new features on existing .NET systems, and new
-                        builds on ASP.NET Core. The back end, not just the front.
-                    </p>
-                    <span class="offer__more" aria-hidden="true">See the work</span>
-                </a>
-            </li>
-
-            <li>
-                <a class="offer" asp-controller="Services" asp-action="SmallBusiness">
-                    <h3 class="offer__title">Business websites</h3>
-                    <p class="offer__text">
-                        Fast, server-rendered sites that search engines can read on the first
-                        pass. This one included.
-                    </p>
-                    <span class="offer__more" aria-hidden="true">See the work</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-</section>
+@* Services section hidden while not in use. Restore when needed. *@
 
 @* Selected work section hidden while portfolio is not in use. Restore when needed. *@
 

@@ -30,64 +30,17 @@ public class ServicesController : Controller
         _blog = blog;
     }
 
-    [HttpGet("")]
-    public IActionResult Index()
-    {
-        ViewData["Title"] = "What I do";
-        ViewData["Description"] =
-            "The kinds of projects I work on: nopCommerce development, .NET applications, and business websites.";
+    // Services pages hidden while not in use. Restore by reverting this controller.
 
-        return View();
-    }
+    [HttpGet("")]
+    public IActionResult Index() => NotFound();
 
     [HttpGet("nopcommerce")]
-    public async Task<IActionResult> NopCommerce(CancellationToken ct)
-    {
-        ViewData["Title"] = "nopCommerce development";
-        ViewData["Description"] =
-            "Custom plugins, integrations, upgrades and fixes on live nopCommerce stores. Certified nopCommerce developer.";
-
-        return View(await BuildAsync(ServicePages.NopCommerce, ct));
-    }
+    public IActionResult NopCommerce() => NotFound();
 
     [HttpGet("dotnet-development")]
-    public async Task<IActionResult> DotNet(CancellationToken ct)
-    {
-        ViewData["Title"] = ".NET application development";
-        ViewData["Description"] =
-            "Maintenance, fixes, features and integrations on existing .NET applications, plus new builds. Building on .NET since 2005.";
-
-        return View(await BuildAsync(ServicePages.DotNet, ct));
-    }
+    public IActionResult DotNet() => NotFound();
 
     [HttpGet("small-business-websites")]
-    public async Task<IActionResult> SmallBusiness(CancellationToken ct)
-    {
-        ViewData["Title"] = "Business websites";
-        ViewData["Description"] =
-            "Fast, server-rendered business websites that search engines can read without running JavaScript.";
-
-        return View(await BuildAsync(ServicePages.SmallBusiness, ct));
-    }
-
-    /// <summary>
-    /// Finds the category assigned to this service page and its top projects. When no category
-    /// is assigned the model comes back empty and the related-work section simply doesn't render.
-    /// </summary>
-    private async Task<ServicePageModel> BuildAsync(string serviceKey, CancellationToken ct)
-    {
-        var category = await _categories.GetByServiceKeyAsync(serviceKey, ct);
-        if (category is null)
-        {
-            return new ServicePageModel();
-        }
-
-        return new ServicePageModel
-        {
-            CategoryName = category.Name,
-            CategorySlug = category.Slug,
-            Projects = await _projects.GetPublishedAsync(category.Slug, RelatedCount, ct),
-            Posts = await _blog.GetPublishedByCategoryAsync(category.Slug, RelatedCount, ct: ct)
-        };
-    }
+    public IActionResult SmallBusiness() => NotFound();
 }
